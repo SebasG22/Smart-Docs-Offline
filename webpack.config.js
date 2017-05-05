@@ -17,6 +17,7 @@ module.exports = {
                     'css-loader'
                     ]
             },
+            /*
             {
                 test: /\.js$/,
                 use: {
@@ -26,11 +27,14 @@ module.exports = {
                     }
                 }
             }
+            */
         ]
-    },
+    }
+    /*,
     plugins: [
         new webpack.optimize.UglifyJsPlugin({
             //...
         })
     ]
+    */
 };

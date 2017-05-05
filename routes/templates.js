@@ -13,6 +13,7 @@ router.post('/', function (req, res, next) {
         templateId: req.body.templateId,
         name: req.body.name,
         project: req.body.project,
+        icon: req.body.icon,
         content: req.body.content,
         creationDate: new Date(),
         lastModification: new Date()
@@ -31,6 +32,37 @@ router.post('/', function (req, res, next) {
             obj: result
         })
     })
+});
+
+router.delete('/:id', function (req, res, next) {
+    Template.findById(req.params.id, function (err, template) {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!template) {
+            return res.status(500).json({
+                title: 'No Template Founded',
+                error: { message: '"Template not found"' }
+            });
+        }
+
+        template.remove(function (err, result) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error ocurred',
+                    error: err
+                });
+            }
+            res.status(201).json({
+                message: 'The template was deleted',
+                obj: result
+            });
+        })
+    });
 });
 
 module.exports = router;

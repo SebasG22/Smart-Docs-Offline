@@ -1,53 +1,141 @@
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 let dataBase;
+let templatesConnection = require("./templates");
+let reportsConnection = require("./reports");
+
 module.exports = {
+    "dataBase": "",
     "startIndexedDB": function () {
-    dataBase = indexedDB.open("SmartDocsOffline");
-    dataBase.onupgradeneeded = function (e) {
-        let active = dataBase.result;
-        let templates = active.createObjectStore("templates", { keyPath: 'templateId', autoIncrement:true });
-        templates.createIndex("by_templateId", "templateId", { unique : true });
-        templates.createIndex("by_creation_date","creation_date",{unique:false});
-        templates.createIndex("by_project","project",{unique : false});
+        let reference = this;
+        reference.dataBase = indexedDB.open("SmartDocsOffline");
+        reference.dataBase.onupgradeneeded = function (e) {
+            let active = reference.dataBase.result;
+            let templates = active.createObjectStore("templates", { keyPath: 'templateId' });
+            templates.createIndex("by_templateId", "templateId", { unique: true });
+            templates.createIndex("by_creationDate", "creationDate", { unique: false });
+            templates.createIndex("by_lastModification", "lastModification", { unique: false });
+            templates.createIndex("by_project", "project", { unique: false });
 
-        let reports = active.createObjectStore("reports",{keyPath:'reportId', autoIncrement:true});
-        reports.createIndex("by_reportId","reportId",{unique:true});
-        reports.createIndex("by_creation_date","creation_date",{unique:false});
-        reports.createIndex("by_lastUpdate","lastUpdate",{unique:false});
+            let reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
+            reports.createIndex("by_reportId", "reportId", { unique: true });
+            reports.createIndex("by_name", "name", { unique: false });
+            reports.createIndex("by_creation_date", "creation_date", { unique: false });
+            reports.createIndex("by_lastModification", "lastModification", { unique: false });
 
-        let reportsLog = active.createObjectStore("reportsLog",{keyPath:'reportLogId',autoIncrement:true});
-        reportsLog.createIndex("by_reportLogId","reportLogId",{unique:true});
-        reportsLog.createIndex("by_creation_date","creation_date",{unique:false});
-        reportsLog.createIndex("by_operation","operation",{unique:false});
-    }
-
-    dataBase.onsuccess = function (e) {
-        console.log("Smart Docs Offline DB was loaded");
-    }
-
-    dataBase.onerror = function (e) {
-        console.error("An error ocurred " + e);
-    }
-},
-"getTemplates":function() {
-    let active = dataBase.result;
-    let data = active.transaction(["templates"], "readOnly");
-    let object = data.objectStore("templates");
-    var elements = [];
-
-    object.openCursor().onsuccess = function (e) {
-        var result = e.target.result;
-        if (result === null) {
-            result;
+            let reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
+            reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
+            reportsLog.createIndex("by_creation_date", "creation_date", { unique: false });
+            reportsLog.createIndex("by_operation", "operation", { unique: false });
         }
-        else {
-            elements.push(result.value);
-            result.continue();
-        }
-    }
 
-    data.oncomplete = function (e) {
-        console.log(elements);
+        reference.dataBase.onsuccess = function (e) {
+            console.log("Smart Docs Offline DB was loaded");
+        }
+
+        reference.dataBase.onerror = function (e) {
+            console.error("An error ocurred " + e);
+        }
+    },
+    "addTemplate": function (templateId, name, project, icon, content) {
+        let reference = this;
+        var active = reference.dataBase.result;
+        var data = active.transaction(["templates"], "readwrite");
+        var object = data.objectStore("templates");
+
+        var request = object.put({
+            templateId: templateId,
+            name: name,
+            project: project,
+            icon: icon,
+            content: content,
+            creationDate: new Date(),
+            lastModification: new Date()
+        });
+
+        request.onerror = function (e) {
+            console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+        }
+
+        data.oncomplete = function (e) {
+            console.log("The template was added to SmartDocsOffline");
+        }
+    },
+    "getTemplates": function () {
+        let reference = this;
+        let active = reference.dataBase.result;
+        let data = active.transaction(["templates"], "readonly");
+        let object = data.objectStore("templates");
+        let elements = [];
+
+        object.openCursor().onsuccess = function (e) {
+            var result = e.target.result;
+            if (result === null) {
+                result;
+            }
+            else {
+                elements.push(result.value);
+                console.log(elements);
+                result.continue();
+            }
+        }
+
+        data.oncomplete = function (e) {
+            console.log("elements", elements);
+            templatesConnection.templates = elements;
+        }
+
+    },
+    "addReport": function (name, templateId, answer, status) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports"], "readwrite");
+            let object = data.objectStore("reports");
+            let request = object.put({
+                name: name,
+                templateId: templateId,
+                content: answer,
+                status: status,
+                creationDate: new Date(),
+                lastModification: new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(e);
+            }
+
+            data.oncomplete = function (e) {
+                console.log("The template was added to SmartDocsOffline");
+                resolve();
+            }
+        });
+    },
+    "getReports": function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports"], "readonly");
+            let object = data.objectStore("reports");
+            let elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                let result = e.target.result;
+                if (result === null) {
+                    result;
+                }
+                else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            }
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                reportsConnection.reports = elements;
+                resolve();
+            }
+        });
     }
-}
 }

@@ -1,0 +1,24 @@
+CACHE MANIFEST
+# 2010-06-18:v2
+CACHE:
+img/eyeIcon.png
+img/huaweiLogo.png
+css/bootstrap.min.css
+css/font-awesome.min.css
+fonts/fontawesome-webfont.ttf
+fonts/fontawesome-webfont.ttf
+fonts/fontawesome-webfont.woff2
+js/bootstrap.min.js
+js/jquery-2.2.4.min.js
+views/allTemplatesBoxes.html
+views/dashboard.html
+views/menu.html
+views/myReports.html
+views/newReport.html
+views/newTemplate.html
+bundle.js
+
+NETWORK:
+http://localhost:3000/templates/
+FALLBACK:
+

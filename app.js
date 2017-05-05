@@ -24,6 +24,8 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use('/dist',express.static(path.join(__dirname, 'dist')));
+
 app.use(express.static(path.join(__dirname, 'dist')));
 
 app.use(function(req, res, next) {
@@ -32,6 +34,8 @@ app.use(function(req, res, next) {
     res.setHeader('Access-Control-Allow-Methods', 'POST, GET, PATCH, DELETE, OPTIONS');
     next();
 });
+
+app.use('/dist',express.static(path.join(__dirname, 'dist')));
 
 app.use('/', index);
 app.use('/templates',templateRoutes);
