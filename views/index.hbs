@@ -12,247 +12,244 @@
     <title>Smart Docs </title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name='mobile-web-app-capable' content='yes'>
+    <link rel="manifest" href="/manifest.json">
+    <link rel='icon' sizes='192x192' href='/img/huaweiLogo.png'>
     <link rel="stylesheet" href="/css/bootstrap.min.css">
     <link rel="stylesheet" href="/css/font-awesome.min.css">
 </head>
+
 <body class="flat-blue">
     <div class="app-container">
         <div class="row content-container">
             <nav class="navbar navbar-default navbar-fixed-top navbar-top" style="max-height: 60px">
-    <div class="container-fluid" style="max-height: 60px">
-        <div class="navbar-header">
-            <button type="button" class="navbar-expand-toggle">
+                <div class="container-fluid" style="max-height: 60px">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-expand-toggle">
                 <i class="fa fa-bars icon"></i>
             </button>
-            <ol class="breadcrumb navbar-breadcrumb">
-                <li class="active" id="pageName"> Inicio </li>
-            </ol>
-            <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                        <ol class="breadcrumb navbar-breadcrumb">
+                            <li class="active" id="pageName"> Inicio </li>
+                        </ol>
+                        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
                 <i class="fa fa-th icon"></i>
             </button>
-        </div>
-        <ul id="navbarBig" class="nav navbar-nav navbar-right">
-            <li class="dropdown profile">
-                <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="userFullname">Huawei User<span class="caret"></span></a>
-                <ul class="dropdown-menu animated fadeInDown">
-                    <li class="profile-img">
-                        <img src="/img/huaweiLogo.png"
-                            class="profile-img">
-                    </li>
-                    <li>
-                        <div class="profile-info">
-                            <h4 class="username"> Huawei User</h4>
-                            <p id="userRol"> FME </p>
-                            <p id="userEmail"> Actualmente estas usando la version Offline de Smart Docs @OWS </p>
-                            <div class="btn-group margin-bottom-2x" role="group">
-                                <a id="btnlogOut" href="javascript:window.open('','_self').close();" class="btn btn-default"><i class="fa fa-sign-out"></i> Salir App</a>
-                            </div>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-        </ul>
-    </div>
-</nav>
+                    </div>
+                    <ul id="navbarBig" class="nav navbar-nav navbar-right">
+                        <li class="dropdown profile">
+                            <a href="" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" id="userFullname">Huawei User<span class="caret"></span></a>
+                            <ul class="dropdown-menu animated fadeInDown">
+                                <li class="profile-img">
+                                    <img src="/img/huaweiLogo.png" class="profile-img">
+                                </li>
+                                <li>
+                                    <div class="profile-info">
+                                        <h4 class="username"> Huawei User</h4>
+                                        <p id="userRol"> FME </p>
+                                        <p id="userEmail"> Actualmente estas usando la version Offline de Smart Docs @OWS </p>
+                                        <div class="btn-group margin-bottom-2x" role="group">
+                                            <a id="btnlogOut" href="javascript:window.open('','_self').close();" class="btn btn-default"><i class="fa fa-sign-out"></i> Salir App</a>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
 
-<div class="side-menu sidebar-inverse">
-    <div class="side-menu sidebar-inverse">
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="side-menu-container">
-                <div class="navbar-header" style='background-color: #353d47'>
-                    <a class="navbar-brand" href="">
-                        <div class="icon fa fa fa-connectdevelop"></div>
-                        <div class="title">Smart Docs @OWS</div>
-                    </a>
-                    <button type="button" class="navbar-expand-toggle pull-right visible-xs">
+            <div class="side-menu sidebar-inverse">
+                <div class="side-menu sidebar-inverse">
+                    <nav class="navbar navbar-default" role="navigation">
+                        <div class="side-menu-container">
+                            <div class="navbar-header" style='background-color: #353d47'>
+                                <a class="navbar-brand" href="">
+                                    <div class="icon fa fa fa-connectdevelop"></div>
+                                    <div class="title">Smart Docs @OWS</div>
+                                </a>
+                                <button type="button" class="navbar-expand-toggle pull-right visible-xs">
                         <i class="fa fa-times icon"></i>
                     </button>
+                            </div>
+                            <ul class="nav navbar-nav">
+                                <li id="itemInicio" class="active" style="cursor: pointer">
+                                    <a>
+                                        <span class="icon fa fa-tachometer"></span><span class="title">Inicio</span>
+                                    </a>
+                                </li>
+                                <li id="itemVisitas" style="cursor: pointer">
+                                    <a>
+                                        <span class="icon fa fa-map-marker"></span><span class="title">Mis Visitas</span>
+                                    </a>
+                                </li>
+                                <li id="itemTemplates" style="cursor: pointer">
+                                    <a>
+                                        <span class="icon fa fa-book"></span><span class="title">Plantillas</span>
+                                    </a>
+                                </li>
+                                <li id="itemLogger" style="cursor: pointer">
+                                    <a>
+                                        <span class="icon fa fa-database"></span><span class="title">Logger</span>
+                                    </a>
+                                </li>
+                                <li id="itemFaq" class="noPage" style="cursor: pointer">
+                                    <a>
+                                        <span class="icon fa fa-question"></span><span class="title">FAQ</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.navbar-collapse -->
+                    </nav>
                 </div>
-                <ul class="nav navbar-nav">
-                    <li id="itemInicio" class="active" style="cursor: pointer">
-                        <a>
-                            <span class="icon fa fa-tachometer"></span><span class="title">Inicio</span>
-                        </a>
-                    </li>
-                    <li id="itemTemplates" style="cursor: pointer">
-                        <a>
-                            <span class="icon fa fa-book"></span><span class="title">Plantillas</span>
-                        </a>
-                    </li>
-                    <li id="itemReportes" style="cursor: pointer">
-                        <a>
-                            <span class="icon fa fa-fire"></span><span class="title">Mis Reportes</span>
-                        </a>
-                    </li>
-                    <li id="itemLogger" style="cursor: pointer">
-                        <a>
-                            <span class="icon fa fa-database"></span><span class="title">Logger</span>
-                        </a>
-                    </li>
-                    <li id="itemFaq" class="noPage" style="cursor: pointer">
-                        <a>
-                            <span class="icon fa fa-question"></span><span class="title">FAQ</span>
-                        </a>
-                    </li>
-                </ul>
             </div>
-            <!-- /.navbar-collapse -->
-        </nav>
-    </div>
-</div>
-<!-- Main Content -->
-<div id="mainContent" class="container-fluid">
-    <div id="mainContent2">
-    </div>
-</div>
-<footer class="app-footer">
-    <div class="wrapper">
-        <div id="google_translate_element"></div>
-    </div>
-</footer>
+            <!-- Main Content -->
+            <div id="mainContent" class="container-fluid">
+                <div id="mainContent2">
+                </div>
+            </div>
+            <footer class="app-footer">
+                <div class="wrapper">
+                    <div id="google_translate_element"></div>
+                </div>
+            </footer>
 
-<div class="modal fade modal-warning" id="pageNotFound" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
-    style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel">Pagina en Desarollo </h4>
+            <div class="modal fade modal-warning" id="pageNotFound" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
+                style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel">Pagina en Desarollo </h4>
+                        </div>
+                        <div class="modal-body">
+                            <img style="margin-left: auto;margin-right: auto;display: block;" src="" width="150px">
+                            <h4 style="text-align: center">Esta pagina se encuentra en desarollo.</h4>
+                            <h5 style="text-align: center">Nuestros desarolladores estan trabajando fuertemente cada dia para ofrecerte nuevas caracteristicas.
+                            </h5>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" id="btnLoEntiendo" class="btn btn-warning" data-dismiss="modal" value="Lo entiendo">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <img style="margin-left: auto;margin-right: auto;display: block;" src=""
-                    width="150px">
-                <h4 style="text-align: center">Esta pagina se encuentra en desarollo.</h4>
-                <h5 style="text-align: center">Nuestros desarolladores estan trabajando fuertemente cada dia para ofrecerte nuevas caracteristicas. </h5>
-            </div>
-            <div class="modal-footer">
-                <input type="button" id="btnLoEntiendo" class="btn btn-warning" data-dismiss="modal" value="Lo entiendo">
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade modal-danger" id="deleteReport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
-    style="display: none; ">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel5">Eliminar Reporte</h4>
+            <div class="modal fade modal-danger" id="deleteReport" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
+                style="display: none; ">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel5">Eliminar Reporte</h4>
+                        </div>
+                        <div class="modal-body">
+                            <img style="margin-left: auto;margin-right: auto;display: block;" src="" width="150px">
+                            <h4 style="text-align: center">¿Esta seguro de eliminar el reporte?</h4>
+                            <h5 style="text-align: center">Esta accion no se podra deshacer y se perdera todo el progeso. <br>Smart te recomienda editar
+                                el reporte en vez de eliminarlo.</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="Cerrar">
+                            <input type="button" id="btnDeleteReport" class="btn btn-danger" value="Eliminar">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <img style="margin-left: auto;margin-right: auto;display: block;" src=""
-                    width="150px">
-                <h4 style="text-align: center">¿Esta seguro de eliminar el reporte?</h4>
-                <h5 style="text-align: center">Esta accion no se podra deshacer y se perdera todo el progeso. <br>Smart te recomienda editar el reporte
-                    en vez de eliminarlo.</h5>
-            </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-default" data-dismiss="modal" value="Cerrar">
-                <input type="button" id="btnDeleteReport" class="btn btn-danger" value="Eliminar">
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade modal-danger" id="errorTemplate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
-    style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel9">Oppps ha ocurrido un error</h4>
+            <div class="modal fade modal-danger" id="errorTemplate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
+                style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel9">Oppps ha ocurrido un error</h4>
+                        </div>
+                        <div class="modal-body">
+                            <img style="margin-left: auto;margin-right: auto;display: block;" src="" width="150px">
+                            <h4 style="text-align: center">Algunos campos no han sido completados</h4>
+                            <h5 style="text-align: center">Asegurate de haber completado todos los campos</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-danger" data-dismiss="modal" value="Revisar">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <img style="margin-left: auto;margin-right: auto;display: block;" src=""
-                    width="150px">
-                <h4 style="text-align: center">Algunos campos no han sido completados</h4>
-                <h5 style="text-align: center">Asegurate de haber completado todos los campos</h5>
-            </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-danger" data-dismiss="modal" value="Revisar">
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade modal-danger" id="deleteTemplate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
-    style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel22">Esto sera permanente</h4>
+            <div class="modal fade modal-danger" id="deleteTemplate" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
+                style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel22">Esto sera permanente</h4>
+                        </div>
+                        <div class="modal-body">
+                            <img style="margin-left: auto;margin-right: auto;display: block;" src="" width="150px">
+                            <h4 style="text-align: center">Estas seguro de eliminar la plantilla</h4>
+                            <h5 style="text-align: center">Si decides continuar, la plantilla se eliminara del sistema</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default" data-dismiss="modal" value="No">
+                            <button id='btnDeleteReportTrue' class="btn btn-danger">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <img style="margin-left: auto;margin-right: auto;display: block;" src=""
-                    width="150px">
-                <h4 style="text-align: center">Estas seguro de eliminar la plantilla</h4>
-                <h5 style="text-align: center">Si decides continuar, la plantilla se eliminara del sistema</h5>
-            </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-default" data-dismiss="modal" value="No">
-                <button id='btnDeleteReportTrue' class="btn btn-danger">Eliminar</button>
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade modal-danger" id="error404" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
-    style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel9">Oppps ha ocurrido un error</h4>
+            <div class="modal fade modal-danger" id="error404" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
+                style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel9">Oppps ha ocurrido un error</h4>
+                        </div>
+                        <div class="modal-body">
+                            <img style="margin-left: auto;margin-right: auto;display: block;" src="" width="150px">
+                            <h4 style="text-align: center">Error 404</h4>
+                            <h5 style="text-align: center">Ha ocurrido una nueva actualizacion, por favor vuelve a ingresar a Smart Docs.</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" id="btnRestartSmart" class="btn btn-danger" data-dismiss="modal" value="Volver a Ingresar">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <img style="margin-left: auto;margin-right: auto;display: block;" src=""
-                    width="150px">
-                <h4 style="text-align: center">Error 404</h4>
-                <h5 style="text-align: center">Ha ocurrido una nueva actualizacion, por favor vuelve a ingresar a Smart Docs.</h5>
-            </div>
-            <div class="modal-footer">
-                <input type="button" id="btnRestartSmart" class="btn btn-danger" data-dismiss="modal" value="Volver a Ingresar">
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade modal-danger" id="invalidOpt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
-    style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel13">La opcion seleccionada es invalida...</h4>
+            <div class="modal fade modal-danger" id="invalidOpt" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
+                style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel13">La opcion seleccionada es invalida...</h4>
+                        </div>
+                        <div class="modal-body">
+                            <img style="margin-left: auto;margin-right: auto;display: block;" src="" width="150px">
+                            <h5 style="text-align: center">Asegúrate de que hayas seleccionado una opcion valida !</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-danger" data-dismiss="modal" value="Revisar Opciones">
+                        </div>
+                    </div>
+                </div>
             </div>
-            <div class="modal-body">
-                <img style="margin-left: auto;margin-right: auto;display: block;" src=""
-                    width="150px">
-                <h5 style="text-align: center">Asegúrate de que hayas seleccionado una opcion valida !</h5>
-            </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-danger" data-dismiss="modal" value="Revisar Opciones">
-            </div>
-        </div>
-    </div>
-</div>
 
-<div class="modal fade modal-danger" id="invalidTable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
-    style="display: none;">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h4 class="modal-title" id="myModalLabel13">Campos Incompletos</h4>
-            </div>
-            <div class="modal-body">
-                <img style="margin-left: auto;margin-right: auto;display: block;" src=""
-                    width="150px">
-                <h5 style="text-align: center">Asegúrate de completar todos los campos antes de agregar un registro !</h5>
-            </div>
-            <div class="modal-footer">
-                <input type="button" class="btn btn-danger" data-dismiss="modal" value="Revisar Campos">
+            <div class="modal fade modal-danger" id="invalidTable" tabindex="-1" role="dialog" aria-labelledby="myModalLabel1" aria-hidden="true"
+                style="display: none;">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="myModalLabel13">Campos Incompletos</h4>
+                        </div>
+                        <div class="modal-body">
+                            <img style="margin-left: auto;margin-right: auto;display: block;" src="" width="150px">
+                            <h5 style="text-align: center">Asegúrate de completar todos los campos antes de agregar un registro !</h5>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-danger" data-dismiss="modal" value="Revisar Campos">
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
-</div>
-        </div>
-        <div>   
+        <div>
             <script src="/js/jquery-2.2.4.min.js"></script>
             <script src="/js/bootstrap.min.js"></script>
             <script src="/bundle.js"></script>
@@ -264,6 +261,36 @@
     <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            console.log("Will the service worker register?");
+            navigator.serviceWorker.register('/js/service-worker.js')
+                .then(function (reg) {
+                    console.log("Yes, it did.");
+                }).catch(function (err) {
+                    console.log("No it didn't. This happened: ", err)
+                });
+        }
+
+        window.addEventListener('beforeinstallprompt', function (e) {
+            // beforeinstallprompt Event fired
+
+            // e.userChoice will return a Promise. 
+            // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
+            e.userChoice.then(function (choiceResult) {
+
+                console.log(choiceResult.outcome);
+
+                if (choiceResult.outcome == 'dismissed') {
+                    console.log('User cancelled home screen install');
+                }
+                else {
+                    console.log('User added to home screen');
+                }
+            });
+        });
+    </script>
 
 </body>
 

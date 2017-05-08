@@ -1,8 +1,9 @@
 CACHE MANIFEST
-# 2010-06-18:v2
+# 2010-06-18:v1
 CACHE:
 img/eyeIcon.png
 img/huaweiLogo.png
+img/visitIcon.svg
 css/bootstrap.min.css
 css/font-awesome.min.css
 fonts/fontawesome-webfont.ttf
@@ -12,11 +13,14 @@ js/bootstrap.min.js
 js/jquery-2.2.4.min.js
 views/allTemplatesBoxes.html
 views/dashboard.html
-views/menu.html
+views/allVisits.html
+views/allReportsRelated.html
 views/myReports.html
+views/myReportsLog.html
 views/newReport.html
 views/newTemplate.html
 bundle.js
+manifest.json
 
 NETWORK:
 http://localhost:3000/templates/

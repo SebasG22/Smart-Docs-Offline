@@ -63,11 +63,39 @@
 /******/ 	__webpack_require__.p = "/dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 11);
+/******/ 	return __webpack_require__(__webpack_require__.s = 13);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    addMessageLoder: function (selector,location) {
+        $(location).addClass("loader");
+        $(location).append("<div id='loader' class='loader-container text-center color-white'><div><i style='color:white' class='fa fa-spinner fa-pulse fa-3x'></i></div><div style='color:white'><h4>Smart Docs <br> <small> Cargando Recursos <div id='"+selector+"'> </div> </small> <br><small>... Se esta preparando para ti ...</small></h4><h5>Desarollado por: Huawei Colombia  <br> OSS IT Team </h5></div></div>");
+    },
+    changeMessageLoader: function (selector, msg) {
+        console.log("Selector: "+ selector);
+        console.log("Message: " + msg);
+        $("#" + selector).text(msg);
+    },
+    removeMessageLoader: function (location){
+        $("#loader").remove();
+        $(location).removeClass("loader");
+    },
+    launchProcessImageModal: function(){
+        $("#process_image_modal").remove();
+        $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=process_image_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>La imagen esta siendo procesada </h4></div><div class=modal-body> <img src='./../images/mapIcon.svg' style='margin-left:auto;margin-right:auto;display:block' width='150px'><h4 style='text-align:center'> Espera un momento, este proceso puede tomar algunos segundos dependiendo de tu conexion</h4></div></div></div></div>");
+        $("#process_image_modal").modal({ backdrop: 'static', keyboard: false });
+    },
+    removeProcessImageModal:function(){
+        $("#process_image_modal").modal('hide');
+    }
+}
+
+/***/ }),
+/* 1 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -76,11 +104,16 @@ module.exports = {
         let reference = this;
         return reference.reports;
     },
+    "reportsLog": [],
+    "getReportsLog":function(){
+        let reference = this;
+        return reference.reportsLog;
+    },
     "reportSelected":{}
 }
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -93,7 +126,20 @@ module.exports = {
 }
 
 /***/ }),
-/* 2 */
+/* 3 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    "visits":[],
+    "visitSelected":{},
+    "getVisits": function(){
+        let reference = this;
+        return reference.visits; 
+    }
+}
+
+/***/ }),
+/* 4 */
 /***/ (function(module, exports) {
 
 /*
@@ -175,7 +221,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -212,7 +258,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(10);
+	fixUrls = __webpack_require__(12);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -488,13 +534,13 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(8);
+var content = __webpack_require__(10);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -502,7 +548,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(5)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -519,13 +565,13 @@ if(false) {
 }
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(9);
+var content = __webpack_require__(11);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -533,7 +579,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(5)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -550,13 +596,14 @@ if(false) {
 }
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 let dataBase;
-let templatesConnection = __webpack_require__(1);
-let reportsConnection = __webpack_require__(0);
+let visitsConnection = __webpack_require__(3);
+let templatesConnection = __webpack_require__(2);
+let reportsConnection = __webpack_require__(1);
 
 module.exports = {
     "dataBase": "",
@@ -565,6 +612,12 @@ module.exports = {
         reference.dataBase = indexedDB.open("SmartDocsOffline");
         reference.dataBase.onupgradeneeded = function (e) {
             let active = reference.dataBase.result;
+
+            let visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
+            visits.createIndex("by_visitId", "visitId", { unique: true });
+            visits.createIndex("by_site", "site", { unique: false });
+            visits.createIndex("by_creationDate", "creationDate", { unique: false });
+
             let templates = active.createObjectStore("templates", { keyPath: 'templateId' });
             templates.createIndex("by_templateId", "templateId", { unique: true });
             templates.createIndex("by_creationDate", "creationDate", { unique: false });
@@ -573,14 +626,18 @@ module.exports = {
 
             let reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
             reports.createIndex("by_reportId", "reportId", { unique: true });
-            reports.createIndex("by_name", "name", { unique: false });
-            reports.createIndex("by_creation_date", "creation_date", { unique: false });
+            reports.createIndex("by_site", "site", { unique: false });
+            reports.createIndex("by_creation_date", "creationDate", { unique: false });
             reports.createIndex("by_lastModification", "lastModification", { unique: false });
 
             let reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
             reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
-            reportsLog.createIndex("by_creation_date", "creation_date", { unique: false });
+            reportsLog.createIndex("by_reportId", "reportId", { unique: false });
+            reportsLog.createIndex("by_site", "site", { unique: false });
+            reportsLog.createIndex("by_creation_date", "creationDate", { unique: false });
             reportsLog.createIndex("by_operation", "operation", { unique: false });
+            reportsLog.createIndex("by_operationDate", "operationDate", { unique: false });
+            
         }
 
         reference.dataBase.onsuccess = function (e) {
@@ -591,68 +648,142 @@ module.exports = {
             console.error("An error ocurred " + e);
         }
     },
-    "addTemplate": function (templateId, name, project, icon, content) {
+    "addVisit": function (site) {
         let reference = this;
-        var active = reference.dataBase.result;
-        var data = active.transaction(["templates"], "readwrite");
-        var object = data.objectStore("templates");
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["visits"], "readwrite");
+            var object = data.objectStore("visits");
 
-        var request = object.put({
-            templateId: templateId,
-            name: name,
-            project: project,
-            icon: icon,
-            content: content,
-            creationDate: new Date(),
-            lastModification: new Date()
+            var request = object.put({
+                site: site,
+                creationDate: "" + new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(request.error.name);
+            }
+
+            request.onsuccess = function (e){
+                visitsConnection.visitSelected.visitId = e.target.result;
+            }
+
+            data.oncomplete = function (e) {
+                console.log("The Visit was register on SmartDocsOffline");
+                resolve();
+            }
         });
-
-        request.onerror = function (e) {
-            console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
-        }
-
-        data.oncomplete = function (e) {
-            console.log("The template was added to SmartDocsOffline");
-        }
     },
-    "getTemplates": function () {
-        let reference = this;
-        let active = reference.dataBase.result;
-        let data = active.transaction(["templates"], "readonly");
-        let object = data.objectStore("templates");
-        let elements = [];
-
-        object.openCursor().onsuccess = function (e) {
-            var result = e.target.result;
-            if (result === null) {
-                result;
-            }
-            else {
-                elements.push(result.value);
-                console.log(elements);
-                result.continue();
-            }
-        }
-
-        data.oncomplete = function (e) {
-            console.log("elements", elements);
-            templatesConnection.templates = elements;
-        }
-
-    },
-    "addReport": function (name, templateId, answer, status) {
+    "getVisits": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
-            let data = active.transaction(["reports"], "readwrite");
+            let data = active.transaction(["visits"], "readonly");
+            let object = data.objectStore("visits");
+            let elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                var result = e.target.result;
+                if (result === null) {
+                    result;
+                }
+                else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            }
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                visitsConnection.visits = elements;
+                resolve();
+            }
+        });
+    },
+    "addTemplate": function (templateId, name, project, icon, content) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["templates"], "readwrite");
+            var object = data.objectStore("templates");
+
+            var request = object.put({
+                templateId: templateId,
+                name: name,
+                project: project,
+                icon: icon,
+                content: content,
+                creationDate: "" + new Date(),
+                lastModification: "" + new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(request.error.name);
+            }
+
+            data.oncomplete = function (e) {
+                console.log("The template was added to SmartDocsOffline");
+                resolve();
+            }
+        });
+    },
+    "getTemplates": function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["templates"], "readonly");
+            let object = data.objectStore("templates");
+            let elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                var result = e.target.result;
+                if (result === null) {
+                    result;
+                }
+                else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            }
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                templatesConnection.templates = elements;
+                resolve();
+            }
+        });
+    },
+    "getTemplateByTemplateId": function (templateId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["templates"], "readonly");
+            let object = data.objectStore("templates");
+            let request = object.get(templateId);
+            request.onsuccess = function () {
+                if (request.result !== undefined) {
+                    resolve(request.result);
+                }
+            }
+        });
+    },
+    "addReport": function (templateId, site, answer, status) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports", "reportsLog"], "readwrite");
             let object = data.objectStore("reports");
             let request = object.put({
-                name: name,
+                site: site,
                 templateId: templateId,
                 content: answer,
                 status: status,
-                creationDate: new Date(),
-                lastModification: new Date()
+                creationDate: "" + new Date(),
+                lastModification: "" + new Date()
             });
 
             request.onerror = function (e) {
@@ -660,10 +791,48 @@ module.exports = {
                 reject(e);
             }
 
+            request.onsuccess = function (e) {
+                reference.addReportLog(e.target.result ,"Creacion", status);
+            }
+
             data.oncomplete = function (e) {
-                console.log("The template was added to SmartDocsOffline");
+                console.log("The report was added to SmartDocsOffline", e);
                 resolve();
             }
+        });
+    },
+    "updateReport": function (reportId, status, content) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            var objectStore = active.transaction(["reports"], "readwrite").objectStore("reports");
+            var request = objectStore.get(reportId);
+            request.onerror = function (event) {
+                // Handle errors!
+                reject(request.error.name);
+            };
+            request.onsuccess = function (event) {
+                // Get the old value that we want to update
+                var data = request.result;
+
+                // update the value(s) in the object that you want to change
+                data.content = content;
+                data.status = status;
+                data.lastModification = "" + new Date()
+
+                // Put this updated object back into the database.
+                var requestUpdate = objectStore.put(data);
+                requestUpdate.onerror = function (event) {
+                    // Do something with the error
+                    reject(requestUpdate.error.name);
+                };
+                requestUpdate.onsuccess = function (event) {
+                    // Success - the data is updated!
+                    reference.addReportLog(reportId ,"Actualizacion", status).then(function () {
+                        resolve();
+                    });
+                };
+            };
         });
     },
     "getReports": function () {
@@ -692,14 +861,65 @@ module.exports = {
                 resolve();
             }
         });
+    },
+    "addReportLog": function (reportId, operation, status) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsLog"], "readwrite");
+            let object = data.objectStore("reportsLog");
+            let request = object.put({
+                reportId: reportId,
+                operation: operation,
+                status: status,
+                operationDate: "" + new Date(),
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(e);
+            }
+
+            data.oncomplete = function (e) {
+                console.log("The report was added to the Log");
+                resolve();
+            }
+        });
+    },
+    getReportsLog: function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsLog"], "readonly");
+            let object = data.objectStore("reportsLog");
+            let elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                let result = e.target.result;
+                if (result === null) {
+                    result;
+                }
+                else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            }
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                reportsConnection.reportsLog = elements;
+                resolve();
+            }
+        });
     }
 }
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
-let message = __webpack_require__(12);
+let message = __webpack_require__(0);
 
 module.exports = {
     "imgTo64": function (input) {
@@ -1919,10 +2139,10 @@ module.exports = {
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(4)(undefined);
 // imports
 
 
@@ -1933,10 +2153,10 @@ exports.push([module.i, ".flat-blue {\n  background-color: #F9F9F9;\n  /* small 
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(4)(undefined);
 // imports
 
 
@@ -1947,7 +2167,7 @@ exports.push([module.i, "html {\n  height: 100%; }\n\nbody {\n  padding-top: 0px
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports) {
 
 
@@ -2042,21 +2262,23 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__css_flat_blue_css__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__css_flat_blue_css__ = __webpack_require__(6);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__css_flat_blue_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__css_flat_blue_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__css_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__css_style_css__);
 
 
-let smartEngine = __webpack_require__(7);
-let templates = __webpack_require__(1);
-let reports = __webpack_require__(0);
-let indexDb = __webpack_require__(6);
+let visits = __webpack_require__(3);
+let smartEngine = __webpack_require__(9);
+let templates = __webpack_require__(2);
+let reports = __webpack_require__(1);
+let indexDb = __webpack_require__(8);
+let message = __webpack_require__(0);
 
 
 (function () {
@@ -2065,16 +2287,36 @@ let indexDb = __webpack_require__(6);
             let reference = this;
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
+                reference.addEventsToMenu();
+                reference.loadNavBar();
             });
-            reference.addEventsToMenu();
+        },
+        loadNavBar: function () {
+            $(function () {
+                $(".navbar-expand-toggle").click(function () {
+                    $(".app-container").toggleClass("expanded");
+                    return $(".navbar-expand-toggle").toggleClass("fa-rotate-90");
+                });
+                return $(".navbar-right-expand-toggle").click(function () {
+                    $(".navbar-right").toggleClass("expanded");
+                    return $(".navbar-right-expand-toggle").toggleClass("fa-rotate-90");
+                });
+            });
+
+            $(function () {
+                return $(".side-menu .nav .dropdown").on('show.bs.collapse', function () {
+                    return $(".side-menu .nav .dropdown .collapse").collapse('hide');
+                });
+            });
         },
         addEventsToMenu: function () {
             let reference = this;
             let items = [
                 { id: "itemInicio", page_route: "dashboard" },
+                { id: "itemVisitas", page_route: "allVisits" },
                 { id: "itemTemplates", page_route: "allTemplatesBoxes" },
                 { id: "itemReportes", page_route: "myReports" },
-                { id: "itemLogger", page_route: "" },
+                { id: "itemLogger", page_route: "myReportsLog" },
                 { id: "itemFaq", page_route: "" }
             ];
 
@@ -2099,43 +2341,87 @@ let indexDb = __webpack_require__(6);
         loadResources: function (page_route) {
             let reference = this;
             switch (page_route) {
+                case "allVisits":
+                    indexDb.getVisits().then(function () {
+                        reference.fillVisitsPage();
+                        reference.loadEventNewVisit();
+                    });
+                    break;
+                case "allReportsRelated":
+                    indexDb.getTemplates().then(function () {
+                        return indexDb.getReports();
+                    }).then(function () {
+                        let reportsFiltered = reports.getReports().filter(function (report) {
+                            return report.site == visits.visitSelected.visitId;
+                        });
+                        console.log("Reports Filtered", reportsFiltered);
+                        reference.fillBoxesReportsRelated(reportsFiltered);
+                    })
+                    reference.addEventsReportRelated();
+                    break;
                 case "allTemplatesBoxes":
-                    reference.getAllTemplates();
+                    indexDb.getReports().then(function () {
+                        reference.getAllTemplates();
+                    });
                     break;
                 case "newReport":
                     reference.showTemplate();
-                    if(Object.keys(reports.reportSelected).length == 0){
-                        $("#btnSave").click(function () {
-                        let answer = smartEngine.saveAnswer();
-                        let status;
-                        switch (answer.completed) {
-                            case true:
-                                status = "SM-Status001";
-                                break;
-                            case false:
-                                status = "SM-Status002";
-                                break;
-                        }
-                        indexDb.addReport("Test", templates.templateSelected.templateId, JSON.parse(answer.userAnswer), status).then(function(){
-                                                    reference.changePage("myReports");
-                        })
-                        .catch(function(err){
-                            console.log(err);
-                        });
-                    });
-                }
-                else{
-                    smartEngine.matchAnswers(reports.reportSelected.content);
-                }
+                    reference.saveAnswerEvent();
+                    if (Object.keys(reports.reportSelected).length != 0) {
+                        reference.fillAnswer();
+                    }
                     break;
                 case "myReports":
-                console.log("Start Fill Reports");
-                    indexDb.getTemplates();
-                    indexDb.getReports().then(function(){
+                    console.log("Start Fill Reports");
+                    indexDb.getReports().then(function () {
                         reference.fillReportsPage();
                     });
                     break;
+                case "myReportsLog":
+                    indexDb.getReportsLog().then(function () {
+                        reference.fillReportsLogPage();
+                    });
+                    break;
             }
+        },
+        loadEventNewVisit() {
+            let reference = this;
+            $("#new_VisitBtn").click(function () {
+                $("#new_visit_modal").remove();
+                $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=new_visit_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13> Registra una nueva visita </h4></div><div class='modal-body'><label class='text-right'>Nombre Sitio : </label><input id='site_name_register' type='text' class='form-control' placeholder='El nombre del sitio debe tener al menos 5 caracteres'><br><p style='text-align: center'><b>Nota:</b> Debes registrar una visita para poder crear reportes del sitio </p></div><div class='modal-footer'><button id='new_visit_register_btn' class='btn btn-info' disabled> Registrar </button> </div> </div></div></div>");
+                $("#new_visit_modal").modal({ backdrop: 'static', keyboard: false });
+
+                $("#site_name_register").on("input", function () {
+                    let site = $("#site_name_register").val();
+
+                    if (site.length > 5) {
+                        $("#new_visit_register_btn").attr("disabled", false);
+                    }
+                    else {
+                        $("#new_visit_register_btn").attr("disabled", true);
+                    }
+                });
+
+                $("#new_visit_register_btn").click(function () {
+                    let site = $("#site_name_register").val();
+                    $("#new_visit_modal").modal('hide');
+                    indexDb.addVisit(site).then(function () {
+                        reference.changePage("allTemplatesBoxes");
+                    });
+                });
+            });
+
+
+        },
+        addEventsReportRelated: function () {
+            let reference = this;
+            $("#add_reportBtn").click(function () {
+                reference.changePage("allTemplatesBoxes");
+            });
+
+            $("#del_reportBtn").click(function () {
+                alert("Se ha eliminado la visita");
+            });
         },
         getAllTemplates: function () {
             let reference = this;
@@ -2143,7 +2429,7 @@ let indexDb = __webpack_require__(6);
                 $.get("http://localhost:3000/templates/", function (templatesResponse) {
                     templates.templates = templatesResponse;
                     for (let template of templates.templates) {
-                        indexDb.addTemplate(template.templateId, "Test", template.project, template.icon, template.content);
+                        indexDb.addTemplate(template.templateId, template.name, template.project, template.icon, template.content);
                     }
                     reference.fillTemplatesPage();
 
@@ -2154,13 +2440,63 @@ let indexDb = __webpack_require__(6);
                 reference.fillTemplatesPage({});
             }
         },
+        fillVisitsPage: function () {
+            let reference = this;
+            let visitsResponse = visits.getVisits();
+            let cont = 0;
+            for (let visit of visitsResponse) {
+                $("#visitsNotFound").remove();
+                $("#allVisitsDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + visit.site + "</div><img style='width:100px' src='/img/visitIcon.svg' style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + visit.visitId + "!--></div></div></div><div class=pt-footer><button id='attachReports" + cont + "' class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Ver Visita</button></div></div></div>");
+                $("#attachReports" + cont).on("click", function (event) {
+                    visits.visitSelected = visit;
+                    reference.changePage("allReportsRelated");
+                });
+                cont++;
+            }
+        },
+        fillBoxesReportsRelated: function (reportsFiltered) {
+            let reference = this;
+            let templatesResponse = templates.getTemplates();
+            message.addMessageLoder("loaderMessage", "#mainContent2");
+            message.changeMessageLoader("loaderMessage", "Filtrando Reportes Relacionados");
+            let cont = 0;
+            for (let report of reportsFiltered) {
+                switch (report.status) {
+                    case "SM-Status001":
+                        report.status_name = "DRAFT";
+                        report.status_background = "yellow";
+                        report.status_class = "warning";
+                        break;
+                    case "SM-Status002":
+                        report.status_name = "COMPLETED";
+                        report.status_background = "blue";
+                        report.status_class = "info";
+                        break;
+                }
+                let templateFilter = templatesResponse.filter(function (template) {
+                    return template.templateId == report.templateId;
+                });
+                templateFilter = templateFilter[0];
+                console.log("Template Filter ", templateFilter);
+                $("#allReportsRelatedDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class='pricing-table " + report.status_background + "'><div class=pt-header><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + templateFilter.name + "</div><div class=pricing-type> Ultima Modificacion: " + report.lastModification.split("GMT")[0] + "</div></div></div><div class=pt-body><h4>" + report.status_name + "</h4><ul class=plan-detail><li><b>Report Id:<br></b>" + report.reportId + "</ul></div><div class=pt-footer><button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
+                $("#viewReport_" + cont).on("click", function (event) {
+                    reports.reportSelected = report;
+                    templates.templateSelected = templateFilter;
+                    reference.changePage('newReport');
+                });
+                cont++;
+            }
+            $("#sdmTicket").text(reports.reportSelected.ticket_id);
+            message.removeMessageLoader("#mainContent2");
+        },
         fillTemplatesPage: function () {
             let reference = this;
             let templatesResponse = templates.getTemplates();
             for (let template of templatesResponse) {
                 $("#templatesNotFound").remove();
-                $("#allTemplatesDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + template.name + "</div><img src='" + template.icon + "'style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + template.templateId + "!--></div></div></div><div class=pt-footer><p><b>Ultima Actualizacion: </b> " + template.lastModification + " </p><button id='createTemplate'class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Crear Reporte</button></div></div></div>");
+                $("#allTemplatesDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + template.name + "</div><img src='" + template.icon + "'style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + template.templateId + "!--></div></div></div><div class=pt-footer><p><b>Ultima Actualizacion: </b> " + template.lastModification.split("GMT")[0] + " </p><button id='createTemplate'class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Crear Reporte</button></div></div></div>");
                 $("#createTemplate").on("click", function (event) {
+                    reports.reportSelected = {};
                     templates.templateSelected = template;
                     reference.changePage("newReport");
                 });
@@ -2171,20 +2507,80 @@ let indexDb = __webpack_require__(6);
             smartEngine.executeEngine(templates.templateSelected.content);
             $('#templateNavTabs a:first').tab('show');
         },
+        fillAnswer: function () {
+            let reference = this;
+            smartEngine.matchAnswers(reports.reportSelected.content);
+        },
+        saveAnswerEvent: function () {
+            let reference = this;
+            $("#btnSave").click(function () {
+                let answer = smartEngine.saveAnswer();
+                console.log("Smart Engine Answer : ", answer);
+                let status;
+                switch (answer.completed) {
+                    case false:
+                        status = "SM-Status001";
+                        break;
+                    case true:
+                        status = "SM-Status002";
+                        break;
+                }
+
+                let answerObj = JSON.parse(answer.userAnswer);
+
+                if (Object.keys(reports.reportSelected).length == 0) {
+                    indexDb.addReport(templates.templateSelected.templateId, visits.visitSelected.visitId, answerObj, status).then(function () {
+                        reference.changePage("allVisits");
+                    })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+                }
+                else {
+                    indexDb.updateReport(reports.reportSelected.reportId, status, answerObj).then(function () {
+                        reports.reportSelected = {};
+                        reference.changePage("allVisits");
+                    });
+                }
+            });
+        },
         fillReportsPage: function () {
             let reference = this;
-            let templatesResponse = templates.getTemplates();
+            //let templatesResponse = templates.getTemplates();
             let reportsResponse = reports.getReports();
-            console.log("Templates Response",templatesResponse);
-            let cont = 0 ;
+            console.log("Reports Response", reportsResponse);
+            let cont = 0;
             for (let report of reportsResponse) {
-                $("#dataTableAllReport > tbody").append("<tr><td style='cursor:pointer' id='allReports" + cont + "'>" + report.reportId + "</td><td> " + report.name + "</td><td>" + report.status + "</td><td>" + report.lastModification + "</td><td><input id='allReports" + cont + "Details' type='image' name='image' src='/img/eyeIcon.png'></td></tr>");
+                $("#dataTableAllReport > tbody").append("<tr><td style='cursor:pointer' id='allReports" + cont + "'>" + report.reportId + "</td><td> " + report.name + "</td><td>" + report.status + "</td><td>" + report.lastModification.split("GMT")[0] + "</td><td><input id='allReports" + cont + "Details' type='image' name='image' src='/img/eyeIcon.png'></td></tr>");
                 $('#allReports' + cont).add('#allReports' + cont + "Details").on("click",
-                    {"report": report }, function (event) {
+                    { "report": report }, function (event) {
                         reports.reportSelected = event.data.report;
-                        reference.changePage("newReport");
+                        indexDb.getTemplateByTemplateId(reports.reportSelected.templateId).then(function (template) {
+                            console.log("Get Template By Id : " + template);
+                            templates.templateSelected = template;
+                            reference.changePage("newReport");
+                        });
                     });
                 cont += 1;
+            }
+        },
+        fillReportsLogPage: function () {
+            let reference = this;
+            //let templatesResponse = templates.getTemplates();
+            let reportsLogResponse = reports.getReportsLog();
+            console.log("Reports Log Response", reportsLogResponse);
+            let cont = 0;
+            for (let reportLog of reportsLogResponse) {
+                let background_status;
+                switch (reportLog.status) {
+                    case "SM-Status001":
+                        background_status = "warning";
+                        break;
+                    case "SM-Status002":
+                        background_status = "info";
+                        break;
+                }
+                $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
             }
         }
     }
@@ -2193,34 +2589,6 @@ let indexDb = __webpack_require__(6);
     indexDb.startIndexedDB();
 
 })();
-
-/***/ }),
-/* 12 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    addMessageLoder: function (selector,location) {
-        $(location).addClass("loader");
-        $(location).append("<div id='loader' class='loader-container text-center color-white'><div><i style='color:white' class='fa fa-spinner fa-pulse fa-3x'></i></div><div style='color:white'><h4>Smart Docs <br> <small> Cargando Recursos <div id='"+selector+"'> </div> </small> <br><small>... Se esta preparando para ti ...</small></h4><h5>Desarollado por: Huawei Colombia  <br> OSS IT Team </h5></div></div>");
-    },
-    changeMessageLoader: function (selector, msg) {
-        console.log("Selector: "+ selector);
-        console.log("Message: " + msg);
-        $("#" + selector).text(msg);
-    },
-    removeMessageLoader: function (location){
-        $("#loader").remove();
-        $(location).removeClass("loader");
-    },
-    launchProcessImageModal: function(){
-        $("#process_image_modal").remove();
-        $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=process_image_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>La imagen esta siendo procesada </h4></div><div class=modal-body> <img src='./../images/mapIcon.svg' style='margin-left:auto;margin-right:auto;display:block' width='150px'><h4 style='text-align:center'> Espera un momento, este proceso puede tomar algunos segundos dependiendo de tu conexion</h4></div></div></div></div>");
-        $("#process_image_modal").modal({ backdrop: 'static', keyboard: false });
-    },
-    removeProcessImageModal:function(){
-        $("#process_image_modal").modal('hide');
-    }
-}
 
 /***/ })
 /******/ ]);
