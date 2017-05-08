@@ -23,6 +23,6 @@ bundle.js
 manifest.json
 
 NETWORK:
-http://localhost:3000/templates/
+https://smart-docs.herokuapp.com/templates/
 FALLBACK:
 

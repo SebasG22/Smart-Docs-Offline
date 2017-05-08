@@ -153,7 +153,7 @@ let message = require("./messages");
         getAllTemplates: function () {
             let reference = this;
             if (navigator.onLine) {
-                $.get("http://localhost:3000/templates/", function (templatesResponse) {
+                $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
                     templates.templates = templatesResponse;
                     for (let template of templates.templates) {
                         indexDb.addTemplate(template.templateId, template.name, template.project, template.icon, template.content);
