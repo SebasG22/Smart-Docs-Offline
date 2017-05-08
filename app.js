@@ -11,7 +11,7 @@ var index = require('./routes/index');
 var templateRoutes = require("./routes/templates");
 
 var app = express();
-mongoose.connect("mongodb://localhost/smart-docs");
+mongoose.connect("Smart-Admin:huaweiDevelopers2017@ds131621.mlab.com:31621/smartdocs");
 mongoose.Promise = global.Promise;
 
 // view engine setup
