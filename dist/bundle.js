@@ -11879,7 +11879,7 @@ module.exports = {
                 allReqComplete = false;
             }
         });
-        response = { "userAnswer": JSON.stringify(allInputsFilled), "completed": allReqComplete };
+        response = { "userAnswer": JSON.stringify(reference.allInputsFilled), "completed": allReqComplete };
         if (allReqComplete == false) {
             $("#emptyFieldsText").text(fieldsEmpty);
             response["fieldsEmpty"] = fieldsEmpty;
