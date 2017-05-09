@@ -11831,7 +11831,7 @@ module.exports = {
         var reference = this;
         var allReqComplete = false;
         var arrayAllReqComplete = [];
-        allInputsFilled = [];
+        var allInputsFilled = [];
         var validate;
         var fieldsEmpty;
         var response = {};
