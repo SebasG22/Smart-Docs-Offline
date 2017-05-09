@@ -4,7 +4,6 @@ CACHE:
 img/eyeIcon.png
 img/huaweiLogo.png
 img/visitIcon.svg
-js/service-worker.js
 css/bootstrap.min.css
 css/font-awesome.min.css
 fonts/fontawesome-webfont.ttf

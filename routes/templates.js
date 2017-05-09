@@ -13,6 +13,7 @@ router.post('/', function (req, res, next) {
         templateId: req.body.templateId,
         name: req.body.name,
         project: req.body.project,
+        taskType:req.body.taskType,
         icon: req.body.icon,
         content: req.body.content,
         creationDate: new Date(),
