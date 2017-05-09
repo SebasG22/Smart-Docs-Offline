@@ -166,8 +166,9 @@ let notification = require("./notifications");
                 })
             }
             else {
-                indexDb.getTemplates();
-                reference.fillTemplatesPage({});
+                indexDb.getTemplates().then(function(){
+                    reference.fillTemplatesPage({});
+                });
             }
         },
         fillVisitsPage: function () {
@@ -222,10 +223,11 @@ let notification = require("./notifications");
         fillTemplatesPage: function () {
             let reference = this;
             let templatesResponse = templates.getTemplates();
+            let cont = 0;
             for (let template of templatesResponse) {
                 $("#templatesNotFound").remove();
-                $("#allTemplatesDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + template.name + "</div><img src='" + template.icon + "'style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + template.templateId + "!--></div></div></div><div class=pt-footer><p><b>Ultima Actualizacion: </b> " + template.lastModification.split("GMT")[0] + " </p><button id='createTemplate'class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Crear Reporte</button></div></div></div>");
-                $("#createTemplate").on("click", function (event) {
+                $("#allTemplatesDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + template.name + "</div><img src='" + template.icon + "'style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + template.templateId + "!--></div></div></div><div class=pt-footer><p><b>Ultima Actualizacion: </b> " + template.lastModification.split("GMT")[0] + " </p><button id='createTemplate"+ cont +"'class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Crear Reporte</button></div></div></div>");
+                $("#createTemplate" + cont).on("click", function (event) {
                     reports.reportSelected = {};
                     templates.templateSelected = template;
                     reference.changePage("newReport");
