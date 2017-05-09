@@ -274,7 +274,11 @@
                 });
         }
 
-        window.addEventListener('beforeinstallprompt', function (e) {
+        if (localStorage.getItem("appInstalled")){
+
+        }
+        else{
+            window.addEventListener('beforeinstallprompt', function (e) {
             // beforeinstallprompt Event fired
 
             // e.userChoice will return a Promise. 
@@ -287,10 +291,12 @@
                     console.log('User cancelled home screen install');
                 }
                 else {
+                    localStorage.setItem("appInstalled","yes");
                     console.log('User added to home screen');
                 }
             });
         });
+        }
     </script>
 
 </body>

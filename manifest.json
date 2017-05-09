@@ -1,6 +1,6 @@
 {
   "short_name": " Smart Docs",
-  "name": "Smart Docs @Huawei App",
+  "name": "Smart Docs App",
   "icons": [
     {
       "src": "img/HuaweiLogo.png",
@@ -9,7 +9,7 @@
     }
   ],
   "start_url": "/",
-  "background_color": "#000",
+  "background_color": "#fff",
   "Theme_color": "#536878",
   "display": "standalone",
   "related_applications": [
