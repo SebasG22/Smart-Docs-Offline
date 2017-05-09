@@ -14419,6 +14419,10 @@ var notification = __webpack_require__(9);
                 });
             });
         },
+        hideNavBar: function hideNavBar() {
+            $(".app-container").removeClass("expanded");
+            $(".navbar-expand-toggle").removeClass("fa-rotate-90");
+        },
         addEventsToMenu: function addEventsToMenu() {
             var reference = this;
             var items = [{ id: "itemInicio", page_route: "dashboard" }, { id: "itemVisitas", page_route: "allVisits" }, { id: "itemTemplates", page_route: "allTemplatesBoxes" }, { id: "itemReportes", page_route: "myReports" }, { id: "itemLogger", page_route: "myReportsLog" }, { id: "itemFaq", page_route: "" }];
@@ -14434,6 +14438,7 @@ var notification = __webpack_require__(9);
                     $("#" + item.id).click(function () {
                         reference.changePage(item.page_route);
                         reference.changeActiveMenu(item.id);
+                        reference.hideNavBar();
                     });
                 };
 
