@@ -14,4 +14,8 @@ router.get('/service-worker.js',function(req,res,next){
 router.get('/manifest.json',function(req,res,next){
     res.sendFile(path.resolve(__dirname, '..') + "/manifest.json");
 })
+
+router.get('/img/HuaweiLogo.png',function(req,res,next){
+    res.sendFile(path.resolve(__dirname, '..') + "/dist/img/huaweiLogo.png");
+})
 module.exports = router;
