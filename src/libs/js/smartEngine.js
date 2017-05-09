@@ -1128,7 +1128,7 @@ module.exports = {
     let reference = this;
     var allReqComplete = false;
     var arrayAllReqComplete = [];
-    let allInputsFilled = [];
+    allInputsFilled = [];
     var validate;
     var fieldsEmpty;
     let response = {};
