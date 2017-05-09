@@ -19,6 +19,7 @@ views/newReport.html
 views/newTemplate.html
 bundle.js
 manifest.json
+service-worker.js
 
 NETWORK:
 https://smart-docs.herokuapp.com/templates/
