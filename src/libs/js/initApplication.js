@@ -1,3 +1,5 @@
+import 'jquery';
+import 'bootstrap';
 import './../css/flat-blue.css';
 import './../css/style.css';
 let visits = require("./visits");
