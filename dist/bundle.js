@@ -14741,6 +14741,17 @@ var notification = __webpack_require__(9);
             var reference = this;
             smartEngine.matchAnswers(reports.reportSelected.content);
         },
+        launchAnswerCompletedModal: function launchAnswerCompletedModal() {
+            $("#completedReport").remove();
+            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=completeReport role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Todos los campos fueron completados</h4></div><div class=modal-body><img src='/img/completed.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center>Todos los campos obligatorios fueron completados.</h4></div><div class=modal-footer><input class='btn btn-info'data-dismiss=modal type=button value='Guardar el reporte'></div></div></div></div>");
+            $("#completedReport").modal({ backdrop: 'static', keyboard: false });
+        },
+        launchAnswerInCompleteModal: function launchAnswerInCompleteModal(emptyFields) {
+            $("#incompleteReport").remove();
+            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=incompleteReport role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel7>Algunos campos no fueron completados</h4></div><div class=modal-body><img src='/img/incompleted.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center>Todos los campos obligatorios no fueron completados</h4><h5 id=emptyFieldsText style=text-align:center></h5></div><div class=modal-footer><input class='btn btn-info'data-dismiss=modal type=button value=Entendido></div></div></div></div>");
+            $("#emptyFieldsText").text(emptyFields);
+            $("#incompleteReport").modal({ backdrop: 'static', keyboard: false });
+        },
         saveAnswerEvent: function saveAnswerEvent() {
             var reference = this;
             $("#btnSave").click(function () {
@@ -14760,7 +14771,12 @@ var notification = __webpack_require__(9);
 
                 if (Object.keys(reports.reportSelected).length == 0) {
                     indexDb.addReport(templates.templateSelected.templateId, visits.visitSelected.visitId, answerObj, status).then(function () {
-                        notification.sendNotification("Smart Docs", "Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status);
+                        if (answer.completed) {
+                            reference.launchAnswerCompletedModal();
+                        } else {
+                            reference.launchAnswerInCompleteModal(answer.fieldsEmpty);
+                        }
+                        //notification.sendNotification("Smart Docs", "Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status);
                         reference.changePage("allVisits");
                     }).catch(function (err) {
                         console.log(err);
