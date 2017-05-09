@@ -40,6 +40,10 @@ let notification = require("./notifications");
                 });
             });
         },
+        hideNavBar: function () {
+        $(".app-container").removeClass("expanded");
+        $(".navbar-expand-toggle").removeClass("fa-rotate-90");
+    },
         addEventsToMenu: function () {
             let reference = this;
             let items = [
@@ -55,6 +59,7 @@ let notification = require("./notifications");
                 $("#" + item.id).click(function () {
                     reference.changePage(item.page_route);
                     reference.changeActiveMenu(item.id);
+                    reference.hideNavBar();
                 });
             }
         },
