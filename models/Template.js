@@ -9,6 +9,7 @@ let schema = new Schema({
     icon: { type: String, required: true },
     project: { type: String, required: true },
     content: { type: Object, required: true },
+    taskType: {type: String, required: false},
     creationDate: { type: String, required: true },
     lastModification: { type: String, required: false },
     user: { type: Schema.Types.ObjectId, ref: "User" }

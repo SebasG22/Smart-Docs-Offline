@@ -21,6 +21,7 @@ module.exports = {
             templates.createIndex("by_templateId", "templateId", { unique: true });
             templates.createIndex("by_creationDate", "creationDate", { unique: false });
             templates.createIndex("by_lastModification", "lastModification", { unique: false });
+            templates.createIndex("by_taskType","taskType",{unique: false})
             templates.createIndex("by_project", "project", { unique: false });
 
             let reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
@@ -101,7 +102,7 @@ module.exports = {
             }
         });
     },
-    "addTemplate": function (templateId, name, project, icon, content) {
+    "addTemplate": function (templateId, name, project, taskType, icon, content) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -112,6 +113,7 @@ module.exports = {
                 templateId: templateId,
                 name: name,
                 project: project,
+                taskType: taskType,
                 icon: icon,
                 content: content,
                 creationDate: "" + new Date(),

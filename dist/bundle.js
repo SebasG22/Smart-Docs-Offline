@@ -10433,6 +10433,7 @@ module.exports = {
             templates.createIndex("by_templateId", "templateId", { unique: true });
             templates.createIndex("by_creationDate", "creationDate", { unique: false });
             templates.createIndex("by_lastModification", "lastModification", { unique: false });
+            templates.createIndex("by_taskType", "taskType", { unique: false });
             templates.createIndex("by_project", "project", { unique: false });
 
             var reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
@@ -10511,7 +10512,7 @@ module.exports = {
             };
         });
     },
-    "addTemplate": function addTemplate(templateId, name, project, icon, content) {
+    "addTemplate": function addTemplate(templateId, name, project, taskType, icon, content) {
         var reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -10522,6 +10523,7 @@ module.exports = {
                 templateId: templateId,
                 name: name,
                 project: project,
+                taskType: taskType,
                 icon: icon,
                 content: content,
                 creationDate: "" + new Date(),
@@ -14558,7 +14560,7 @@ var notification = __webpack_require__(9);
                         for (var _iterator2 = templates.templates[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                             var template = _step2.value;
 
-                            indexDb.addTemplate(template.templateId, template.name, template.project, template.icon, template.content);
+                            indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
                         }
                     } catch (err) {
                         _didIteratorError2 = true;
