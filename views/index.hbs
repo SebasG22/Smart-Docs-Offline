@@ -274,7 +274,7 @@
                 });
         }
 
-        if (localStorage.getItem("appInstalled") != 'yes') {
+        if (localStorage.getItem("appInstalled") == null) {
             window.addEventListener('beforeinstallprompt', function (e) {
                 // beforeinstallprompt Event fired
 
