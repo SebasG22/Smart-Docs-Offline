@@ -232,6 +232,7 @@ let notification = require("./notifications");
                     templates.templateSelected = template;
                     reference.changePage("newReport");
                 });
+                cont += 1;
             }
         },
         showTemplate: function () {

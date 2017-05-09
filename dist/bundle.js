@@ -14706,6 +14706,7 @@ var notification = __webpack_require__(9);
                         templates.templateSelected = template;
                         reference.changePage("newReport");
                     });
+                    cont += 1;
                 };
 
                 for (var _iterator5 = templatesResponse[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
