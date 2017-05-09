@@ -1,6 +1,7 @@
 CACHE MANIFEST
-# 2010-06-18:v3
+# 2017-05-09:v24
 CACHE:
+/
 img/eyeIcon.png
 img/huaweiLogo.png
 img/visitIcon.svg
@@ -20,6 +21,7 @@ views/newTemplate.html
 bundle.js
 manifest.json
 service-worker.js
+
 
 NETWORK:
 https://smart-docs.herokuapp.com/templates/

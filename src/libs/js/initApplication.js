@@ -163,7 +163,6 @@ let notification = require("./notifications");
                         indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
                     }
                     reference.fillTemplatesPage();
-
                 })
             }
             else {

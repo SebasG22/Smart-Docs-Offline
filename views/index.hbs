@@ -263,41 +263,44 @@
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
 
+
     <script>
-        if ('serviceWorker' in navigator) {
-            console.log("Will the service worker register?");
-            navigator.serviceWorker.register('/service-worker.js')
-                .then(function (reg) {
-                    console.log("Yes, it did.");
-                }).catch(function (err) {
-                    console.log("No it didn't. This happened: ", err)
+        /*
+        if (navigator.onLine) {
+            if ('serviceWorker' in navigator) {
+                console.log("Will the service worker register?");
+                navigator.serviceWorker.register('/service-worker.js')
+                    .then(function (reg) {
+                        console.log("Yes, it did.", reg.scope);
+                    }).catch(function (err) {
+                        console.log("No it didn't. This happened: ", err)
+                    });
+            }
+
+            if (localStorage.getItem("appInstalled") == null) {
+                window.addEventListener('beforeinstallprompt', function (e) {
+                    // beforeinstallprompt Event fired
+
+                    // e.userChoice will return a Promise. 
+                    // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
+                    e.userChoice.then(function (choiceResult) {
+
+                        console.log(choiceResult.outcome);
+
+                        if (choiceResult.outcome == 'dismissed') {
+                            console.log('User cancelled home screen install');
+                        }
+                        else {
+                            localStorage.setItem("appInstalled", "yes");
+                            console.log('User added to home screen');
+                        }
+                    });
+                    e.preventDefault();
+                    return false;
                 });
+            }
         }
-
-        if (localStorage.getItem("appInstalled") == null) {
-            window.addEventListener('beforeinstallprompt', function (e) {
-                // beforeinstallprompt Event fired
-
-                // e.userChoice will return a Promise. 
-                // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
-                e.userChoice.then(function (choiceResult) {
-
-                    console.log(choiceResult.outcome);
-
-                    if (choiceResult.outcome == 'dismissed') {
-                        console.log('User cancelled home screen install');
-                    }
-                    else {
-                        localStorage.setItem("appInstalled", "yes");
-                        console.log('User added to home screen');
-                    }
-                });
-                e.preventDefault();
-                return false;
-            });
-        }
+        */
     </script>
-
 </body>
-
 </html>
