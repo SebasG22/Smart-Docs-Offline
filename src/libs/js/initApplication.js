@@ -2,7 +2,6 @@ import 'jquery';
 import 'bootstrap';
 import './../css/flat-blue.css';
 import './../css/style.css';
-import './../css/bootstrap.min.css';
 let visits = require("./visits");
 let smartEngine = require("./smartEngine");
 let templates = require("./templates");

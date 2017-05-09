@@ -8,7 +8,7 @@ module.exports = {
     "dataBase": "",
     "startIndexedDB": function () {
         let reference = this;
-        reference.dataBase = indexedDB.open("SmartDocsOffline");
+        reference.dataBase = indexedDB.open("SmartDocsOffline",1);
         reference.dataBase.onupgradeneeded = function (e) {
             let active = reference.dataBase.result;
 
