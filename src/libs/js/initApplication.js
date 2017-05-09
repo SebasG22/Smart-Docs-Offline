@@ -17,7 +17,7 @@ let notification = require("./notifications");
             let reference = this;
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
-                notification.sendNotification("Bievenido a Smart Docs","Registra visitas para poder agregar reportes");
+                notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
                 reference.addEventsToMenu();
                 reference.loadNavBar();
             });
@@ -41,9 +41,9 @@ let notification = require("./notifications");
             });
         },
         hideNavBar: function () {
-        $(".app-container").removeClass("expanded");
-        $(".navbar-expand-toggle").removeClass("fa-rotate-90");
-    },
+            $(".app-container").removeClass("expanded");
+            $(".navbar-expand-toggle").removeClass("fa-rotate-90");
+        },
         addEventsToMenu: function () {
             let reference = this;
             let items = [
@@ -171,7 +171,7 @@ let notification = require("./notifications");
                 })
             }
             else {
-                indexDb.getTemplates().then(function(){
+                indexDb.getTemplates().then(function () {
                     reference.fillTemplatesPage({});
                 });
             }
@@ -231,7 +231,7 @@ let notification = require("./notifications");
             let cont = 0;
             for (let template of templatesResponse) {
                 $("#templatesNotFound").remove();
-                $("#allTemplatesDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + template.name + "</div><img src='" + template.icon + "'style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + template.templateId + "!--></div></div></div><div class=pt-footer><p><b>Ultima Actualizacion: </b> " + template.lastModification.split("GMT")[0] + " </p><button id='createTemplate"+ cont +"'class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Crear Reporte</button></div></div></div>");
+                $("#allTemplatesDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + template.name + "</div><img src='" + template.icon + "'style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + template.templateId + "!--></div></div></div><div class=pt-footer><p><b>Ultima Actualizacion: </b> " + template.lastModification.split("GMT")[0] + " </p><button id='createTemplate" + cont + "'class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Crear Reporte</button></div></div></div>");
                 $("#createTemplate" + cont).on("click", function (event) {
                     reports.reportSelected = {};
                     templates.templateSelected = template;
@@ -248,6 +248,17 @@ let notification = require("./notifications");
         fillAnswer: function () {
             let reference = this;
             smartEngine.matchAnswers(reports.reportSelected.content);
+        },
+        launchAnswerCompletedModal: function () {
+            $("#completedReport").remove();
+            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=completeReport role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Todos los campos fueron completados</h4></div><div class=modal-body><img src='/img/completed.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center>Todos los campos obligatorios fueron completados.</h4></div><div class=modal-footer><input class='btn btn-info'data-dismiss=modal type=button value='Guardar el reporte'></div></div></div></div>");
+            $("#completedReport").modal({ backdrop: 'static', keyboard: false });
+        },
+        launchAnswerInCompleteModal: function (emptyFields) {
+            $("#incompleteReport").remove();
+            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=incompleteReport role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel7>Algunos campos no fueron completados</h4></div><div class=modal-body><img src='/img/incompleted.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center>Todos los campos obligatorios no fueron completados</h4><h5 id=emptyFieldsText style=text-align:center></h5></div><div class=modal-footer><input class='btn btn-info'data-dismiss=modal type=button value=Entendido></div></div></div></div>");
+            $("#emptyFieldsText").text(emptyFields);
+            $("#incompleteReport").modal({ backdrop: 'static', keyboard: false });
         },
         saveAnswerEvent: function () {
             let reference = this;
@@ -268,7 +279,13 @@ let notification = require("./notifications");
 
                 if (Object.keys(reports.reportSelected).length == 0) {
                     indexDb.addReport(templates.templateSelected.templateId, visits.visitSelected.visitId, answerObj, status).then(function () {
-                        notification.sendNotification("Smart Docs","Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status );
+                        if (answer.completed) {
+                            reference.launchAnswerCompletedModal();
+                        }
+                        else {
+                            reference.launchAnswerInCompleteModal(answer.fieldsEmpty);
+                        }
+                        //notification.sendNotification("Smart Docs", "Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status);
                         reference.changePage("allVisits");
                     })
                         .catch(function (err) {
