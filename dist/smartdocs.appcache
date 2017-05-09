@@ -1,16 +1,15 @@
 CACHE MANIFEST
-# 2010-06-18:v2
+# 2010-06-18:v1
 CACHE:
 img/eyeIcon.png
 img/huaweiLogo.png
 img/visitIcon.svg
+js/service-worker.js
 css/bootstrap.min.css
 css/font-awesome.min.css
 fonts/fontawesome-webfont.ttf
 fonts/fontawesome-webfont.ttf
 fonts/fontawesome-webfont.woff2
-js/bootstrap.min.js
-js/jquery-2.2.4.min.js
 views/allTemplatesBoxes.html
 views/dashboard.html
 views/allVisits.html

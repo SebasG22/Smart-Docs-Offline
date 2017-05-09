@@ -8,6 +8,7 @@ let templates = require("./templates");
 let reports = require("./reports");
 let indexDb = require("./indexedDb");
 let message = require("./messages");
+let notification = require("./notifications");
 
 
 (function () {
@@ -16,6 +17,7 @@ let message = require("./messages");
             let reference = this;
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
+                notification.sendNotification("Bievenido a Smart Docs","Registra visitas para poder agregar reportes");
                 reference.addEventsToMenu();
                 reference.loadNavBar();
             });
@@ -259,6 +261,7 @@ let message = require("./messages");
 
                 if (Object.keys(reports.reportSelected).length == 0) {
                     indexDb.addReport(templates.templateSelected.templateId, visits.visitSelected.visitId, answerObj, status).then(function () {
+                        notification.sendNotification("Smart Docs","Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status );
                         reference.changePage("allVisits");
                     })
                         .catch(function (err) {
