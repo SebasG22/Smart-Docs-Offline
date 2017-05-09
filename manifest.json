@@ -1,6 +1,6 @@
 {
-  "short_name": " Smart Docs @Huawei",
-  "name": "Smart Docs Offline Version",
+  "short_name": " Smart Docs",
+  "name": "Smart Docs @Huawei App",
   "icons": [
     {
       "src": "img/HuaweiLogo.png",
@@ -9,7 +9,7 @@
     }
   ],
   "start_url": "/",
-  "background_color": "#fff",
+  "background_color": "#000",
   "Theme_color": "#536878",
   "display": "standalone",
   "related_applications": [
