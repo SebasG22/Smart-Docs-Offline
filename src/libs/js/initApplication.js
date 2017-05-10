@@ -21,11 +21,11 @@ let notification = require("./notifications");
 
                 switch (navigator.onLine) {
                     case true:
-                        $("#userStatus").html("Online");
+                        $("#userStatus").html(" Estado: Online ");
                         $("#userStatus").css("color", "green");
                         break;
                     case false:
-                        $("#userStatus").html("Offline");
+                        $("#userStatus").html(" Estado: Offline ");
                         $("#userStatus").css("color", "red");
                         break;
                 }
@@ -428,8 +428,7 @@ let notification = require("./notifications");
             }
         }
     }
-
-    smartDocsOffline.initApplication();
     indexDb.startIndexedDB();
+    smartDocsOffline.initApplication();
 
 })();

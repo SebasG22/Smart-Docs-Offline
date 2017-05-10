@@ -14400,11 +14400,11 @@ var notification = __webpack_require__(9);
 
                 switch (navigator.onLine) {
                     case true:
-                        $("#userStatus").html("Online");
+                        $("#userStatus").html(" Estado: Online ");
                         $("#userStatus").css("color", "green");
                         break;
                     case false:
-                        $("#userStatus").html("Offline");
+                        $("#userStatus").html(" Estado: Offline ");
                         $("#userStatus").css("color", "red");
                         break;
                 }
@@ -14975,9 +14975,8 @@ var notification = __webpack_require__(9);
             }
         }
     };
-
-    smartDocsOffline.initApplication();
     indexDb.startIndexedDB();
+    smartDocsOffline.initApplication();
 })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
