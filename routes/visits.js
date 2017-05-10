@@ -10,14 +10,14 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.findOne({ siteId: ''+ req.body.siteId }, function (err,obj) {
+    Visit.findOne({ siteId: ''+ req.body.siteId }, function (err,visitResponse) {
         if(err){
              return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
             });
         }
-        if(!obj){
+        if(!visitResponse){
             //Not founded
             var visitEntry = new Visit({
                     siteId: req.body.siteId,
@@ -42,10 +42,18 @@ router.post('/', function (req, res, next) {
         }
         else{
             //Founded
-            res.status(201).json({
+            
+            visitResponse.siteId = req.body.siteId;
+            visitResponse.visitId = req.body.visitId;
+            visitResponse.author = req.body.author;
+            visitResponse.creationDate = req.body.creationDate;
+
+            visitResponse.save(function(err,visitRes){
+                res.status(201).json({
                 message: 'Visit Founded',
-                obj: obj,
-                type: typeof (obj)
+                obj: visitRes,
+                type: typeof (visitRes)
+            });
             });
         }
     })
