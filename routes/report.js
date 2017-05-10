@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 
 
 router.post('/', function (req, res, next) {
-    
+
     var report = new Report({
         idReport: req.body.idReport,
         templateId: req.body.templateId,
@@ -22,7 +22,7 @@ router.post('/', function (req, res, next) {
         creationDate: req.body.creationDate,
     });
 
-    report.save(function(err,result){
+    report.save(function (err, result) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -39,29 +39,38 @@ router.post('/', function (req, res, next) {
 });
 
 router.post('/update/checkbox_answer', function (req, res, next) {
-    
-    var report = new Report({
-        idReport: req.body.id,
-        checkbox_answer: req.body.checkbox_answer
-    });
 
-    report.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Report was updated - CheckBox Answer',
-            obj: result
-        })
+        }
+        else {
+            //Founded
+            reportResponse.checkbox_answer = req.body.checkbox_answer;
+            reportResponse.save(function (err, res) {
+                res.status(201).json({
+                    message: 'Report was update - checkbox Answer',
+                    obj: res
+                });
+            });
+        }
     })
+
 });
 
 router.post('/update/date_answer', function (req, res, next) {
-    
+
     var report = new Report({
         idReport: req.body.idReport,
         date_answer: req.body.date_answer
@@ -76,14 +85,14 @@ router.post('/update/date_answer', function (req, res, next) {
         }
 
         res.status(201).json({
-            message: 'Report was updated - Date Answer' ,
+            message: 'Report was updated - Date Answer',
             obj: result
         })
     })
 });
 
 router.post('/update/datetime_answer', function (req, res, next) {
-    
+
     var report = new Report({
         idReport: req.body.idReport,
         datetime_answer: req.body.datetime_answer
@@ -105,7 +114,7 @@ router.post('/update/datetime_answer', function (req, res, next) {
 });
 
 router.post('/updateList_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         list_answer: { type: String }
@@ -127,7 +136,7 @@ router.post('/updateList_answer', function (req, res, next) {
 });
 
 router.post('/updateMonth_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         month_answer: { type: String }
@@ -149,7 +158,7 @@ router.post('/updateMonth_answer', function (req, res, next) {
 });
 
 router.post('/updateMultiselect_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         multiselect_answer: { type: String }
@@ -171,7 +180,7 @@ router.post('/updateMultiselect_answer', function (req, res, next) {
 });
 
 router.post('/updateNumber_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         number_answer: { type: String }
@@ -193,7 +202,7 @@ router.post('/updateNumber_answer', function (req, res, next) {
 });
 
 router.post('/updateRadio_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         radio_answer: { type: String }
@@ -215,7 +224,7 @@ router.post('/updateRadio_answer', function (req, res, next) {
 });
 
 router.post('/updateSelect_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         select_answer: { type: String }
@@ -237,7 +246,7 @@ router.post('/updateSelect_answer', function (req, res, next) {
 });
 
 router.post('/updateTable_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         table_answer: { type: String }
@@ -259,7 +268,7 @@ router.post('/updateTable_answer', function (req, res, next) {
 });
 
 router.post('/updateText_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         text_answer: { type: String }
@@ -281,7 +290,7 @@ router.post('/updateText_answer', function (req, res, next) {
 });
 
 router.post('/updateTextarea_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         textarea_answer: { type: String }
@@ -303,7 +312,7 @@ router.post('/updateTextarea_answer', function (req, res, next) {
 });
 
 router.post('/updateTime_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         time_answer: { type: String }
@@ -325,7 +334,7 @@ router.post('/updateTime_answer', function (req, res, next) {
 });
 
 router.post('/updateWeek_answer', function (req, res, next) {
-    
+
     var site = new Report({
         id_report: { type: String, required: true },
         week_answer: { type: String }
