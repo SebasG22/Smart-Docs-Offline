@@ -14758,7 +14758,7 @@ var sites = __webpack_require__(3);
                     for (var _iterator4 = sites.getAllSites()[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                         var siteElement = _step4.value;
 
-                        $("#siteList").append("<option value='" + siteElement.siteId + "' > " + siteElement.name + " </option>");
+                        $("#sitesList").append("<option value='" + siteElement.siteId + "' > " + siteElement.name + " </option>");
                     }
                 } catch (err) {
                     _didIteratorError4 = true;
