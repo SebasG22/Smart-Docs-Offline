@@ -9,6 +9,7 @@ let reports = require("./reports");
 let indexDb = require("./indexedDb");
 let message = require("./messages");
 let notification = require("./notifications");
+let sites = require("./sites");
 
 (function () {
     let smartDocsOffline = {
@@ -226,28 +227,40 @@ let notification = require("./notifications");
                     break;
             }
         },
+        "siteOptSelected": "",
         loadEventNewVisit() {
             let reference = this;
             $("#new_VisitBtn").click(function () {
                 $("#new_visit_modal").remove();
-                $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=new_visit_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13> Registra una nueva visita </h4></div><div class='modal-body'><label class='text-right'>Nombre Sitio : </label><input id='site_name_register' type='text' class='form-control' placeholder='El nombre del sitio debe tener al menos 5 caracteres'><br><p style='text-align: center'><b>Nota:</b> Debes registrar una visita para poder crear reportes del sitio </p></div><div class='modal-footer'><button id='new_visit_register_btn' class='btn btn-info' disabled> Registrar </button> </div> </div></div></div>");
-                $("#new_visit_modal").modal({ backdrop: 'static', keyboard: false });
+                $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=new_visit_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13> Registra una nueva visita </h4></div><div class='modal-body'><label class='text-right'>Nombre Sitio : </label><input id='site_list_register' list='siteList' class='form-control' placeholder='La funcion de autocompletado funciona cuando escribes mas de 3 caracteres'> <datalist id='sitesList'></datalist><br><p style='text-align: center'><b>Nota:</b> Debes registrar una visita para poder crear reportes del sitio </p></div><div class='modal-footer'><button id='new_visit_register_btn' class='btn btn-info' disabled> Registrar </button> </div> </div></div></div>");
+                for (let siteElement of sites.getAllSites()) {
+                    $("#siteList").append("<option value='" + siteElement.siteId + "' > " + siteElement.name + " </option>");
+                }
 
-                $("#site_name_register").on("input", function () {
-                    let site = $("#site_name_register").val();
+                $("#new_visit_modal").modal('show');
 
-                    if (site.length > 5) {
+                $("input[id='site_list_register']").on('focusout', function (e) {
+                    var opt = $('option[value="' + $(this).val() + '"]');
+                    if (opt.length) {
+                        console.log(opt.attr('value'));
+                        reference.siteOptSelected = opt.attr('value');
                         $("#new_visit_register_btn").attr("disabled", false);
-                    }
-                    else {
+                    } else {
+                        $("input[id='site_list_register']").val("");
+                        console.log("Invalid Option");
+                        $("#invalidOpt").modal('show');
                         $("#new_visit_register_btn").attr("disabled", true);
                     }
                 });
 
                 $("#new_visit_register_btn").click(function () {
-                    let site = $("#site_name_register").val();
+                    let siteFilter = sites.getAllSites().filter(function(siteEle){
+                        return siteEle.siteId == siteOptSelected;
+                    });
+                    console.log("Site Filter ", siteFilter);
+
                     $("#new_visit_modal").modal('hide');
-                    indexDb.addVisit(site).then(function () {
+                    indexDb.addVisit(reference.siteOptSelected).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });
