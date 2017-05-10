@@ -428,7 +428,10 @@ let notification = require("./notifications");
             }
         }
     }
-    indexDb.startIndexedDB();
-    smartDocsOffline.initApplication();
-
+    message.addMessageLoder("loaderMessage", "#mainContent2");
+    message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
+    indexDb.startIndexedDB().then(function () {
+        message.removeMessageLoader("#mainContent2");
+        smartDocsOffline.initApplication();
+    });
 })();

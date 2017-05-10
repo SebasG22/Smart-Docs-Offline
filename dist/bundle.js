@@ -10420,44 +10420,48 @@ module.exports = {
     "dataBase": "",
     "startIndexedDB": function startIndexedDB() {
         var reference = this;
-        reference.dataBase = indexedDB.open("SmartDocsOffline", 1);
-        reference.dataBase.onupgradeneeded = function (e) {
-            var active = reference.dataBase.result;
+        return new Promise(function (resolve, reject) {
+            reference.dataBase = indexedDB.open("SmartDocsOffline", 1);
+            reference.dataBase.onupgradeneeded = function (e) {
+                var active = reference.dataBase.result;
 
-            var visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
-            visits.createIndex("by_visitId", "visitId", { unique: true });
-            visits.createIndex("by_site", "site", { unique: false });
-            visits.createIndex("by_creationDate", "creationDate", { unique: false });
+                var visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
+                visits.createIndex("by_visitId", "visitId", { unique: true });
+                visits.createIndex("by_site", "site", { unique: false });
+                visits.createIndex("by_creationDate", "creationDate", { unique: false });
 
-            var templates = active.createObjectStore("templates", { keyPath: 'templateId' });
-            templates.createIndex("by_templateId", "templateId", { unique: true });
-            templates.createIndex("by_creationDate", "creationDate", { unique: false });
-            templates.createIndex("by_lastModification", "lastModification", { unique: false });
-            templates.createIndex("by_taskType", "taskType", { unique: false });
-            templates.createIndex("by_project", "project", { unique: false });
+                var templates = active.createObjectStore("templates", { keyPath: 'templateId' });
+                templates.createIndex("by_templateId", "templateId", { unique: true });
+                templates.createIndex("by_creationDate", "creationDate", { unique: false });
+                templates.createIndex("by_lastModification", "lastModification", { unique: false });
+                templates.createIndex("by_taskType", "taskType", { unique: false });
+                templates.createIndex("by_project", "project", { unique: false });
 
-            var reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
-            reports.createIndex("by_reportId", "reportId", { unique: true });
-            reports.createIndex("by_site", "site", { unique: false });
-            reports.createIndex("by_creation_date", "creationDate", { unique: false });
-            reports.createIndex("by_lastModification", "lastModification", { unique: false });
+                var reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
+                reports.createIndex("by_reportId", "reportId", { unique: true });
+                reports.createIndex("by_site", "site", { unique: false });
+                reports.createIndex("by_creation_date", "creationDate", { unique: false });
+                reports.createIndex("by_lastModification", "lastModification", { unique: false });
 
-            var reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
-            reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
-            reportsLog.createIndex("by_reportId", "reportId", { unique: false });
-            reportsLog.createIndex("by_site", "site", { unique: false });
-            reportsLog.createIndex("by_creation_date", "creationDate", { unique: false });
-            reportsLog.createIndex("by_operation", "operation", { unique: false });
-            reportsLog.createIndex("by_operationDate", "operationDate", { unique: false });
-        };
+                var reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
+                reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
+                reportsLog.createIndex("by_reportId", "reportId", { unique: false });
+                reportsLog.createIndex("by_site", "site", { unique: false });
+                reportsLog.createIndex("by_creation_date", "creationDate", { unique: false });
+                reportsLog.createIndex("by_operation", "operation", { unique: false });
+                reportsLog.createIndex("by_operationDate", "operationDate", { unique: false });
+            };
 
-        reference.dataBase.onsuccess = function (e) {
-            console.log("Smart Docs Offline DB was loaded");
-        };
+            reference.dataBase.onsuccess = function (e) {
+                console.log("Smart Docs Offline DB was loaded");
+                resolve();
+            };
 
-        reference.dataBase.onerror = function (e) {
-            console.error("An error ocurred " + e);
-        };
+            reference.dataBase.onerror = function (e) {
+                console.error("An error ocurred " + e);
+                reject(e);
+            };
+        });
     },
     "addVisit": function addVisit(site) {
         var reference = this;
@@ -14975,8 +14979,12 @@ var notification = __webpack_require__(9);
             }
         }
     };
-    indexDb.startIndexedDB();
-    smartDocsOffline.initApplication();
+    message.addMessageLoder("loaderMessage", "#mainContent2");
+    message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
+    indexDb.startIndexedDB().then(function () {
+        message.removeMessageLoader("#mainContent2");
+        smartDocsOffline.initApplication();
+    });
 })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
