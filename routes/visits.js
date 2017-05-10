@@ -10,13 +10,23 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.findOne({'siteId': 'Test1' , 'visitId': 'Test'}).
-    then(function (err, result) {
+    Visit.findOne({ siteId: 'Test1' }, function (err,obj) {
+        res.status(201).json({
+                message: 'Request Processed',
+                obj: obj,
+                type: typeof (obj)
+            });
+    })
+
+    /*
+    Visit.findOne({ 'siteId': 'Test1' }).
+        then(function (err, result) {
             res.status(201).json({
                 message: 'Request Processed',
                 obj: result,
-                type: typeof(result)
+                type: typeof (result)
             });
+            */
             /*
             if (!result) {
                 
@@ -48,7 +58,13 @@ router.post('/', function (req, res, next) {
             })
         }
         */
-        });
+        
+
+
+
+
+
+
 });
 
 router.delete('/:id', function (req, res, next) {
