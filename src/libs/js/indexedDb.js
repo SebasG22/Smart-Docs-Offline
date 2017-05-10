@@ -116,7 +116,7 @@ module.exports = {
             }
         });
     },
-    "addVisit": function (site, user) {
+    "addVisit": function (name,siteId, user) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -124,7 +124,8 @@ module.exports = {
             var object = data.objectStore("visits");
 
             var request = object.put({
-                site: site,
+                siteId: siteId,
+                name: site,
                 user: user,
                 creationDate: "" + new Date()
             });

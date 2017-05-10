@@ -39,8 +39,11 @@ let sites = require("./sites");
                 message.changeMessageLoader("Consultando Plantillas");
 
                 if (navigator.onLine == true) {
+                    message.changeMessageLoader("Subiendo Visitas");
+                    reference.uploadToVisitToDB().then(function(){
                     message.changeMessageLoader("Actualizando Sitios");
-                    reference.updateSiteExternal().then(function () {
+                    return reference.updateSiteExternal();
+                    }).then(function () {
                         message.changeMessageLoader("Actualizando Plantillas");
                         $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
                             templates.templates = templatesResponse;
@@ -68,7 +71,7 @@ let sites = require("./sites");
                 }
             });
         },
-        
+
         loadNavBar: function () {
             $(function () {
                 $(".navbar-expand-toggle").click(function () {
@@ -97,18 +100,18 @@ let sites = require("./sites");
             $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=userModal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Ingresa el usuario</h4></div><div class=modal-body><input type='text' class='form-control' placeholder='Ingresa el usuario de Huawei Smart Docs @OWS' id='username'/></div><div class=modal-footer><button id='btnOpenApp'class='btn btn-info' disabled>Ingresar</button></div></div></div></div>");
             $("#userModal").modal({ backdrop: 'static', keyboard: false });
 
-            $("#username").on("input",function(){
+            $("#username").on("input", function () {
                 let usernameval = $("#username").val();
-                if(usernameval.length > 5 ){
-                    localStorage.setItem("username" , usernameval);
-                    $("#btnOpenApp").attr("disabled",false);
+                if (usernameval.length > 5) {
+                    localStorage.setItem("username", usernameval);
+                    $("#btnOpenApp").attr("disabled", false);
                 }
-                else{
-                    $("#btnOpenApp").attr("disabled",true);
+                else {
+                    $("#btnOpenApp").attr("disabled", true);
                 }
             });
 
-            $("#btnOpenApp").click(function(){
+            $("#btnOpenApp").click(function () {
                 $("#userModal").modal('hide');
                 reference.initApplication();
             });
@@ -190,9 +193,9 @@ let sites = require("./sites");
                 case "allVisits":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Sitios Almacenados");
-                    indexDb.getSites().then(function(){
+                    indexDb.getSites().then(function () {
                         message.changeMessageLoader("Consultando Visitas Almacenadas");
-                        return indexDb.getVisits(); 
+                        return indexDb.getVisits();
                     }).then(function () {
                         reference.fillVisitsPage();
                         reference.loadEventNewVisit();
@@ -259,7 +262,7 @@ let sites = require("./sites");
             $("#new_VisitBtn").click(function () {
                 $("#new_visit_modal").remove();
                 $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=new_visit_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13> Registra una nueva visita </h4></div><div class='modal-body'><label class='text-right'>Nombre Sitio : </label><input id='site_list_register' list='sitesList' class='form-control' placeholder='La funcion de autocompletado funciona cuando escribes mas de 3 caracteres'> <datalist id='sitesList'></datalist><br><p style='text-align: center'><b>Nota:</b> Debes registrar una visita para poder crear reportes del sitio </p></div><div class='modal-footer'><button id='new_visit_register_btn' class='btn btn-info' disabled> Registrar </button> </div> </div></div></div>");
-                console.log("Sites before Filter",sites.getAllSites())
+                console.log("Sites before Filter", sites.getAllSites())
                 for (let siteElement of sites.getAllSites()) {
                     $("#sitesList").append("<option value='" + siteElement.siteId + "' > " + siteElement.name + " </option>");
                 }
@@ -281,13 +284,13 @@ let sites = require("./sites");
                 });
 
                 $("#new_visit_register_btn").click(function () {
-                    let siteFilter = sites.getAllSites().filter(function(siteEle){
+                    let siteFilter = sites.getAllSites().filter(function (siteEle) {
                         return siteEle.siteId == reference.siteOptSelected;
                     });
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username")).then(function () {
+                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), siteFilter[0].siteId, localStorage.getItem("username")).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });
@@ -485,18 +488,42 @@ let sites = require("./sites");
                 $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
             }
         },
-        "uploadToVisitToDB()": function(){
-
+        "uploadToVisitToDB()": function () {
+            return new Promise(function (resolve, reject) {
+                let reference = this;
+                let visitsToUpdate = visits.getVisits();
+                let cont = 0
+                let promisesUpdate = [];
+                for (let visitsToUpd of visitsToUpdate) {
+                    this["visitsToUpdate" + cont] = reference.postVisitRequest( 
+                        {siteId: visitsToUpd.siteId, visitId: visitsToUpd.visitId,
+                         author: visitsToUpd.user , creationDate: visitsToUpd.creationDate });
+                    promisesUpdate.push(this["visitsToUpdate" + cont]);
+                    cont += 1;
+                }
+                Promise.all(promisesUpdate).then(function (values) {
+                    console.log("Visits Update " , values);
+                    resolve();
+                });
+            });
+        },
+        "postVisitRequest": function (dataToUpdate) {
+            return new Promise(function (resolve, reject) {
+                $.post("https://smart-docs.herokuapp.com/visits/", dataToUpdate)
+                    .done(function (data) {
+                        resolve(data);
+                    });
+            });
         }
     }
     message.addMessageLoder("loaderMessage", "#mainContent2");
     message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
-        if(localStorage.getItem("username") == null){
+        if (localStorage.getItem("username") == null) {
             smartDocsOffline.launchUserModal();
         }
-        else{
+        else {
             smartDocsOffline.initApplication();
         }
     });

@@ -10540,7 +10540,7 @@ module.exports = {
             };
         });
     },
-    "addVisit": function addVisit(site, user) {
+    "addVisit": function addVisit(name, siteId, user) {
         var reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -10548,7 +10548,8 @@ module.exports = {
             var object = data.objectStore("visits");
 
             var request = object.put({
-                site: site,
+                siteId: siteId,
+                name: site,
                 user: user,
                 creationDate: "" + new Date()
             });
@@ -14499,8 +14500,11 @@ var sites = __webpack_require__(3);
                 message.changeMessageLoader("Consultando Plantillas");
 
                 if (navigator.onLine == true) {
-                    message.changeMessageLoader("Actualizando Sitios");
-                    reference.updateSiteExternal().then(function () {
+                    message.changeMessageLoader("Subiendo Visitas");
+                    reference.uploadToVisitToDB().then(function () {
+                        message.changeMessageLoader("Actualizando Sitios");
+                        return reference.updateSiteExternal();
+                    }).then(function () {
                         message.changeMessageLoader("Actualizando Plantillas");
                         $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
                             templates.templates = templatesResponse;
@@ -14826,7 +14830,7 @@ var sites = __webpack_require__(3);
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username")).then(function () {
+                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), siteFilter[0].siteId, localStorage.getItem("username")).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });
@@ -15158,7 +15162,53 @@ var sites = __webpack_require__(3);
                 }
             }
         },
-        "uploadToVisitToDB()": function uploadToVisitToDB() {}
+        "uploadToVisitToDB()": function uploadToVisitToDB() {
+            return new Promise(function (resolve, reject) {
+                var reference = this;
+                var visitsToUpdate = visits.getVisits();
+                var cont = 0;
+                var promisesUpdate = [];
+                var _iteratorNormalCompletion11 = true;
+                var _didIteratorError11 = false;
+                var _iteratorError11 = undefined;
+
+                try {
+                    for (var _iterator11 = visitsToUpdate[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+                        var visitsToUpd = _step11.value;
+
+                        this["visitsToUpdate" + cont] = reference.postVisitRequest({ siteId: visitsToUpd.siteId, visitId: visitsToUpd.visitId,
+                            author: visitsToUpd.user, creationDate: visitsToUpd.creationDate });
+                        promisesUpdate.push(this["visitsToUpdate" + cont]);
+                        cont += 1;
+                    }
+                } catch (err) {
+                    _didIteratorError11 = true;
+                    _iteratorError11 = err;
+                } finally {
+                    try {
+                        if (!_iteratorNormalCompletion11 && _iterator11.return) {
+                            _iterator11.return();
+                        }
+                    } finally {
+                        if (_didIteratorError11) {
+                            throw _iteratorError11;
+                        }
+                    }
+                }
+
+                Promise.all(promisesUpdate).then(function (values) {
+                    console.log("Visits Update ", values);
+                    resolve();
+                });
+            });
+        },
+        "postVisitRequest": function postVisitRequest(dataToUpdate) {
+            return new Promise(function (resolve, reject) {
+                $.post("https://smart-docs.herokuapp.com/visits/", dataToUpdate).done(function (data) {
+                    resolve(data);
+                });
+            });
+        }
     };
     message.addMessageLoder("loaderMessage", "#mainContent2");
     message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
