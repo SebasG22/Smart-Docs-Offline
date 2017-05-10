@@ -9,8 +9,6 @@ let reports = require("./reports");
 let indexDb = require("./indexedDb");
 let message = require("./messages");
 let notification = require("./notifications");
-let sites = require("./sites");
-
 
 (function () {
     let smartDocsOffline = {
@@ -41,7 +39,7 @@ let sites = require("./sites");
 
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("Actualizando Sitios");
-                    sites.updateSiteExternal().then(function () {
+                    reference.updateSiteExternal().then(function () {
                         message.changeMessageLoader("Actualizando Plantillas");
                         $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
                             templates.templates = templatesResponse;
@@ -59,9 +57,9 @@ let sites = require("./sites");
                 }
                 else {
                     message.changeMessageLoader("Obteniendo Sitios Almacenados");
-                    indexDb.getSites().then(function(resolve,reject){
+                    indexDb.getSites().then(function (resolve, reject) {
                         message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                        return indexDb.getTemplates(); 
+                        return indexDb.getTemplates();
                     }).then(function () {
                         message.removeMessageLoader("#mainContent2");
                     });
@@ -119,6 +117,18 @@ let sites = require("./sites");
             $("#errorPosition").remove();
             $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel2 id=errorPosition role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>No has permitido el acceso a tu localizacion </h4></div><div class=modal-body><img src='https://cdn4.iconfinder.com/data/icons/flatified/128/map.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Por favor, configura tu dispositivo correctamente </h4><h5 style=text-align:center>El accesor a la localizacion ha sido bloqueado <br> <b> Solucion> </b> Ingresa a la configuracion del navegador y modifica los permisos de localizacion </h5><div class='text-center'></div></div></div></div></div>");
             $("#errorPosition").modal({ backdrop: 'static', keyboard: false });
+        },
+        updateSiteExternal: function () {
+            return new Promise(function (resolve, reject) {
+                $.get("https://smart-docs.herokuapp.com/sites/", function (sitesResponse) {
+                    for (let site of sitesResponse) {
+                        indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project);
+                    }
+                    indexDb.getSites().then(function (resolve, reject) {
+                        resolve();
+                    });
+                })
+            });
         },
         addEventsToMenu: function () {
             let reference = this;
