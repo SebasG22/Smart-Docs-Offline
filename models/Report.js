@@ -9,7 +9,6 @@ let answerSchema = new Schema({
     val: { type: String, required: true }
 });
 
-
 let schema = new Schema({
     idReport: { type: String, required: true },
     templateId: { type: String },
