@@ -14802,7 +14802,7 @@ var sites = __webpack_require__(3);
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    indexDb.addVisit(reference.siteOptSelected).then(function () {
+                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString()).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });
