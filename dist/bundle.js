@@ -14752,7 +14752,7 @@ var sites = __webpack_require__(3);
             var reference = this;
             $("#new_VisitBtn").click(function () {
                 $("#new_visit_modal").remove();
-                $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=new_visit_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13> Registra una nueva visita </h4></div><div class='modal-body'><label class='text-right'>Nombre Sitio : </label><input id='site_list_register' list='siteList' class='form-control' placeholder='La funcion de autocompletado funciona cuando escribes mas de 3 caracteres'> <datalist id='sitesList'></datalist><br><p style='text-align: center'><b>Nota:</b> Debes registrar una visita para poder crear reportes del sitio </p></div><div class='modal-footer'><button id='new_visit_register_btn' class='btn btn-info' disabled> Registrar </button> </div> </div></div></div>");
+                $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=new_visit_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13> Registra una nueva visita </h4></div><div class='modal-body'><label class='text-right'>Nombre Sitio : </label><input id='site_list_register' list='sitesList' class='form-control' placeholder='La funcion de autocompletado funciona cuando escribes mas de 3 caracteres'> <datalist id='sitesList'></datalist><br><p style='text-align: center'><b>Nota:</b> Debes registrar una visita para poder crear reportes del sitio </p></div><div class='modal-footer'><button id='new_visit_register_btn' class='btn btn-info' disabled> Registrar </button> </div> </div></div></div>");
                 console.log("Sites before Filter", sites.getAllSites());
                 var _iteratorNormalCompletion4 = true;
                 var _didIteratorError4 = false;
@@ -14797,7 +14797,7 @@ var sites = __webpack_require__(3);
 
                 $("#new_visit_register_btn").click(function () {
                     var siteFilter = sites.getAllSites().filter(function (siteEle) {
-                        return siteEle.siteId == siteOptSelected;
+                        return siteEle.siteId == reference.siteOptSelected;
                     });
                     console.log("Site Filter ", siteFilter);
 
