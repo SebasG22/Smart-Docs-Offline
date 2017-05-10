@@ -14447,13 +14447,13 @@ var notification = __webpack_require__(9);
                     }).then(function () {
                         message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
                         indexDb.getTemplates().then(function () {
-                            messsage.removeMessageLoader("#mainContent2");
+                            message.removeMessageLoader("#mainContent2");
                         });
                     });
                 } else {
                     message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
                     indexDb.getTemplates().then(function () {
-                        messsage.removeMessageLoader("#mainContent2");
+                        message.removeMessageLoader("#mainContent2");
                     });
                 }
             });
