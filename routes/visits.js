@@ -3,8 +3,8 @@ var router = express.Router();
 const Visit = require("./../models/Visits");
 
 router.get('/', function (req, res, next) {
-    Visit.find().then(function (sites) {
-        res.send(sites);
+    Visit.find().then(function (visits) {
+        res.send(visits);
     });
 });
 
@@ -21,7 +21,8 @@ router.post('/', function (req, res, next) {
             author: req.body.author,
             creationDate: req.body.creationDate
         }).then(function (err, result) {
-            if (err) {
+            
+            if (result) {
                 var visit = new Visit({
                     siteId: req.body.siteId,
                     visitId: req.body.visitId,
