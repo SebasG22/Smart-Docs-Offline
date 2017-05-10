@@ -40,7 +40,7 @@ let sites = require("./sites");
 
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("Subiendo Visitas");
-                    reference.uploadToVisitToDB().then(function(){
+                    reference.uploadToVisitToDB.then(function(){
                     message.changeMessageLoader("Actualizando Sitios");
                     return reference.updateSiteExternal();
                     }).then(function () {
@@ -516,6 +516,8 @@ let sites = require("./sites");
             });
         }
     }
+
+
     message.addMessageLoder("loaderMessage", "#mainContent2");
     message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
     indexDb.startIndexedDB().then(function () {

@@ -14501,7 +14501,7 @@ var sites = __webpack_require__(3);
 
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("Subiendo Visitas");
-                    reference.uploadToVisitToDB().then(function () {
+                    reference.uploadToVisitToDB.then(function () {
                         message.changeMessageLoader("Actualizando Sitios");
                         return reference.updateSiteExternal();
                     }).then(function () {
@@ -15210,6 +15210,7 @@ var sites = __webpack_require__(3);
             });
         }
     };
+
     message.addMessageLoder("loaderMessage", "#mainContent2");
     message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
     indexDb.startIndexedDB().then(function () {
