@@ -9,6 +9,7 @@ let reports = require("./reports");
 let indexDb = require("./indexedDb");
 let message = require("./messages");
 let notification = require("./notifications");
+let sites = require("./sites");
 
 
 (function () {
@@ -37,24 +38,31 @@ let notification = require("./notifications");
                 reference.grantPermissionPosition();
                 message.addMessageLoder("loaderMessage", "#mainContent2");
                 message.changeMessageLoader("Consultando Plantillas");
+
                 if (navigator.onLine == true) {
-                    message.changeMessageLoader("Actualizando Plantillas");
-                    $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
-                        templates.templates = templatesResponse;
-                        for (let template of templates.templates) {
-                            indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
-                        }
-                        return indexDb.getTemplates();
-                    }).then(function () {
-                        message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                        indexDb.getTemplates().then(function () {
-                            message.removeMessageLoader("#mainContent2");
+                    message.changeMessageLoader("Actualizando Sitios");
+                    sites.updateSiteExternal().then(function () {
+                        message.changeMessageLoader("Actualizando Plantillas");
+                        $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
+                            templates.templates = templatesResponse;
+                            for (let template of templates.templates) {
+                                indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
+                            }
+                            return indexDb.getTemplates();
+                        }).then(function () {
+                            message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                            indexDb.getTemplates().then(function () {
+                                message.removeMessageLoader("#mainContent2");
+                            });
                         });
                     });
                 }
                 else {
-                    message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                    indexDb.getTemplates().then(function () {
+                    message.changeMessageLoader("Obteniendo Sitios Almacenados");
+                    indexDb.getSites().then(function(resolve,reject){
+                        message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                        return indexDb.getTemplates(); 
+                    }).then(function () {
                         message.removeMessageLoader("#mainContent2");
                     });
 

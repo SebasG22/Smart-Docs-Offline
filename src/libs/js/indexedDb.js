@@ -3,22 +3,23 @@ let dataBase;
 let visitsConnection = require("./visits");
 let templatesConnection = require("./templates");
 let reportsConnection = require("./reports");
+let siteConnection = require("./sites");
 
 module.exports = {
     "dataBase": "",
     "startIndexedDB": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
-            reference.dataBase = indexedDB.open("SmartDocsOffline", 2);
+            reference.dataBase = indexedDB.open("SmartDocsOffline", 3);
             reference.dataBase.onupgradeneeded = function (e) {
                 let active = reference.dataBase.result;
 
-                let sites = active.createObjectStore("sites",{keyPath: 'siteId'});
-                sites.createIndex("by_siteId","siteId", {unique: true});
-                sites.createIndex("by_project","project", {unique: false});
-                sites.createIndex("by_fmOffice","fmOffice", {unique: false});
-                sites.createIndex("by_creationDate","creationDate", {unique: false});
-                sites.createIndex("by_lastModification","lastModification", {unique: false});
+                let sites = active.createObjectStore("sites", { keyPath: 'siteId' });
+                sites.createIndex("by_siteId", "siteId", { unique: true });
+                sites.createIndex("by_project", "project", { unique: false });
+                sites.createIndex("by_fmOffice", "fmOffice", { unique: false });
+                sites.createIndex("by_creationDate", "creationDate", { unique: false });
+                sites.createIndex("by_lastModification", "lastModification", { unique: false });
 
                 let visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
                 visits.createIndex("by_visitId", "visitId", { unique: true });
@@ -56,6 +57,60 @@ module.exports = {
             reference.dataBase.onerror = function (e) {
                 console.error("An error ocurred " + e);
                 reject(e);
+            }
+        });
+    },
+    "addSite": function (siteId, name, fmOffice, project) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["sites"], "readwrite");
+            var object = data.objectStore("sites");
+
+            var request = object.put({
+                siteId: siteId,
+                name: name,
+                fmOffice: fmOffice,
+                project: project,
+                creationDate: "" + new Date(),
+                lastModification: "" + new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(request.error.name);
+            }
+
+            data.oncomplete = function (e) {
+                console.log("The Site was register on SmartDocsOffline");
+                resolve();
+            }
+        });
+    },
+    "getSites": function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["sites"], "readonly");
+            let object = data.objectStore("sites");
+            let elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                var result = e.target.result;
+                if (result === null) {
+                    result;
+                }
+                else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            }
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                siteConnection.sites = elements;
+                resolve();
             }
         });
     },
