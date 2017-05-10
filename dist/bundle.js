@@ -15162,8 +15162,8 @@ var sites = __webpack_require__(3);
             }
         },
         "uploadToVisitToDB": function uploadToVisitToDB() {
+            var reference = this;
             return new Promise(function (resolve, reject) {
-                var reference = this;
                 var visitsToUpdate = visits.getVisits();
                 var cont = 0;
                 var promisesUpdate = [];

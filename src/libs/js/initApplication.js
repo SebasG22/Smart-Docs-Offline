@@ -487,8 +487,8 @@ let sites = require("./sites");
             }
         },
         "uploadToVisitToDB": function () {
+            let reference = this;
             return new Promise(function (resolve, reject) {
-                let reference = this;
                 let visitsToUpdate = visits.getVisits();
                 let cont = 0
                 let promisesUpdate = [];
