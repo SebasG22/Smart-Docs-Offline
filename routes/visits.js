@@ -10,18 +10,11 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.findOneAndUpdate(
+    Visit.find(
         {
             siteId: req.body.siteId,
             visitId: req.body.visitId
-        },
-        {
-            siteId: req.body.siteId,
-            visitId: req.body.visitId,
-            author: req.body.author,
-            creationDate: req.body.creationDate
-        },
-        {upsert: true, new: true, runValidators: true}
+        }
         ).then(function (err, result) {
             
             res.status(201).json({
