@@ -23,12 +23,7 @@ router.post('/', function (req, res, next) {
         }).then(function (err, result) {
             
             if (!result) {
-               res.status(201).json({
-                message: 'Visit already exist but was updated',
-                obj: result
-            })
-            }
-             var visit = new Visit({
+                var visit = new Visit({
                     siteId: req.body.siteId,
                     visitId: req.body.visitId,
                     author: req.body.author,
@@ -48,8 +43,12 @@ router.post('/', function (req, res, next) {
                         obj: result
                     })
                 })
+            }
+            res.status(201).json({
+                message: 'Visit already exist but was updated',
+                obj: result + typeof(result)
+            })
         });
-
 });
 
 router.delete('/:id', function (req, res, next) {
