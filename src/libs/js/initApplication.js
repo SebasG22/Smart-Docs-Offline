@@ -124,7 +124,7 @@ let notification = require("./notifications");
                     for (let site of sitesResponse) {
                         indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project);
                     }
-                    indexDb.getSites().then(function (resolve, reject) {
+                    indexDb.getSites().then(function () {
                         resolve();
                     });
                 })

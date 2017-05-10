@@ -14608,7 +14608,7 @@ var notification = __webpack_require__(9);
                         }
                     }
 
-                    indexDb.getSites().then(function (resolve, reject) {
+                    indexDb.getSites().then(function () {
                         resolve();
                     });
                 });
