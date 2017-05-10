@@ -10,18 +10,44 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.findOneAndUpdate({ siteId: 'Test1' }, function (err,obj) {
+    Visit.findOne({ siteId: ''+ req.body.siteId }, function (err,obj) {
         if(err){
              return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
             });
         }
-        res.status(201).json({
-                message: 'Request Processed',
+        if(!obj){
+            //Not founded
+            var visitEntry = new Visit({
+                    siteId: req.body.siteId,
+                    visitId: req.body.visitId,
+                    author: req.body.author,
+                    creationDate: req.body.creationDate
+                });
+
+                visitEntry.save(function (err, result) {
+                    if (err) {
+                        return res.status(500).json({
+                            title: 'An error ocurred',
+                            error: err
+                        })
+                    }
+
+                    res.status(201).json({
+                        message: 'Visit was saved',
+                        obj: result
+                    })
+                })
+        }
+        else{
+            //Founded
+            res.status(201).json({
+                message: 'Visit Founded',
                 obj: obj,
                 type: typeof (obj)
             });
+        }
     })
 
     /*
