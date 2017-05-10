@@ -35,12 +35,11 @@ let sites = require("./sites");
                 message.changeMessageLoader("Consultando Plantillas");
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("Obteniendo Visitas Almacenadas");
-                    indexDb.getVisits().then(function(){
+                    indexDb.getVisits().then(function () {
                         message.changeMessageLoader("Subiendo Visitas Almacenadas");
-                        return reference.uploadToVisitToDB();
-                    }).then(function(){
-                    message.changeMessageLoader("Actualizando Sitios");
-                    return reference.updateSiteExternal();
+                        reference.uploadToVisitToDB();
+                        message.changeMessageLoader("Actualizando Sitios");
+                        return reference.updateSiteExternal();
                     }).then(function () {
                         message.changeMessageLoader("Actualizando Plantillas");
                         $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
@@ -488,22 +487,22 @@ let sites = require("./sites");
         },
         "uploadToVisitToDB": function () {
             let reference = this;
-            return new Promise(function (resolve, reject) {
-                let visitsToUpdate = visits.getVisits();
-                let cont = 0
-                let promisesUpdate = [];
-                for (let visitsToUpd of visitsToUpdate) {
-                    this["visitsToUpdate" + cont] = reference.postVisitRequest( 
-                        {siteId: visitsToUpd.siteId, visitId: visitsToUpd.visitId,
-                         author: visitsToUpd.user , creationDate: visitsToUpd.creationDate });
-                    promisesUpdate.push(this["visitsToUpdate" + cont]);
-                    cont += 1;
-                }
-                Promise.all(promisesUpdate).then(function (values) {
-                    console.log("Visits Update " , values);
-                    resolve();
-                });
+            let visitsToUpdate = visits.getVisits();
+            let cont = 0
+            let promisesUpdate = [];
+            for (let visitsToUpd of visitsToUpdate) {
+                this["visitsToUpdate" + cont] = reference.postVisitRequest(
+                    {
+                        siteId: visitsToUpd.siteId, visitId: visitsToUpd.visitId,
+                        author: visitsToUpd.user, creationDate: visitsToUpd.creationDate
+                    });
+                promisesUpdate.push(this["visitsToUpdate" + cont]);
+                cont += 1;
+            }
+            Promise.all(promisesUpdate).then(function (values) {
+                console.log("Visits Update ", values);
             });
+
         },
         "postVisitRequest": function (dataToUpdate) {
             return new Promise(function (resolve, reject) {

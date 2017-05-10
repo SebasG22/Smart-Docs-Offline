@@ -14499,8 +14499,7 @@ var sites = __webpack_require__(3);
                     message.changeMessageLoader("Obteniendo Visitas Almacenadas");
                     indexDb.getVisits().then(function () {
                         message.changeMessageLoader("Subiendo Visitas Almacenadas");
-                        return reference.uploadToVisitToDB();
-                    }).then(function () {
+                        reference.uploadToVisitToDB();
                         message.changeMessageLoader("Actualizando Sitios");
                         return reference.updateSiteExternal();
                     }).then(function () {
@@ -15163,42 +15162,41 @@ var sites = __webpack_require__(3);
         },
         "uploadToVisitToDB": function uploadToVisitToDB() {
             var reference = this;
-            return new Promise(function (resolve, reject) {
-                var visitsToUpdate = visits.getVisits();
-                var cont = 0;
-                var promisesUpdate = [];
-                var _iteratorNormalCompletion11 = true;
-                var _didIteratorError11 = false;
-                var _iteratorError11 = undefined;
+            var visitsToUpdate = visits.getVisits();
+            var cont = 0;
+            var promisesUpdate = [];
+            var _iteratorNormalCompletion11 = true;
+            var _didIteratorError11 = false;
+            var _iteratorError11 = undefined;
 
+            try {
+                for (var _iterator11 = visitsToUpdate[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+                    var visitsToUpd = _step11.value;
+
+                    this["visitsToUpdate" + cont] = reference.postVisitRequest({
+                        siteId: visitsToUpd.siteId, visitId: visitsToUpd.visitId,
+                        author: visitsToUpd.user, creationDate: visitsToUpd.creationDate
+                    });
+                    promisesUpdate.push(this["visitsToUpdate" + cont]);
+                    cont += 1;
+                }
+            } catch (err) {
+                _didIteratorError11 = true;
+                _iteratorError11 = err;
+            } finally {
                 try {
-                    for (var _iterator11 = visitsToUpdate[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
-                        var visitsToUpd = _step11.value;
-
-                        this["visitsToUpdate" + cont] = reference.postVisitRequest({ siteId: visitsToUpd.siteId, visitId: visitsToUpd.visitId,
-                            author: visitsToUpd.user, creationDate: visitsToUpd.creationDate });
-                        promisesUpdate.push(this["visitsToUpdate" + cont]);
-                        cont += 1;
+                    if (!_iteratorNormalCompletion11 && _iterator11.return) {
+                        _iterator11.return();
                     }
-                } catch (err) {
-                    _didIteratorError11 = true;
-                    _iteratorError11 = err;
                 } finally {
-                    try {
-                        if (!_iteratorNormalCompletion11 && _iterator11.return) {
-                            _iterator11.return();
-                        }
-                    } finally {
-                        if (_didIteratorError11) {
-                            throw _iteratorError11;
-                        }
+                    if (_didIteratorError11) {
+                        throw _iteratorError11;
                     }
                 }
+            }
 
-                Promise.all(promisesUpdate).then(function (values) {
-                    console.log("Visits Update ", values);
-                    resolve();
-                });
+            Promise.all(promisesUpdate).then(function (values) {
+                console.log("Visits Update ", values);
             });
         },
         "postVisitRequest": function postVisitRequest(dataToUpdate) {
