@@ -22,7 +22,7 @@ router.post('/', function (req, res, next) {
             creationDate: req.body.creationDate
         }).then(function (err, result) {
             
-            if (result) {
+            if (result == "") {
                 var visit = new Visit({
                     siteId: req.body.siteId,
                     visitId: req.body.visitId,
