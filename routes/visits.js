@@ -44,10 +44,12 @@ router.post('/', function (req, res, next) {
                     })
                 })
             }
-            res.status(201).json({
+            else{
+                res.status(201).json({
                 message: 'Visit already exist but was updated',
                 obj: result + typeof(result)
             })
+            }
         });
 });
 
