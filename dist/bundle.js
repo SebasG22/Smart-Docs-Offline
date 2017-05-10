@@ -14396,9 +14396,54 @@ var notification = __webpack_require__(9);
             var reference = this;
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
-                notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
+                //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
                 reference.addEventsToMenu();
                 reference.loadNavBar();
+                reference.grantPermissionPosition();
+                message.addMessageLoder("loaderMessage", "#mainContent2");
+                message.changeMessageLoader("Consultando Plantillas");
+                if (navigator.onLine == true) {
+                    message.changeMessageLoader("Actualizando Plantillas");
+                    $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
+                        templates.templates = templatesResponse;
+                        var _iteratorNormalCompletion = true;
+                        var _didIteratorError = false;
+                        var _iteratorError = undefined;
+
+                        try {
+                            for (var _iterator = templates.templates[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                                var template = _step.value;
+
+                                indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
+                            }
+                        } catch (err) {
+                            _didIteratorError = true;
+                            _iteratorError = err;
+                        } finally {
+                            try {
+                                if (!_iteratorNormalCompletion && _iterator.return) {
+                                    _iterator.return();
+                                }
+                            } finally {
+                                if (_didIteratorError) {
+                                    throw _iteratorError;
+                                }
+                            }
+                        }
+
+                        return indexDb.getTemplates();
+                    }).then(function () {
+                        message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                        indexedDB.getTemplates().then(function () {
+                            messsage.removeMessageLoader("#mainContent2");
+                        });
+                    });
+                } else {
+                    message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                    indexedDB.getTemplates().then(function () {
+                        messsage.removeMessageLoader("#mainContent2");
+                    });
+                }
             });
         },
         loadNavBar: function loadNavBar() {
@@ -14423,17 +14468,45 @@ var notification = __webpack_require__(9);
             $(".app-container").removeClass("expanded");
             $(".navbar-expand-toggle").removeClass("fa-rotate-90");
         },
+        grantPermissionPosition: function grantPermissionPosition() {
+            var reference = this;
+            var options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+            function success(pos) {
+                var crd = pos.coords;
+                console.log('Your current position is:');
+                console.log('Latitude : ' + crd.latitude);
+                console.log('Longitude: ' + crd.longitude);
+                console.log('More or less ' + crd.accuracy + ' meters.');
+            };
+
+            function error(err) {
+                reference.launchErrorPosition();
+                console.warn('ERROR(' + err.code + '): ' + err.message);
+            };
+
+            navigator.geolocation.getCurrentPosition(success, error, options);
+        },
+        launchErrorPosition: function launchErrorPosition() {
+            $("#errorPosition").remove();
+            $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel2 id=errorPosition role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>No has permitido el acceso a tu localizacion </h4></div><div class=modal-body><img src='https://cdn4.iconfinder.com/data/icons/flatified/128/map.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Por favor, configura tu dispositivo correctamente </h4><h5 style=text-align:center>El accesor a la localizacion ha sido bloqueado <br> <b> Solucion> </b> Ingresa a la configuracion del navegador y modifica los permisos de localizacion </h5><div class='text-center'></div></div></div></div></div>");
+            $("#errorPosition").modal({ backdrop: 'static', keyboard: false });
+        },
         addEventsToMenu: function addEventsToMenu() {
             var reference = this;
             var items = [{ id: "itemInicio", page_route: "dashboard" }, { id: "itemVisitas", page_route: "allVisits" }, { id: "itemTemplates", page_route: "allTemplatesBoxes" }, { id: "itemReportes", page_route: "myReports" }, { id: "itemLogger", page_route: "myReportsLog" }, { id: "itemFaq", page_route: "" }];
 
-            var _iteratorNormalCompletion = true;
-            var _didIteratorError = false;
-            var _iteratorError = undefined;
+            var _iteratorNormalCompletion2 = true;
+            var _didIteratorError2 = false;
+            var _iteratorError2 = undefined;
 
             try {
                 var _loop = function _loop() {
-                    var item = _step.value;
+                    var item = _step2.value;
 
                     $("#" + item.id).click(function () {
                         reference.changePage(item.page_route);
@@ -14442,20 +14515,20 @@ var notification = __webpack_require__(9);
                     });
                 };
 
-                for (var _iterator = items[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                for (var _iterator2 = items[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
                     _loop();
                 }
             } catch (err) {
-                _didIteratorError = true;
-                _iteratorError = err;
+                _didIteratorError2 = true;
+                _iteratorError2 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion && _iterator.return) {
-                        _iterator.return();
+                    if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                        _iterator2.return();
                     }
                 } finally {
-                    if (_didIteratorError) {
-                        throw _iteratorError;
+                    if (_didIteratorError2) {
+                        throw _iteratorError2;
                     }
                 }
             }
@@ -14475,13 +14548,19 @@ var notification = __webpack_require__(9);
             var reference = this;
             switch (page_route) {
                 case "allVisits":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Visitas Almacenadas");
                     indexDb.getVisits().then(function () {
                         reference.fillVisitsPage();
                         reference.loadEventNewVisit();
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
                 case "allReportsRelated":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Plantillas Almacenadas");
                     indexDb.getTemplates().then(function () {
+                        message.changeMessageLoader("Consultando Reportes Relacionados");
                         return indexDb.getReports();
                     }).then(function () {
                         var reportsFiltered = reports.getReports().filter(function (report) {
@@ -14489,30 +14568,44 @@ var notification = __webpack_require__(9);
                         });
                         console.log("Reports Filtered", reportsFiltered);
                         reference.fillBoxesReportsRelated(reportsFiltered);
+                        message.removeMessageLoader("#mainContent2");
                     });
                     reference.addEventsReportRelated();
                     break;
                 case "allTemplatesBoxes":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Plantillas Almacenadas");
                     indexDb.getReports().then(function () {
                         reference.getAllTemplates();
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
                 case "newReport":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Cargando Plantilla Seleccionada");
                     reference.showTemplate();
                     reference.saveAnswerEvent();
                     if (Object.keys(reports.reportSelected).length != 0) {
+                        message.changeMessageLoader("Cargando Reporte Almacenado");
                         reference.fillAnswer();
                     }
+                    message.removeMessageLoader("#mainContent2");
                     break;
                 case "myReports":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Cargando Plantilla Seleccionada");
                     console.log("Start Fill Reports");
                     indexDb.getReports().then(function () {
                         reference.fillReportsPage();
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
                 case "myReportsLog":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Logger");
                     indexDb.getReportsLog().then(function () {
                         reference.fillReportsLogPage();
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
             }
@@ -14559,27 +14652,27 @@ var notification = __webpack_require__(9);
             if (navigator.onLine) {
                 $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
                     templates.templates = templatesResponse;
-                    var _iteratorNormalCompletion2 = true;
-                    var _didIteratorError2 = false;
-                    var _iteratorError2 = undefined;
+                    var _iteratorNormalCompletion3 = true;
+                    var _didIteratorError3 = false;
+                    var _iteratorError3 = undefined;
 
                     try {
-                        for (var _iterator2 = templates.templates[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
-                            var template = _step2.value;
+                        for (var _iterator3 = templates.templates[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                            var template = _step3.value;
 
                             indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
                         }
                     } catch (err) {
-                        _didIteratorError2 = true;
-                        _iteratorError2 = err;
+                        _didIteratorError3 = true;
+                        _iteratorError3 = err;
                     } finally {
                         try {
-                            if (!_iteratorNormalCompletion2 && _iterator2.return) {
-                                _iterator2.return();
+                            if (!_iteratorNormalCompletion3 && _iterator3.return) {
+                                _iterator3.return();
                             }
                         } finally {
-                            if (_didIteratorError2) {
-                                throw _iteratorError2;
+                            if (_didIteratorError3) {
+                                throw _iteratorError3;
                             }
                         }
                     }
@@ -14596,13 +14689,13 @@ var notification = __webpack_require__(9);
             var reference = this;
             var visitsResponse = visits.getVisits();
             var cont = 0;
-            var _iteratorNormalCompletion3 = true;
-            var _didIteratorError3 = false;
-            var _iteratorError3 = undefined;
+            var _iteratorNormalCompletion4 = true;
+            var _didIteratorError4 = false;
+            var _iteratorError4 = undefined;
 
             try {
                 var _loop2 = function _loop2() {
-                    var visit = _step3.value;
+                    var visit = _step4.value;
 
                     $("#visitsNotFound").remove();
                     $("#allVisitsDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + visit.site + "</div><img style='width:100px' src='/img/visitIcon.svg' style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + visit.visitId + "!--></div></div></div><div class=pt-footer><button id='attachReports" + cont + "' class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Ver Visita</button></div></div></div>");
@@ -14613,20 +14706,20 @@ var notification = __webpack_require__(9);
                     cont++;
                 };
 
-                for (var _iterator3 = visitsResponse[Symbol.iterator](), _step3; !(_iteratorNormalCompletion3 = (_step3 = _iterator3.next()).done); _iteratorNormalCompletion3 = true) {
+                for (var _iterator4 = visitsResponse[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
                     _loop2();
                 }
             } catch (err) {
-                _didIteratorError3 = true;
-                _iteratorError3 = err;
+                _didIteratorError4 = true;
+                _iteratorError4 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion3 && _iterator3.return) {
-                        _iterator3.return();
+                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
+                        _iterator4.return();
                     }
                 } finally {
-                    if (_didIteratorError3) {
-                        throw _iteratorError3;
+                    if (_didIteratorError4) {
+                        throw _iteratorError4;
                     }
                 }
             }
@@ -14637,13 +14730,13 @@ var notification = __webpack_require__(9);
             message.addMessageLoder("loaderMessage", "#mainContent2");
             message.changeMessageLoader("loaderMessage", "Filtrando Reportes Relacionados");
             var cont = 0;
-            var _iteratorNormalCompletion4 = true;
-            var _didIteratorError4 = false;
-            var _iteratorError4 = undefined;
+            var _iteratorNormalCompletion5 = true;
+            var _didIteratorError5 = false;
+            var _iteratorError5 = undefined;
 
             try {
                 var _loop3 = function _loop3() {
-                    var report = _step4.value;
+                    var report = _step5.value;
 
                     switch (report.status) {
                         case "SM-Status001":
@@ -14671,51 +14764,8 @@ var notification = __webpack_require__(9);
                     cont++;
                 };
 
-                for (var _iterator4 = reportsFiltered[Symbol.iterator](), _step4; !(_iteratorNormalCompletion4 = (_step4 = _iterator4.next()).done); _iteratorNormalCompletion4 = true) {
+                for (var _iterator5 = reportsFiltered[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
                     _loop3();
-                }
-            } catch (err) {
-                _didIteratorError4 = true;
-                _iteratorError4 = err;
-            } finally {
-                try {
-                    if (!_iteratorNormalCompletion4 && _iterator4.return) {
-                        _iterator4.return();
-                    }
-                } finally {
-                    if (_didIteratorError4) {
-                        throw _iteratorError4;
-                    }
-                }
-            }
-
-            $("#sdmTicket").text(reports.reportSelected.ticket_id);
-            message.removeMessageLoader("#mainContent2");
-        },
-        fillTemplatesPage: function fillTemplatesPage() {
-            var reference = this;
-            var templatesResponse = templates.getTemplates();
-            var cont = 0;
-            var _iteratorNormalCompletion5 = true;
-            var _didIteratorError5 = false;
-            var _iteratorError5 = undefined;
-
-            try {
-                var _loop4 = function _loop4() {
-                    var template = _step5.value;
-
-                    $("#templatesNotFound").remove();
-                    $("#allTemplatesDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + template.name + "</div><img src='" + template.icon + "'style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + template.templateId + "!--></div></div></div><div class=pt-footer><p><b>Ultima Actualizacion: </b> " + template.lastModification.split("GMT")[0] + " </p><button id='createTemplate" + cont + "'class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Crear Reporte</button></div></div></div>");
-                    $("#createTemplate" + cont).on("click", function (event) {
-                        reports.reportSelected = {};
-                        templates.templateSelected = template;
-                        reference.changePage("newReport");
-                    });
-                    cont += 1;
-                };
-
-                for (var _iterator5 = templatesResponse[Symbol.iterator](), _step5; !(_iteratorNormalCompletion5 = (_step5 = _iterator5.next()).done); _iteratorNormalCompletion5 = true) {
-                    _loop4();
                 }
             } catch (err) {
                 _didIteratorError5 = true;
@@ -14728,6 +14778,49 @@ var notification = __webpack_require__(9);
                 } finally {
                     if (_didIteratorError5) {
                         throw _iteratorError5;
+                    }
+                }
+            }
+
+            $("#sdmTicket").text(reports.reportSelected.ticket_id);
+            message.removeMessageLoader("#mainContent2");
+        },
+        fillTemplatesPage: function fillTemplatesPage() {
+            var reference = this;
+            var templatesResponse = templates.getTemplates();
+            var cont = 0;
+            var _iteratorNormalCompletion6 = true;
+            var _didIteratorError6 = false;
+            var _iteratorError6 = undefined;
+
+            try {
+                var _loop4 = function _loop4() {
+                    var template = _step6.value;
+
+                    $("#templatesNotFound").remove();
+                    $("#allTemplatesDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + template.name + "</div><img src='" + template.icon + "'style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + template.templateId + "!--></div></div></div><div class=pt-footer><p><b>Ultima Actualizacion: </b> " + template.lastModification.split("GMT")[0] + " </p><button id='createTemplate" + cont + "'class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Crear Reporte</button></div></div></div>");
+                    $("#createTemplate" + cont).on("click", function (event) {
+                        reports.reportSelected = {};
+                        templates.templateSelected = template;
+                        reference.changePage("newReport");
+                    });
+                    cont += 1;
+                };
+
+                for (var _iterator6 = templatesResponse[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
+                    _loop4();
+                }
+            } catch (err) {
+                _didIteratorError6 = true;
+                _iteratorError6 = err;
+            } finally {
+                try {
+                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
+                        _iterator6.return();
+                    }
+                } finally {
+                    if (_didIteratorError6) {
+                        throw _iteratorError6;
                     }
                 }
             }
@@ -14795,13 +14888,13 @@ var notification = __webpack_require__(9);
             var reportsResponse = reports.getReports();
             console.log("Reports Response", reportsResponse);
             var cont = 0;
-            var _iteratorNormalCompletion6 = true;
-            var _didIteratorError6 = false;
-            var _iteratorError6 = undefined;
+            var _iteratorNormalCompletion7 = true;
+            var _didIteratorError7 = false;
+            var _iteratorError7 = undefined;
 
             try {
-                for (var _iterator6 = reportsResponse[Symbol.iterator](), _step6; !(_iteratorNormalCompletion6 = (_step6 = _iterator6.next()).done); _iteratorNormalCompletion6 = true) {
-                    var _report = _step6.value;
+                for (var _iterator7 = reportsResponse[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
+                    var _report = _step7.value;
 
                     $("#dataTableAllReport > tbody").append("<tr><td style='cursor:pointer' id='allReports" + cont + "'>" + _report.reportId + "</td><td> " + _report.name + "</td><td>" + _report.status + "</td><td>" + _report.lastModification.split("GMT")[0] + "</td><td><input id='allReports" + cont + "Details' type='image' name='image' src='/img/eyeIcon.png'></td></tr>");
                     $('#allReports' + cont).add('#allReports' + cont + "Details").on("click", { "report": _report }, function (event) {
@@ -14815,16 +14908,16 @@ var notification = __webpack_require__(9);
                     cont += 1;
                 }
             } catch (err) {
-                _didIteratorError6 = true;
-                _iteratorError6 = err;
+                _didIteratorError7 = true;
+                _iteratorError7 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion6 && _iterator6.return) {
-                        _iterator6.return();
+                    if (!_iteratorNormalCompletion7 && _iterator7.return) {
+                        _iterator7.return();
                     }
                 } finally {
-                    if (_didIteratorError6) {
-                        throw _iteratorError6;
+                    if (_didIteratorError7) {
+                        throw _iteratorError7;
                     }
                 }
             }
@@ -14835,13 +14928,13 @@ var notification = __webpack_require__(9);
             var reportsLogResponse = reports.getReportsLog();
             console.log("Reports Log Response", reportsLogResponse);
             var cont = 0;
-            var _iteratorNormalCompletion7 = true;
-            var _didIteratorError7 = false;
-            var _iteratorError7 = undefined;
+            var _iteratorNormalCompletion8 = true;
+            var _didIteratorError8 = false;
+            var _iteratorError8 = undefined;
 
             try {
-                for (var _iterator7 = reportsLogResponse[Symbol.iterator](), _step7; !(_iteratorNormalCompletion7 = (_step7 = _iterator7.next()).done); _iteratorNormalCompletion7 = true) {
-                    var reportLog = _step7.value;
+                for (var _iterator8 = reportsLogResponse[Symbol.iterator](), _step8; !(_iteratorNormalCompletion8 = (_step8 = _iterator8.next()).done); _iteratorNormalCompletion8 = true) {
+                    var reportLog = _step8.value;
 
                     var background_status = void 0;
                     switch (reportLog.status) {
@@ -14855,16 +14948,16 @@ var notification = __webpack_require__(9);
                     $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
                 }
             } catch (err) {
-                _didIteratorError7 = true;
-                _iteratorError7 = err;
+                _didIteratorError8 = true;
+                _iteratorError8 = err;
             } finally {
                 try {
-                    if (!_iteratorNormalCompletion7 && _iterator7.return) {
-                        _iterator7.return();
+                    if (!_iteratorNormalCompletion8 && _iterator8.return) {
+                        _iterator8.return();
                     }
                 } finally {
-                    if (_didIteratorError7) {
-                        throw _iteratorError7;
+                    if (_didIteratorError8) {
+                        throw _iteratorError8;
                     }
                 }
             }
