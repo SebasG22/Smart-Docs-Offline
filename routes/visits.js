@@ -20,9 +20,11 @@ router.post('/', function (req, res, next) {
             visitId: req.body.visitId,
             author: req.body.author,
             creationDate: req.body.creationDate
-        }).then(function (err, result) {
+        },
+        {upsert: true, new: true, runValidators: true}
+        ).then(function (err, result) {
             
-            if (result) {
+            if (!result) {
                 var visit = new Visit({
                     siteId: req.body.siteId,
                     visitId: req.body.visitId,
