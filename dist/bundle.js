@@ -14574,12 +14574,13 @@ var sites = __webpack_require__(3);
         launchUserModal: function launchUserModal() {
             var reference = this;
             $("#userModal").remove();
-            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=userModal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Ingresa el usuario</h4></div><div class=modal-body><input type='text' class='form-control' placeholder='Ingresa el usuario de Huawei Smart Docs @OWS' id='username'/></div><div class=modal-footer><button id='btnOpenApp'class='btn btn-info'>Ingresar</button></div></div></div></div>");
+            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=userModal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Ingresa el usuario</h4></div><div class=modal-body><input type='text' class='form-control' placeholder='Ingresa el usuario de Huawei Smart Docs @OWS' id='username'/></div><div class=modal-footer><button id='btnOpenApp'class='btn btn-info' disabled>Ingresar</button></div></div></div></div>");
             $("#userModal").modal({ backdrop: 'static', keyboard: false });
 
             $("#username").on("input", function () {
                 var usernameval = $("#username").val();
                 if (usernameval.length > 5) {
+                    localStorage.setItem("username", usernameval);
                     $("#btnOpenApp").attr("disabled", false);
                 } else {
                     $("#btnOpenApp").attr("disabled", true);
