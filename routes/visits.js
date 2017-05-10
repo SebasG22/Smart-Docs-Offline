@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.find(
+    Visit.findOne(
         {
             siteId: req.body.siteId,
             visitId: req.body.visitId
