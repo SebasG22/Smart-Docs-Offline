@@ -15161,6 +15161,7 @@ var sites = __webpack_require__(3);
             }
         },
         "uploadToVisitToDB": function uploadToVisitToDB() {
+            console.log("Upload to Visit on Action");
             var reference = this;
             var visitsToUpdate = visits.getVisits();
             var cont = 0;

@@ -486,6 +486,7 @@ let sites = require("./sites");
             }
         },
         "uploadToVisitToDB": function () {
+            console.log("Upload to Visit on Action");
             let reference = this;
             let visitsToUpdate = visits.getVisits();
             let cont = 0
