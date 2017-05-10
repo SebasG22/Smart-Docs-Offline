@@ -94,7 +94,7 @@ let sites = require("./sites");
         launchUserModal: function () {
             let reference = this;
             $("#userModal").remove();
-            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=userModal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Ingresa el usuario</h4></div><div class=modal-body><input type='text' class='form-control'id='username'/> <button id='btnOpenApp'class='btn btn-info'>Ingresar</button></div><div class=modal-footer><input class='btn btn-info'data-dismiss=modal type=button value='Guardar el reporte'></div></div></div></div>");
+            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=userModal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Ingresa el usuario</h4></div><div class=modal-body><input type='text' class='form-control' placeholder='Ingresa el usuario de Huawei Smart Docs @OWS' id='username'/></div><div class=modal-footer><button id='btnOpenApp'class='btn btn-info'>Ingresar</button></div></div></div></div>");
             $("#userModal").modal({ backdrop: 'static', keyboard: false });
 
             $("#username").on("input",function(){
@@ -108,6 +108,7 @@ let sites = require("./sites");
             });
 
             $("#btnOpenApp").click(function(){
+                $("#userModal").modal('hide');
                 reference.initApplication();
             });
         },
