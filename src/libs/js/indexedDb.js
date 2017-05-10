@@ -13,7 +13,6 @@ module.exports = {
             reference.dataBase = indexedDB.open("SmartDocsOffline", 3);
             reference.dataBase.onupgradeneeded = function (e) {
                 let active = reference.dataBase.result;
-
                 let sites = active.createObjectStore("sites", { keyPath: 'siteId' });
                 sites.createIndex("by_siteId", "siteId", { unique: true });
                 sites.createIndex("by_project", "project", { unique: false });

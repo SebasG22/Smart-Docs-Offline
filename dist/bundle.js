@@ -10440,7 +10440,6 @@ module.exports = {
             reference.dataBase = indexedDB.open("SmartDocsOffline", 3);
             reference.dataBase.onupgradeneeded = function (e) {
                 var active = reference.dataBase.result;
-
                 var sites = active.createObjectStore("sites", { keyPath: 'siteId' });
                 sites.createIndex("by_siteId", "siteId", { unique: true });
                 sites.createIndex("by_project", "project", { unique: false });
@@ -14481,7 +14480,6 @@ var sites = __webpack_require__(3);
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
                 //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-
                 switch (navigator.onLine) {
                     case true:
                         $("#userStatus").html(" Estado: Online ");
@@ -14492,16 +14490,17 @@ var sites = __webpack_require__(3);
                         $("#userStatus").css("color", "red");
                         break;
                 }
-
                 reference.addEventsToMenu();
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
                 message.addMessageLoder("loaderMessage", "#mainContent2");
                 message.changeMessageLoader("Consultando Plantillas");
-
                 if (navigator.onLine == true) {
-                    message.changeMessageLoader("Subiendo Visitas");
-                    reference.uploadToVisitToDB().then(function () {
+                    message.changeMessageLoader("Obteniendo Visitas Almacenadas");
+                    indexDb.getVisits().then(function () {
+                        message.changeMessageLoader("Subiendo Visitas Almacenadas");
+                        return reference.uploadToVisitToDB();
+                    }).then(function () {
                         message.changeMessageLoader("Actualizando Sitios");
                         return reference.updateSiteExternal();
                     }).then(function () {

@@ -18,7 +18,6 @@ let sites = require("./sites");
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
                 //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-
                 switch (navigator.onLine) {
                     case true:
                         $("#userStatus").html(" Estado: Online ");
@@ -29,18 +28,17 @@ let sites = require("./sites");
                         $("#userStatus").css("color", "red");
                         break;
                 }
-
-
-
                 reference.addEventsToMenu();
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
                 message.addMessageLoder("loaderMessage", "#mainContent2");
                 message.changeMessageLoader("Consultando Plantillas");
-
                 if (navigator.onLine == true) {
-                    message.changeMessageLoader("Subiendo Visitas");
-                    reference.uploadToVisitToDB().then(function(){
+                    message.changeMessageLoader("Obteniendo Visitas Almacenadas");
+                    indexDb.getVisits().then(function(){
+                        message.changeMessageLoader("Subiendo Visitas Almacenadas");
+                        return reference.uploadToVisitToDB();
+                    }).then(function(){
                     message.changeMessageLoader("Actualizando Sitios");
                     return reference.updateSiteExternal();
                     }).then(function () {

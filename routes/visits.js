@@ -9,26 +9,46 @@ router.get('/', function (req, res, next) {
 });
 
 router.post('/', function (req, res, next) {
-    var visit = new Visit({
-        siteId: req.body.siteId,
-        visitId: req.body.visitId,
-        author: req.body.author,
-        creationDate: req.body.creationDate
-    });
 
-    visit.save(function (err, result) {
-        if (err) {
-            return res.status(500).json({
-                title: 'An error ocurred',
-                error: err
+    Visit.findOneAndUpdate(
+        {
+            siteId: req.body.siteId,
+            visitId: req.body.visitId
+        },
+        {
+            siteId: req.body.siteId,
+            visitId: req.body.visitId,
+            author: req.body.author,
+            creationDate: req.body.creationDate
+        }).then(function (err, result) {
+            if (err) {
+                var visit = new Visit({
+                    siteId: req.body.siteId,
+                    visitId: req.body.visitId,
+                    author: req.body.author,
+                    creationDate: req.body.creationDate
+                });
+
+                visit.save(function (err, result) {
+                    if (err) {
+                        return res.status(500).json({
+                            title: 'An error ocurred',
+                            error: err
+                        })
+                    }
+
+                    res.status(201).json({
+                        message: 'Visit was saved',
+                        obj: result
+                    })
+                })
+            }
+            res.status(201).json({
+                message: 'Visit already exist but was updated',
+                obj: result
             })
-        }
+        });
 
-        res.status(201).json({
-            message: 'Visit was saved',
-            obj: result
-        })
-    })
 });
 
 router.delete('/:id', function (req, res, next) {
