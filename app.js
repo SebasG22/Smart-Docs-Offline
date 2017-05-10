@@ -9,6 +9,7 @@ const mongoose = require("mongoose");
 
 var index = require('./routes/index');
 var templateRoutes = require("./routes/templates");
+var siteRoutes = require("./routes/sites");
 
 var app = express();
 mongoose.connect("Smart-Admin:huaweiDevelopers2017@ds131621.mlab.com:31621/smartdocs");
@@ -39,6 +40,7 @@ app.use('/dist',express.static(path.join(__dirname, 'dist')));
 
 app.use('/', index);
 app.use('/templates',templateRoutes);
+app.use('/sites',siteRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -10421,9 +10421,16 @@ module.exports = {
     "startIndexedDB": function startIndexedDB() {
         var reference = this;
         return new Promise(function (resolve, reject) {
-            reference.dataBase = indexedDB.open("SmartDocsOffline", 1);
+            reference.dataBase = indexedDB.open("SmartDocsOffline", 2);
             reference.dataBase.onupgradeneeded = function (e) {
                 var active = reference.dataBase.result;
+
+                var sites = active.createObjectStore("sites", { keyPath: 'siteId' });
+                sites.createIndex("by_siteId", "siteId", { unique: true });
+                sites.createIndex("by_project", "project", { unique: false });
+                sites.createIndex("by_fmOffice", "fmOffice", { unique: false });
+                sites.createIndex("by_creationDate", "creationDate", { unique: false });
+                sites.createIndex("by_lastModification", "lastModification", { unique: false });
 
                 var visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
                 visits.createIndex("by_visitId", "visitId", { unique: true });
