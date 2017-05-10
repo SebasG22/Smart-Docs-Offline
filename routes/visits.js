@@ -42,7 +42,7 @@ router.post('/', function (req, res, next) {
         }
         else{
             //Founded
-            
+
             visitResponse.siteId = req.body.siteId;
             visitResponse.visitId = req.body.visitId;
             visitResponse.author = req.body.author;
@@ -50,7 +50,7 @@ router.post('/', function (req, res, next) {
 
             visitResponse.save(function(err,visitRes){
                 res.status(201).json({
-                message: 'Visit Founded',
+                message: 'Visit already exits was modified',
                 obj: visitRes,
                 type: typeof (visitRes)
             });
