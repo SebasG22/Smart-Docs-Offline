@@ -11,6 +11,7 @@ var index = require('./routes/index');
 var templateRoutes = require("./routes/templates");
 var siteRoutes = require("./routes/sites");
 var visitRoutes = require("./routes/visits");
+var reportRoutes = require("./routes/report");
 
 var app = express();
 mongoose.connect("Smart-Admin:huaweiDevelopers2017@ds131621.mlab.com:31621/smartdocs");
@@ -43,6 +44,7 @@ app.use('/', index);
 app.use('/templates',templateRoutes);
 app.use('/sites',siteRoutes);
 app.use('/visits',visitRoutes);
+app.use('/reports',reportRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

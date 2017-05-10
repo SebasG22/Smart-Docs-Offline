@@ -51,60 +51,11 @@ router.post('/', function (req, res, next) {
             visitResponse.save(function(err,visitRes){
                 res.status(201).json({
                 message: 'Visit already exits was modified',
-                obj: visitRes,
-                type: typeof (visitRes)
+                obj: visitRes
             });
             });
         }
     })
-
-    /*
-    Visit.findOne({ 'siteId': 'Test1' }).
-        then(function (err, result) {
-            res.status(201).json({
-                message: 'Request Processed',
-                obj: result,
-                type: typeof (result)
-            });
-            */
-            /*
-            if (!result) {
-                
-                var visit = new Visit({
-                    siteId: req.body.siteId,
-                    visitId: req.body.visitId,
-                    author: req.body.author,
-                    creationDate: req.body.creationDate
-                });
-
-                visit.save(function (err, result) {
-                    if (err) {
-                        return res.status(500).json({
-                            title: 'An error ocurred',
-                            error: err
-                        })
-                    }
-
-                    res.status(201).json({
-                        message: 'Visit was saved',
-                        obj: result
-                    })
-                })
-            }
-            else{
-                res.status(201).json({
-                message: 'Visit already exist but was updated',
-                obj: result + typeof(result)
-            })
-        }
-        */
-        
-
-
-
-
-
-
 });
 
 router.delete('/:id', function (req, res, next) {
