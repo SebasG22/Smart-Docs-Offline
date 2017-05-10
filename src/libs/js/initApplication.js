@@ -18,6 +18,20 @@ let notification = require("./notifications");
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
                 //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
+
+                switch (navigator.onLine) {
+                    case true:
+                        $("#userStatus").html("Online");
+                        $("#userStatus").css("color", "green");
+                        break;
+                    case false:
+                        $("#userStatus").html("Offline");
+                        $("#userStatus").css("color", "red");
+                        break;
+                }
+
+
+
                 reference.addEventsToMenu();
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
@@ -33,14 +47,14 @@ let notification = require("./notifications");
                         return indexDb.getTemplates();
                     }).then(function () {
                         message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                        indexedDB.getTemplates().then(function () {
+                        indexDb.getTemplates().then(function () {
                             messsage.removeMessageLoader("#mainContent2");
                         });
                     });
                 }
                 else {
                     message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                    indexedDB.getTemplates().then(function () {
+                    indexDb.getTemplates().then(function () {
                         messsage.removeMessageLoader("#mainContent2");
                     });
 
@@ -185,7 +199,7 @@ let notification = require("./notifications");
                     });
                     break;
                 case "myReportsLog":
-                 message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Logger");
                     indexDb.getReportsLog().then(function () {
                         reference.fillReportsLogPage();

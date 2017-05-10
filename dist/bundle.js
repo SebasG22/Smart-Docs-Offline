@@ -14397,6 +14397,18 @@ var notification = __webpack_require__(9);
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
                 //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
+
+                switch (navigator.onLine) {
+                    case true:
+                        $("#userStatus").html("Online");
+                        $("#userStatus").css("color", "green");
+                        break;
+                    case false:
+                        $("#userStatus").html("Offline");
+                        $("#userStatus").css("color", "red");
+                        break;
+                }
+
                 reference.addEventsToMenu();
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
@@ -14434,13 +14446,13 @@ var notification = __webpack_require__(9);
                         return indexDb.getTemplates();
                     }).then(function () {
                         message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                        indexedDB.getTemplates().then(function () {
+                        indexDb.getTemplates().then(function () {
                             messsage.removeMessageLoader("#mainContent2");
                         });
                     });
                 } else {
                     message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                    indexedDB.getTemplates().then(function () {
+                    indexDb.getTemplates().then(function () {
                         messsage.removeMessageLoader("#mainContent2");
                     });
                 }
