@@ -3,8 +3,8 @@ var router = express.Router();
 const Site = require("./../models/Sites");
 
 router.get('/', function (req, res, next) {
-    Site.find().then(function (templates) {
-        res.send(templates);
+    Site.find().then(function (sites) {
+        res.send(sites);
     });
 });
 

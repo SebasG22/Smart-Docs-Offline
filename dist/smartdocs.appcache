@@ -27,5 +27,6 @@ service-worker.js
 
 NETWORK:
 https://smart-docs.herokuapp.com/templates/
+https://smart-docs.herokuapp.com/sites/
 FALLBACK:
 
