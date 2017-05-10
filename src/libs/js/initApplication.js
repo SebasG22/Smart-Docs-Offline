@@ -40,7 +40,7 @@ let sites = require("./sites");
 
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("Subiendo Visitas");
-                    reference.uploadToVisitToDB.then(function(){
+                    reference.uploadToVisitToDB().then(function(){
                     message.changeMessageLoader("Actualizando Sitios");
                     return reference.updateSiteExternal();
                     }).then(function () {
@@ -488,7 +488,7 @@ let sites = require("./sites");
                 $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
             }
         },
-        "uploadToVisitToDB()": function () {
+        "uploadToVisitToDB": function () {
             return new Promise(function (resolve, reject) {
                 let reference = this;
                 let visitsToUpdate = visits.getVisits();

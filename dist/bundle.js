@@ -14501,7 +14501,7 @@ var sites = __webpack_require__(3);
 
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("Subiendo Visitas");
-                    reference.uploadToVisitToDB.then(function () {
+                    reference.uploadToVisitToDB().then(function () {
                         message.changeMessageLoader("Actualizando Sitios");
                         return reference.updateSiteExternal();
                     }).then(function () {
@@ -15162,7 +15162,7 @@ var sites = __webpack_require__(3);
                 }
             }
         },
-        "uploadToVisitToDB()": function uploadToVisitToDB() {
+        "uploadToVisitToDB": function uploadToVisitToDB() {
             return new Promise(function (resolve, reject) {
                 var reference = this;
                 var visitsToUpdate = visits.getVisits();
