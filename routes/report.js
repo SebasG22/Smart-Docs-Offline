@@ -58,10 +58,10 @@ router.post('/update/checkbox_answer', function (req, res, next) {
         else {
             //Founded
             reportResponse.checkbox_answer = req.body.checkbox_answer;
-            reportResponse.save(function (err, res) {
+            reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - checkbox Answer',
-                    obj: res
+                    obj: result
                 });
             });
         }
