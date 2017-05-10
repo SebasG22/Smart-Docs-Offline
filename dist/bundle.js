@@ -10549,7 +10549,7 @@ module.exports = {
 
             var request = object.put({
                 siteId: siteId,
-                name: site,
+                name: name,
                 user: user,
                 creationDate: "" + new Date()
             });
