@@ -10,15 +10,10 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.findOne(
-        {
-            siteId: 'Test1',
-            visitId: 'Test'
-        }
-        ).then(function (err, result) {
-            
+    Visit.findOne({'siteId': 'Test1' , 'visitId': 'Test'}).
+    then(function (err, result) {
             res.status(201).json({
-                message: 'Request Porcess',
+                message: 'Request Processed',
                 obj: result,
                 type: typeof(result)
             });
