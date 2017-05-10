@@ -2,6 +2,14 @@ const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 const mongooseUniqueValidator = require("mongoose-unique-validator");
 
+let answerSchema = new Schema({
+    name: { type: String, required: true },
+    sel: { type: String, required: true },
+    type: { type: String, required: true },
+    val: { type: String, required: true }
+});
+
+
 let schema = new Schema({
     idReport: { type: String, required: true },
     templateId: { type: String },
@@ -9,7 +17,7 @@ let schema = new Schema({
     status: { type: String },
     lastModification: { type: String },
     author: { type: String },
-    checkbox_answer: { type: String },
+    checkbox_answer: { type: Array },
     completedDate: { type: String },
     creationDate: { type: String },
     date_answer: { type: Array },

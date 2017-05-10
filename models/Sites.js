@@ -9,7 +9,7 @@ let schema = new Schema({
     project: { type: String, required: true },
     creationDate: { type: String, required: true },
     lastModification: { type: String, required: true }
-    });
+});
 
 schema.plugin(mongooseUniqueValidator);
 
