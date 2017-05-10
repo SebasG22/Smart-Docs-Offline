@@ -17,9 +17,34 @@ let notification = require("./notifications");
             let reference = this;
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
-                notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
+                //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
                 reference.addEventsToMenu();
                 reference.loadNavBar();
+                reference.grantPermissionPosition();
+                message.addMessageLoder("loaderMessage", "#mainContent2");
+                message.changeMessageLoader("Consultando Plantillas");
+                if (navigator.onLine == true) {
+                    message.changeMessageLoader("Actualizando Plantillas");
+                    $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
+                        templates.templates = templatesResponse;
+                        for (let template of templates.templates) {
+                            indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
+                        }
+                        return indexDb.getTemplates();
+                    }).then(function () {
+                        message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                        indexedDB.getTemplates().then(function () {
+                            messsage.removeMessageLoader("#mainContent2");
+                        });
+                    });
+                }
+                else {
+                    message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                    indexedDB.getTemplates().then(function () {
+                        messsage.removeMessageLoader("#mainContent2");
+                    });
+
+                }
             });
         },
         loadNavBar: function () {
@@ -43,6 +68,35 @@ let notification = require("./notifications");
         hideNavBar: function () {
             $(".app-container").removeClass("expanded");
             $(".navbar-expand-toggle").removeClass("fa-rotate-90");
+        },
+        grantPermissionPosition: function () {
+            let reference = this;
+            var options = {
+                enableHighAccuracy: true,
+                timeout: 5000,
+                maximumAge: 0
+            };
+
+            function success(pos) {
+                var crd = pos.coords;
+                console.log('Your current position is:');
+                console.log('Latitude : ' + crd.latitude);
+                console.log('Longitude: ' + crd.longitude);
+                console.log('More or less ' + crd.accuracy + ' meters.');
+
+            };
+
+            function error(err) {
+                reference.launchErrorPosition();
+                console.warn('ERROR(' + err.code + '): ' + err.message);
+            };
+
+            navigator.geolocation.getCurrentPosition(success, error, options);
+        },
+        launchErrorPosition: function () {
+            $("#errorPosition").remove();
+            $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel2 id=errorPosition role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>No has permitido el acceso a tu localizacion </h4></div><div class=modal-body><img src='https://cdn4.iconfinder.com/data/icons/flatified/128/map.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Por favor, configura tu dispositivo correctamente </h4><h5 style=text-align:center>El accesor a la localizacion ha sido bloqueado <br> <b> Solucion> </b> Ingresa a la configuracion del navegador y modifica los permisos de localizacion </h5><div class='text-center'></div></div></div></div></div>");
+            $("#errorPosition").modal({ backdrop: 'static', keyboard: false });
         },
         addEventsToMenu: function () {
             let reference = this;
@@ -78,13 +132,19 @@ let notification = require("./notifications");
             let reference = this;
             switch (page_route) {
                 case "allVisits":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Visitas Almacenadas");
                     indexDb.getVisits().then(function () {
                         reference.fillVisitsPage();
                         reference.loadEventNewVisit();
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
                 case "allReportsRelated":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Plantillas Almacenadas");
                     indexDb.getTemplates().then(function () {
+                        message.changeMessageLoader("Consultando Reportes Relacionados");
                         return indexDb.getReports();
                     }).then(function () {
                         let reportsFiltered = reports.getReports().filter(function (report) {
@@ -92,30 +152,44 @@ let notification = require("./notifications");
                         });
                         console.log("Reports Filtered", reportsFiltered);
                         reference.fillBoxesReportsRelated(reportsFiltered);
+                        message.removeMessageLoader("#mainContent2");
                     })
                     reference.addEventsReportRelated();
                     break;
                 case "allTemplatesBoxes":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Plantillas Almacenadas");
                     indexDb.getReports().then(function () {
                         reference.getAllTemplates();
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
                 case "newReport":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Cargando Plantilla Seleccionada");
                     reference.showTemplate();
                     reference.saveAnswerEvent();
                     if (Object.keys(reports.reportSelected).length != 0) {
+                        message.changeMessageLoader("Cargando Reporte Almacenado");
                         reference.fillAnswer();
                     }
+                    message.removeMessageLoader("#mainContent2");
                     break;
                 case "myReports":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Cargando Plantilla Seleccionada");
                     console.log("Start Fill Reports");
                     indexDb.getReports().then(function () {
                         reference.fillReportsPage();
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
                 case "myReportsLog":
+                 message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Logger");
                     indexDb.getReportsLog().then(function () {
                         reference.fillReportsLogPage();
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
             }
