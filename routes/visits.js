@@ -24,7 +24,14 @@ router.post('/', function (req, res, next) {
         {upsert: true, new: true, runValidators: true}
         ).then(function (err, result) {
             
+            res.status(201).json({
+                message: 'Request Porcess',
+                obj: result,
+                type: typeof(result)
+            });
+            /*
             if (!result) {
+                
                 var visit = new Visit({
                     siteId: req.body.siteId,
                     visitId: req.body.visitId,
@@ -51,12 +58,13 @@ router.post('/', function (req, res, next) {
                 message: 'Visit already exist but was updated',
                 obj: result + typeof(result)
             })
-            }
+        }
+        */
         });
 });
 
 router.delete('/:id', function (req, res, next) {
-    Visit.findById(req.params.id, function (err, template) {
+    Visit.findById(req.params.id, function (err, visit) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -64,14 +72,14 @@ router.delete('/:id', function (req, res, next) {
             });
         }
 
-        if (!template) {
+        if (!visit) {
             return res.status(500).json({
                 title: 'No Visit Founded',
                 error: { message: "Visit not found" }
             });
         }
 
-        template.remove(function (err, result) {
+        visit.remove(function (err, result) {
             if (err) {
                 return res.status(500).json({
                     title: 'An error ocurred',
