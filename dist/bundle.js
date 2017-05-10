@@ -10451,6 +10451,7 @@ module.exports = {
                 var visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
                 visits.createIndex("by_visitId", "visitId", { unique: true });
                 visits.createIndex("by_site", "site", { unique: false });
+                visits.createIndex("by_user", "user", { unique: false });
                 visits.createIndex("by_creationDate", "creationDate", { unique: false });
 
                 var templates = active.createObjectStore("templates", { keyPath: 'templateId' });
@@ -10539,7 +10540,7 @@ module.exports = {
             };
         });
     },
-    "addVisit": function addVisit(site) {
+    "addVisit": function addVisit(site, user) {
         var reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -10548,6 +10549,7 @@ module.exports = {
 
             var request = object.put({
                 site: site,
+                user: user,
                 creationDate: "" + new Date()
             });
 
@@ -10661,14 +10663,14 @@ module.exports = {
             };
         });
     },
-    "addReport": function addReport(templateId, site, answer, status) {
+    "addReport": function addReport(templateId, visitId, answer, status) {
         var reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
             var data = active.transaction(["reports", "reportsLog"], "readwrite");
             var object = data.objectStore("reports");
             var request = object.put({
-                site: site,
+                visit: visitId,
                 templateId: templateId,
                 content: answer,
                 status: status,
@@ -14546,6 +14548,7 @@ var sites = __webpack_require__(3);
                 }
             });
         },
+
         loadNavBar: function loadNavBar() {
             $(function () {
                 $(".navbar-expand-toggle").click(function () {
@@ -14567,6 +14570,25 @@ var sites = __webpack_require__(3);
         hideNavBar: function hideNavBar() {
             $(".app-container").removeClass("expanded");
             $(".navbar-expand-toggle").removeClass("fa-rotate-90");
+        },
+        launchUserModal: function launchUserModal() {
+            var reference = this;
+            $("#userModal").remove();
+            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=userModal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Ingresa el usuario</h4></div><div class=modal-body><input type='text' class='form-control'id='username'/> <button id='btnOpenApp'class='btn btn-info'>Ingresar</button></div><div class=modal-footer><input class='btn btn-info'data-dismiss=modal type=button value='Guardar el reporte'></div></div></div></div>");
+            $("#userModal").modal({ backdrop: 'static', keyboard: false });
+
+            $("#username").on("input", function () {
+                var usernameval = $("#username").val();
+                if (usernameval.length > 5) {
+                    $("#btnOpenApp").attr("disabled", false);
+                } else {
+                    $("#btnOpenApp").attr("disabled", true);
+                }
+            });
+
+            $("#btnOpenApp").click(function () {
+                reference.initApplication();
+            });
         },
         grantPermissionPosition: function grantPermissionPosition() {
             var reference = this;
@@ -14802,7 +14824,7 @@ var sites = __webpack_require__(3);
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString()).then(function () {
+                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username")).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });
@@ -15133,13 +15155,18 @@ var sites = __webpack_require__(3);
                     }
                 }
             }
-        }
+        },
+        "uploadToVisitToDB()": function uploadToVisitToDB() {}
     };
     message.addMessageLoder("loaderMessage", "#mainContent2");
     message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
-        smartDocsOffline.initApplication();
+        if (localStorage.getItem("username") == null) {
+            smartDocsOffline.launchUserModal();
+        } else {
+            smartDocsOffline.initApplication();
+        }
     });
 })();
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))

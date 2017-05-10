@@ -24,7 +24,9 @@ module.exports = {
                 let visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
                 visits.createIndex("by_visitId", "visitId", { unique: true });
                 visits.createIndex("by_site", "site", { unique: false });
+                visits.createIndex("by_user", "user", { unique: false }); 
                 visits.createIndex("by_creationDate", "creationDate", { unique: false });
+                
 
                 let templates = active.createObjectStore("templates", { keyPath: 'templateId' });
                 templates.createIndex("by_templateId", "templateId", { unique: true });
@@ -114,7 +116,7 @@ module.exports = {
             }
         });
     },
-    "addVisit": function (site) {
+    "addVisit": function (site, user) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -123,6 +125,7 @@ module.exports = {
 
             var request = object.put({
                 site: site,
+                user: user,
                 creationDate: "" + new Date()
             });
 
@@ -238,14 +241,14 @@ module.exports = {
             }
         });
     },
-    "addReport": function (templateId, site, answer, status) {
+    "addReport": function (templateId, visitId, answer, status) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["reports", "reportsLog"], "readwrite");
             let object = data.objectStore("reports");
             let request = object.put({
-                site: site,
+                visit: visitId,
                 templateId: templateId,
                 content: answer,
                 status: status,

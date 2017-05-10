@@ -68,6 +68,7 @@ let sites = require("./sites");
                 }
             });
         },
+        
         loadNavBar: function () {
             $(function () {
                 $(".navbar-expand-toggle").click(function () {
@@ -89,6 +90,26 @@ let sites = require("./sites");
         hideNavBar: function () {
             $(".app-container").removeClass("expanded");
             $(".navbar-expand-toggle").removeClass("fa-rotate-90");
+        },
+        launchUserModal: function () {
+            let reference = this;
+            $("#userModal").remove();
+            $("body").append("<div class='fade modal modal-info'aria-hidden=true aria-labelledby=myModalLabel1 id=userModal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel8>Ingresa el usuario</h4></div><div class=modal-body><input type='text' class='form-control'id='username'/> <button id='btnOpenApp'class='btn btn-info'>Ingresar</button></div><div class=modal-footer><input class='btn btn-info'data-dismiss=modal type=button value='Guardar el reporte'></div></div></div></div>");
+            $("#userModal").modal({ backdrop: 'static', keyboard: false });
+
+            $("#username").on("input",function(){
+                let usernameval = $("#username").val();
+                if(usernameval.length > 5 ){
+                    $("#btnOpenApp").attr("disabled",false);
+                }
+                else{
+                    $("#btnOpenApp").attr("disabled",true);
+                }
+            });
+
+            $("#btnOpenApp").click(function(){
+                reference.initApplication();
+            });
         },
         grantPermissionPosition: function () {
             let reference = this;
@@ -264,7 +285,7 @@ let sites = require("./sites");
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString() ).then(function () {
+                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username")).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });
@@ -461,12 +482,20 @@ let sites = require("./sites");
                 }
                 $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
             }
+        },
+        "uploadToVisitToDB()": function(){
+
         }
     }
     message.addMessageLoder("loaderMessage", "#mainContent2");
     message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
-        smartDocsOffline.initApplication();
+        if(localStorage.getItem("username") == null){
+            smartDocsOffline.launchUserModal();
+        }
+        else{
+            smartDocsOffline.initApplication();
+        }
     });
 })();
