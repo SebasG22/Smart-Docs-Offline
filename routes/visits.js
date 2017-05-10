@@ -12,8 +12,8 @@ router.post('/', function (req, res, next) {
 
     Visit.findOne(
         {
-            siteId: req.body.siteId,
-            visitId: req.body.visitId
+            siteId: 'Test1',
+            visitId: 'Test'
         }
         ).then(function (err, result) {
             
