@@ -100,7 +100,7 @@ let sites = require("./sites");
             $("#username").on("input",function(){
                 let usernameval = $("#username").val();
                 if(usernameval.length > 5 ){
-                    localStorage.setItem("username",usernameval);
+                    localStorage.setItem("username" , usernameval);
                     $("#btnOpenApp").attr("disabled",false);
                 }
                 else{
