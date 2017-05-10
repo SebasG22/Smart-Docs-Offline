@@ -11,6 +11,12 @@ router.get('/', function (req, res, next) {
 router.post('/', function (req, res, next) {
 
     Visit.findOneAndUpdate({ siteId: 'Test1' }, function (err,obj) {
+        if(err){
+             return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
         res.status(201).json({
                 message: 'Request Processed',
                 obj: obj,
