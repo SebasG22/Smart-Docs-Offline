@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.findOne({ siteId: 'Test1' }, function (err,obj) {
+    Visit.findOneAndUpdate({ siteId: 'Test1' }, function (err,obj) {
         res.status(201).json({
                 message: 'Request Processed',
                 obj: obj,
