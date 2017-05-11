@@ -10670,7 +10670,7 @@ module.exports = {
             var data = active.transaction(["reports", "reportsLog"], "readwrite");
             var object = data.objectStore("reports");
             var request = object.put({
-                visit: visitId,
+                visitId: visitId,
                 templateId: templateId,
                 content: answer,
                 status: status,
@@ -14727,7 +14727,7 @@ var sites = __webpack_require__(3);
                         return indexDb.getReports();
                     }).then(function () {
                         var reportsFiltered = reports.getReports().filter(function (report) {
-                            return report.site == visits.visitSelected.visitId;
+                            return report.visitId == visits.visitSelected.visitId;
                         });
                         console.log("Reports Filtered", reportsFiltered);
                         reference.fillBoxesReportsRelated(reportsFiltered);
@@ -15175,8 +15175,10 @@ var sites = __webpack_require__(3);
                     var visitsToUpd = _step11.value;
 
                     this["visitsToUpdate" + cont] = reference.postVisitRequest({
-                        siteId: visitsToUpd.siteId, visitId: visitsToUpd.visitId,
-                        author: visitsToUpd.user, creationDate: visitsToUpd.creationDate
+                        siteId: visitsToUpd.siteId,
+                        visitId: visitsToUpd.visitId,
+                        author: visitsToUpd.user,
+                        creationDate: visitsToUpd.creationDate
                     });
                     promisesUpdate.push(this["visitsToUpdate" + cont]);
                     cont += 1;
