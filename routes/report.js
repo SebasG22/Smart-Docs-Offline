@@ -491,7 +491,7 @@ router.delete('/:id', function (req, res, next) {
     });
 });
 
-router.get('checkbox_answer/:id', function (req, res, next) {
+router.get('/checkbox_answer/:id', function (req, res, next) {
     Report.findById(req.params.id, function(err,report){
         if (err) {
             return res.status(500).json({
