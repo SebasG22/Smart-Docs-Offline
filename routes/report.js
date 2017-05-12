@@ -382,8 +382,8 @@ router.delete('/:id', function (req, res, next) {
 
         if (!template) {
             return res.status(500).json({
-                title: 'No Site Founded',
-                error: { message: "Site not found" }
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
             });
         }
 
@@ -395,7 +395,7 @@ router.delete('/:id', function (req, res, next) {
                 });
             }
             res.status(201).json({
-                message: 'The site was deleted',
+                message: 'The report was deleted',
                 obj: result
             });
         })
