@@ -129,26 +129,35 @@ router.post('/update/datetime_answer', function (req, res, next) {
     });
 });
 
-router.post('/updateList_answer', function (req, res, next) {
+router.post('/update/list_answer', function (req, res, next) {
 
-    var site = new Report({
-        id_report: { type: String, required: true },
-        list_answer: { type: String }
-    });
-
-    site.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Site was saved',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.list_answer = req.body.list_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - List Answer',
+                    obj: result
+                });
+            });
+        }
+    });
+    
 });
 
 router.post('/updateMonth_answer', function (req, res, next) {
