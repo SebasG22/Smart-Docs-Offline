@@ -96,29 +96,37 @@ router.post('/update/date_answer', function (req, res, next) {
                 });
             });
         }
-    })
+    });
 });
 
 router.post('/update/datetime_answer', function (req, res, next) {
 
-    var report = new Report({
-        idReport: req.body.idReport,
-        datetime_answer: req.body.datetime_answer
-    });
-
-    report.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Report was updated - Datetime Answer',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.datetime_answer = req.body.datetime_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Date Time Answer',
+                    obj: result
+                });
+            });
+        }
+    });
 });
 
 router.post('/updateList_answer', function (req, res, next) {
