@@ -9991,7 +9991,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-
+/* WEBPACK VAR INJECTION */(function($) {
 
 module.exports = {
     "visits": [],
@@ -9999,8 +9999,19 @@ module.exports = {
     "getVisits": function getVisits() {
         var reference = this;
         return reference.visits;
+    },
+    showVisitsSaveonCloud: function showVisitsSaveonCloud() {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                method: "GET",
+                url: "https://smart-docs.herokuapp.com/visits/"
+            }).done(function (res) {
+                alert("Visits on DB: " + res);
+            });
+        });
     }
 };
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 6 */
@@ -10550,6 +10561,7 @@ module.exports = {
                 siteId: siteId,
                 name: name,
                 user: user,
+                update: 'yes',
                 creationDate: "" + new Date()
             });
 
@@ -10663,7 +10675,7 @@ module.exports = {
             };
         });
     },
-    "addReport": function addReport(templateId, visitId, answer, status) {
+    "addReport": function addReport(templateId, visitId, status, checkbox_answer, date_answer, datetime_answer, list_answer, month_answer, multiselect_answer, number_answer, radio_answer, select_answer, table_answer, text_answer, textarea_answer, time_answer, week_answer) {
         var reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -10672,8 +10684,23 @@ module.exports = {
             var request = object.put({
                 visitId: visitId,
                 templateId: templateId,
-                content: answer,
-                status: status,
+                checkbox_answer: checkbox_answer,
+                date_answer: date_answer,
+                datetime_answer: datetime_answer,
+                list_answer: list_answer,
+                month_answer: month_answer,
+                multiselect_answer: multiselect_answer,
+                number_answer: number_answer,
+                radio_answer: radio_answer,
+                select_answer: select_answer,
+                table_answer: table_answer,
+                text_answer: text_answer,
+                textarea_answer: textarea_answer,
+                time_answer: time_answer,
+                week_answer: week_answer,
+                update: 'yes',
+                author: '',
+                completedDate: status == 'SM-Status002' ? "" + new Date() : "",
                 creationDate: "" + new Date(),
                 lastModification: "" + new Date()
             });
@@ -14494,16 +14521,18 @@ var sites = __webpack_require__(3);
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
                 message.addMessageLoder("loaderMessage", "#mainContent2");
-                message.changeMessageLoader("Consultando Plantillas");
+                message.changeMessageLoader("loaderMessage", "Consultando Plantillas");
                 if (navigator.onLine == true) {
-                    message.changeMessageLoader("Obteniendo Visitas Almacenadas");
+                    message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
                     indexDb.getVisits().then(function () {
-                        message.changeMessageLoader("Subiendo Visitas Almacenadas");
+                        message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         reference.uploadToVisitToDB();
-                        message.changeMessageLoader("Actualizando Sitios");
+                        message.changeMessageLoader("loaderMessage", "Actualizando Sitios");
+                        return visits.showVisitsSaveonCloud();
+                    }).then(function () {
                         return reference.updateSiteExternal();
                     }).then(function () {
-                        message.changeMessageLoader("Actualizando Plantillas");
+                        message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
                         $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
                             templates.templates = templatesResponse;
                             var _iteratorNormalCompletion = true;
@@ -14533,7 +14562,7 @@ var sites = __webpack_require__(3);
 
                             return indexDb.getTemplates();
                         }).then(function () {
-                            message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                            message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
                             indexDb.getTemplates().then(function () {
                                 message.removeMessageLoader("#mainContent2");
                             });

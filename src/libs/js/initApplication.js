@@ -32,16 +32,18 @@ let sites = require("./sites");
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
                 message.addMessageLoder("loaderMessage", "#mainContent2");
-                message.changeMessageLoader("Consultando Plantillas");
+                message.changeMessageLoader("loaderMessage", "Consultando Plantillas");
                 if (navigator.onLine == true) {
-                    message.changeMessageLoader("Obteniendo Visitas Almacenadas");
+                    message.changeMessageLoader("loaderMessage","Obteniendo Visitas Almacenadas");
                     indexDb.getVisits().then(function() {
-                        message.changeMessageLoader("Subiendo Visitas Almacenadas");
+                        message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         reference.uploadToVisitToDB();
-                        message.changeMessageLoader("Actualizando Sitios");
+                        message.changeMessageLoader("loaderMessage","Actualizando Sitios");
+                        return visits.showVisitsSaveonCloud(); 
+                    }).then(function(){
                         return reference.updateSiteExternal();
                     }).then(function() {
-                        message.changeMessageLoader("Actualizando Plantillas");
+                        message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
                         $.get("https://smart-docs.herokuapp.com/templates/", function(templatesResponse) {
                             templates.templates = templatesResponse;
                             for (let template of templates.templates) {
@@ -49,7 +51,7 @@ let sites = require("./sites");
                             }
                             return indexDb.getTemplates();
                         }).then(function() {
-                            message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                            message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
                             indexDb.getTemplates().then(function() {
                                 message.removeMessageLoader("#mainContent2");
                             });
