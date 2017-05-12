@@ -372,7 +372,7 @@ router.post('/updateWeek_answer', function (req, res, next) {
 });
 
 router.delete('/:id', function (req, res, next) {
-    Site.findById(req.params.id, function (err, template) {
+    Report.findById(req.params.id, function (err, template) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
