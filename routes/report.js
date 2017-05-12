@@ -509,7 +509,7 @@ router.get('/checkbox_answer/:id', function (req, res, next) {
 
         res.status(200).json({
                 message: 'Report Founded',
-                obj: report
+                obj: report.checkbox_answer
             });
             
     });
