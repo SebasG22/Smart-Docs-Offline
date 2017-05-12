@@ -71,23 +71,31 @@ router.post('/update/checkbox_answer', function (req, res, next) {
 
 router.post('/update/date_answer', function (req, res, next) {
 
-    var report = new Report({
-        idReport: req.body.idReport,
-        date_answer: req.body.date_answer
-    });
-
-    report.save(function (err, result) {
+   Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Report was updated - Date Answer',
-            obj: result
-        })
+        }
+        else {
+            //Founded
+            reportResponse.date_answer = req.body.date_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Date Answer',
+                    obj: result
+                });
+            });
+        }
     })
 });
 
