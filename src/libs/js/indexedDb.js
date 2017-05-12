@@ -125,6 +125,7 @@ module.exports = {
                 siteId: siteId,
                 name: name,
                 user: user,
+                update: 'yes',
                 creationDate: "" + new Date()
             });
 

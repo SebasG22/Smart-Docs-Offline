@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.findOne({ siteId: ''+ req.body.siteId }, function (err,visitResponse) {
+    Visit.findOne({ siteId: ''+ req.body.siteId, author: req.body.author }, function (err,visitResponse) {
         if(err){
              return res.status(500).json({
                 title: 'An error ocurred',
