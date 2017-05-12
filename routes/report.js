@@ -9,7 +9,7 @@ router.get('/', function (req, res, next) {
 });
 
 router.get('/checkbox_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -25,16 +25,16 @@ router.get('/checkbox_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.checkbox_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.checkbox_answer
+        });
+
     });
 
 });
 
 router.get('/date_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -50,16 +50,16 @@ router.get('/date_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.date_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.date_answer
+        });
+
     });
 
 });
 
 router.get('/datetime_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -75,16 +75,16 @@ router.get('/datetime_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.datetime_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.datetime_answer
+        });
+
     });
 
 });
 
 router.get('/list_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -100,16 +100,16 @@ router.get('/list_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.list_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.list_answer
+        });
+
     });
 
 });
 
 router.get('/month_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -125,16 +125,16 @@ router.get('/month_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.month_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.month_answer
+        });
+
     });
 
 });
 
 router.get('/multiselect_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -150,16 +150,16 @@ router.get('/multiselect_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.multiselect_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.multiselect_answer
+        });
+
     });
 
 });
 
 router.get('/number_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -175,16 +175,16 @@ router.get('/number_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.number_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.number_answer
+        });
+
     });
 
 });
 
 router.get('/radio_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -200,16 +200,16 @@ router.get('/radio_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.radio_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.radio_answer
+        });
+
     });
 
 });
 
 router.get('/select_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -225,16 +225,16 @@ router.get('/select_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.select_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.select_answer
+        });
+
     });
 
 });
 
 router.get('/table_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -250,16 +250,16 @@ router.get('/table_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.table_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.table_answer
+        });
+
     });
 
 });
 
 router.get('/text_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -275,16 +275,16 @@ router.get('/text_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.text_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.text_answer
+        });
+
     });
 
 });
 
 router.get('/textarea_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -300,16 +300,16 @@ router.get('/textarea_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.textarea_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.textarea_answer
+        });
+
     });
 
 });
 
 router.get('/time_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -325,16 +325,16 @@ router.get('/time_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.time_answer
-            });
-            
+            message: 'Report Founded',
+            obj: report.time_answer
+        });
+
     });
 
 });
 
 router.get('/week_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
+    Report.findById(req.params.id, function (err, report) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -350,10 +350,44 @@ router.get('/week_answer/:id', function (req, res, next) {
         }
 
         res.status(200).json({
-                message: 'Report Founded',
-                obj: report.week_answer
+            message: 'Report Founded',
+            obj: report.week_answer
+        });
+
+    });
+
+});
+
+router.get('/basicInf/:id', function (req, res, next) {
+    Report.findById(req.params.id, function (err, report) {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
             });
-            
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+            message: 'Report Founded',
+            obj: {
+                idReport: report.idReport,
+                templateId: report.templateId,
+                visitId: report.visitId,
+                status: report.status,
+                lastModification: report.lastModification,
+                author: report.author,
+                completedDate: report.completedDate,
+                creationDate: report.creationDate
+            }
+        });
+
     });
 
 });
@@ -420,7 +454,7 @@ router.patch('/update/checkbox_answer', function (req, res, next) {
 
 router.patch('/update/date_answer', function (req, res, next) {
 
-   Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -506,7 +540,7 @@ router.patch('/update/list_answer', function (req, res, next) {
             });
         }
     });
-    
+
 });
 
 router.patch('/update/month_answer', function (req, res, next) {
