@@ -160,26 +160,34 @@ router.post('/update/list_answer', function (req, res, next) {
     
 });
 
-router.post('/updateMonth_answer', function (req, res, next) {
+router.post('/update/month_answer', function (req, res, next) {
 
-    var site = new Report({
-        id_report: { type: String, required: true },
-        month_answer: { type: String }
-    });
-
-    site.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Site was saved',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.month_answer = req.body.month_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Month Answer',
+                    obj: result
+                });
+            });
+        }
+    });
 });
 
 router.post('/updateMultiselect_answer', function (req, res, next) {
