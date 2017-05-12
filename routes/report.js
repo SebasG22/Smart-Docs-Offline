@@ -188,50 +188,67 @@ router.post('/update/month_answer', function (req, res, next) {
             });
         }
     });
+
 });
 
-router.post('/updateMultiselect_answer', function (req, res, next) {
+router.post('/update/multiselect_answer', function (req, res, next) {
 
-    var site = new Report({
-        id_report: { type: String, required: true },
-        multiselect_answer: { type: String }
-    });
-
-    site.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Site was saved',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.multiselect_answer = req.body.multiselect_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Multi Select Answer',
+                    obj: result
+                });
+            });
+        }
+    });
 });
 
-router.post('/updateNumber_answer', function (req, res, next) {
+router.post('/update/number_answer', function (req, res, next) {
 
-    var site = new Report({
-        id_report: { type: String, required: true },
-        number_answer: { type: String }
-    });
-
-    site.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Site was saved',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.number_answer = req.body.number_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Number Answer',
+                    obj: result
+                });
+            });
+        }
+    });
 });
 
 router.post('/updateRadio_answer', function (req, res, next) {
