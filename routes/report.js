@@ -8,7 +8,6 @@ router.get('/', function (req, res, next) {
     });
 });
 
-
 router.post('/', function (req, res, next) {
 
     var report = new Report({
@@ -492,5 +491,29 @@ router.delete('/:id', function (req, res, next) {
     });
 });
 
+router.get('checkbox_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report
+            });
+            
+    });
+
+});
 
 module.exports = router;
