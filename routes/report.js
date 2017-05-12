@@ -387,7 +387,7 @@ router.post('/', function (req, res, next) {
 
 });
 
-router.post('/update/checkbox_answer', function (req, res, next) {
+router.patch('/update/checkbox_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -418,7 +418,7 @@ router.post('/update/checkbox_answer', function (req, res, next) {
 
 });
 
-router.post('/update/date_answer', function (req, res, next) {
+router.patch('/update/date_answer', function (req, res, next) {
 
    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -448,7 +448,7 @@ router.post('/update/date_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/datetime_answer', function (req, res, next) {
+router.patch('/update/datetime_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -478,7 +478,7 @@ router.post('/update/datetime_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/list_answer', function (req, res, next) {
+router.patch('/update/list_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -509,7 +509,7 @@ router.post('/update/list_answer', function (req, res, next) {
     
 });
 
-router.post('/update/month_answer', function (req, res, next) {
+router.patch('/update/month_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -540,7 +540,7 @@ router.post('/update/month_answer', function (req, res, next) {
 
 });
 
-router.post('/update/multiselect_answer', function (req, res, next) {
+router.patch('/update/multiselect_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -570,7 +570,7 @@ router.post('/update/multiselect_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/number_answer', function (req, res, next) {
+router.patch('/update/number_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -600,7 +600,7 @@ router.post('/update/number_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/radio_answer', function (req, res, next) {
+router.patch('/update/radio_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -630,7 +630,7 @@ router.post('/update/radio_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/select_answer', function (req, res, next) {
+router.patch('/update/select_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -660,7 +660,7 @@ router.post('/update/select_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/table_answer', function (req, res, next) {
+router.patch('/update/table_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -690,7 +690,7 @@ router.post('/update/table_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/text_answer', function (req, res, next) {
+router.patch('/update/text_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -720,7 +720,7 @@ router.post('/update/text_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/textarea_answer', function (req, res, next) {
+router.patch('/update/textarea_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -750,7 +750,7 @@ router.post('/update/textarea_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/time_answer', function (req, res, next) {
+router.patch('/update/time_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
@@ -780,7 +780,7 @@ router.post('/update/time_answer', function (req, res, next) {
     });
 });
 
-router.post('/update/week_answer', function (req, res, next) {
+router.patch('/update/week_answer', function (req, res, next) {
 
     Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
