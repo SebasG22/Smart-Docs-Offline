@@ -341,92 +341,124 @@ router.post('/update/table_answer', function (req, res, next) {
     });
 });
 
-router.post('/updateText_answer', function (req, res, next) {
+router.post('/update/text_answer', function (req, res, next) {
 
-    var site = new Report({
-        id_report: { type: String, required: true },
-        text_answer: { type: String }
-    });
-
-    site.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Site was saved',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.select_answer = req.body.select_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Text Answer',
+                    obj: result
+                });
+            });
+        }
+    });
 });
 
-router.post('/updateTextarea_answer', function (req, res, next) {
+router.post('/update/textarea_answer', function (req, res, next) {
 
-    var site = new Report({
-        id_report: { type: String, required: true },
-        textarea_answer: { type: String }
-    });
-
-    site.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Site was saved',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.textarea_answer = req.body.textarea_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Textarea Answer',
+                    obj: result
+                });
+            });
+        }
+    });
 });
 
-router.post('/updateTime_answer', function (req, res, next) {
+router.post('/update/time_answer', function (req, res, next) {
 
-    var site = new Report({
-        id_report: { type: String, required: true },
-        time_answer: { type: String }
-    });
-
-    site.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Site was saved',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.time_answer = req.body.time_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Time Answer',
+                    obj: result
+                });
+            });
+        }
+    });
 });
 
-router.post('/updateWeek_answer', function (req, res, next) {
+router.post('/update/week_answer', function (req, res, next) {
 
-    var site = new Report({
-        id_report: { type: String, required: true },
-        week_answer: { type: String }
-    });
-
-    site.save(function (err, result) {
+    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            return res.status(500).json({
+                title: 'Report Not Found',
+                error: reportResponse
+            })
 
-        res.status(201).json({
-            message: 'Site was saved',
-            obj: result
-        })
-    })
+        }
+        else {
+            //Founded
+            reportResponse.week_answer = req.body.week_answer;
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update - Week Answer',
+                    obj: result
+                });
+            });
+        }
+    });
 });
 
 router.delete('/:id', function (req, res, next) {
