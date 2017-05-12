@@ -8,6 +8,356 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.get('/checkbox_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.checkbox_answer
+            });
+            
+    });
+
+});
+
+router.get('/date_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.date_answer
+            });
+            
+    });
+
+});
+
+router.get('/datetime_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.datetime_answer
+            });
+            
+    });
+
+});
+
+router.get('/list_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.list_answer
+            });
+            
+    });
+
+});
+
+router.get('/month_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.month_answer
+            });
+            
+    });
+
+});
+
+router.get('/multiselect_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.multiselect_answer
+            });
+            
+    });
+
+});
+
+router.get('/number_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.number_answer
+            });
+            
+    });
+
+});
+
+router.get('/radio_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.radio_answer
+            });
+            
+    });
+
+});
+
+router.get('/select_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.select_answer
+            });
+            
+    });
+
+});
+
+router.get('/table_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.table_answer
+            });
+            
+    });
+
+});
+
+router.get('/text_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.text_answer
+            });
+            
+    });
+
+});
+
+router.get('/textarea_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.textarea_answer
+            });
+            
+    });
+
+});
+
+router.get('/time_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.time_answer
+            });
+            
+    });
+
+});
+
+router.get('/week_answer/:id', function (req, res, next) {
+    Report.findById(req.params.id, function(err,report){
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!report) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        res.status(200).json({
+                message: 'Report Founded',
+                obj: report.week_answer
+            });
+            
+    });
+
+});
+
 router.post('/', function (req, res, next) {
 
     var report = new Report({
@@ -489,31 +839,6 @@ router.delete('/:id', function (req, res, next) {
             });
         })
     });
-});
-
-router.get('/checkbox_answer/:id', function (req, res, next) {
-    Report.findById(req.params.id, function(err,report){
-        if (err) {
-            return res.status(500).json({
-                title: 'An error ocurred',
-                error: err
-            });
-        }
-
-        if (!report) {
-            return res.status(500).json({
-                title: 'No Report Founded',
-                error: { message: "Report not found" }
-            });
-        }
-
-        res.status(200).json({
-                message: 'Report Founded',
-                obj: report.checkbox_answer
-            });
-            
-    });
-
 });
 
 module.exports = router;
