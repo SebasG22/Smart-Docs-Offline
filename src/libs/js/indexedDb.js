@@ -7,11 +7,11 @@ let siteConnection = require("./sites");
 
 module.exports = {
     "dataBase": "",
-    "startIndexedDB": function() {
+    "startIndexedDB": function () {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             reference.dataBase = indexedDB.open("SmartDocsOffline", 3);
-            reference.dataBase.onupgradeneeded = function(e) {
+            reference.dataBase.onupgradeneeded = function (e) {
                 let active = reference.dataBase.result;
                 let sites = active.createObjectStore("sites", { keyPath: 'siteId' });
                 sites.createIndex("by_siteId", "siteId", { unique: true });
@@ -50,20 +50,20 @@ module.exports = {
 
             }
 
-            reference.dataBase.onsuccess = function(e) {
+            reference.dataBase.onsuccess = function (e) {
                 console.log("Smart Docs Offline DB was loaded");
                 resolve();
             }
 
-            reference.dataBase.onerror = function(e) {
+            reference.dataBase.onerror = function (e) {
                 console.error("An error ocurred " + e);
                 reject(e);
             }
         });
     },
-    "addSite": function(siteId, name, fmOffice, project) {
+    "addSite": function (siteId, name, fmOffice, project) {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
             var data = active.transaction(["sites"], "readwrite");
             var object = data.objectStore("sites");
@@ -77,26 +77,26 @@ module.exports = {
                 lastModification: "" + new Date()
             });
 
-            request.onerror = function(e) {
+            request.onerror = function (e) {
                 console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
                 reject(request.error.name);
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("The Site was register on SmartDocsOffline");
                 resolve();
             }
         });
     },
-    "getSites": function() {
+    "getSites": function () {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["sites"], "readonly");
             let object = data.objectStore("sites");
             let elements = [];
 
-            object.openCursor().onsuccess = function(e) {
+            object.openCursor().onsuccess = function (e) {
                 var result = e.target.result;
                 if (result === null) {
                     result;
@@ -107,16 +107,16 @@ module.exports = {
                 }
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("elements", elements);
                 siteConnection.sites = elements;
                 resolve();
             }
         });
     },
-    "addVisit": function(name, siteId, user) {
+    "addVisit": function (name, siteId, user) {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
             var data = active.transaction(["visits"], "readwrite");
             var object = data.objectStore("visits");
@@ -128,30 +128,30 @@ module.exports = {
                 creationDate: "" + new Date()
             });
 
-            request.onerror = function(e) {
+            request.onerror = function (e) {
                 console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
                 reject(request.error.name);
             }
 
-            request.onsuccess = function(e) {
+            request.onsuccess = function (e) {
                 visitsConnection.visitSelected.visitId = e.target.result;
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("The Visit was register on SmartDocsOffline");
                 resolve();
             }
         });
     },
-    "getVisits": function() {
+    "getVisits": function () {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["visits"], "readonly");
             let object = data.objectStore("visits");
             let elements = [];
 
-            object.openCursor().onsuccess = function(e) {
+            object.openCursor().onsuccess = function (e) {
                 var result = e.target.result;
                 if (result === null) {
                     result;
@@ -162,16 +162,16 @@ module.exports = {
                 }
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("elements", elements);
                 visitsConnection.visits = elements;
                 resolve();
             }
         });
     },
-    "addTemplate": function(templateId, name, project, taskType, icon, content) {
+    "addTemplate": function (templateId, name, project, taskType, icon, content) {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
             var data = active.transaction(["templates"], "readwrite");
             var object = data.objectStore("templates");
@@ -187,26 +187,26 @@ module.exports = {
                 lastModification: "" + new Date()
             });
 
-            request.onerror = function(e) {
+            request.onerror = function (e) {
                 console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
                 reject(request.error.name);
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("The template was added to SmartDocsOffline");
                 resolve();
             }
         });
     },
-    "getTemplates": function() {
+    "getTemplates": function () {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["templates"], "readonly");
             let object = data.objectStore("templates");
             let elements = [];
 
-            object.openCursor().onsuccess = function(e) {
+            object.openCursor().onsuccess = function (e) {
                 var result = e.target.result;
                 if (result === null) {
                     result;
@@ -217,68 +217,86 @@ module.exports = {
                 }
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("elements", elements);
                 templatesConnection.templates = elements;
                 resolve();
             }
         });
     },
-    "getTemplateByTemplateId": function(templateId) {
+    "getTemplateByTemplateId": function (templateId) {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["templates"], "readonly");
             let object = data.objectStore("templates");
             let request = object.get(templateId);
-            request.onsuccess = function() {
+            request.onsuccess = function () {
                 if (request.result !== undefined) {
                     resolve(request.result);
                 }
             }
         });
     },
-    "addReport": function(templateId, visitId, answer, status) {
+    "addReport": function (templateId, visitId, status, checkbox_answer,
+        date_answer, datetime_answer, list_answer, month_answer,multiselect_answer,
+        number_answer, radio_answer, select_answer, table_answer, text_answer,
+        textarea_answer, time_answer, week_answer ) {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["reports", "reportsLog"], "readwrite");
             let object = data.objectStore("reports");
             let request = object.put({
                 visitId: visitId,
                 templateId: templateId,
-                content: answer,
-                status: status,
+                checkbox_answer: checkbox_answer,
+                date_answer: date_answer,
+                datetime_answer: datetime_answer,
+                list_answer: list_answer,
+                month_answer: month_answer,
+                multiselect_answer: multiselect_answer,
+                number_answer: number_answer,
+                radio_answer: radio_answer,
+                select_answer: select_answer,
+                table_answer: table_answer,
+                text_answer: text_answer,
+                textarea_answer: textarea_answer,
+                time_answer: time_answer,
+                week_answer: week_answer,
+                update: 'yes',
+                author: '',
+                completedDate: status == 'SM-Status002' ? "" + new Date() : "",
                 creationDate: "" + new Date(),
-                lastModification: "" + new Date()
+                lastModification: "" + new Date(),
             });
 
-            request.onerror = function(e) {
+            request.onerror = function (e) {
                 console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
                 reject(e);
             }
 
-            request.onsuccess = function(e) {
+            request.onsuccess = function (e) {
                 reference.addReportLog(e.target.result, "Creacion", status);
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("The report was added to SmartDocsOffline", e);
                 resolve();
             }
         });
     },
-    "updateReport": function(reportId, status, content) {
+    "updateReport": function (reportId, status, content) {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             var objectStore = active.transaction(["reports"], "readwrite").objectStore("reports");
             var request = objectStore.get(reportId);
-            request.onerror = function(event) {
+            request.onerror = function (event) {
                 // Handle errors!
                 reject(request.error.name);
             };
-            request.onsuccess = function(event) {
+            request.onsuccess = function (event) {
                 // Get the old value that we want to update
                 var data = request.result;
 
@@ -289,28 +307,28 @@ module.exports = {
 
                 // Put this updated object back into the database.
                 var requestUpdate = objectStore.put(data);
-                requestUpdate.onerror = function(event) {
+                requestUpdate.onerror = function (event) {
                     // Do something with the error
                     reject(requestUpdate.error.name);
                 };
-                requestUpdate.onsuccess = function(event) {
+                requestUpdate.onsuccess = function (event) {
                     // Success - the data is updated!
-                    reference.addReportLog(reportId, "Actualizacion", status).then(function() {
+                    reference.addReportLog(reportId, "Actualizacion", status).then(function () {
                         resolve();
                     });
                 };
             };
         });
     },
-    "getReports": function() {
+    "getReports": function () {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["reports"], "readonly");
             let object = data.objectStore("reports");
             let elements = [];
 
-            object.openCursor().onsuccess = function(e) {
+            object.openCursor().onsuccess = function (e) {
                 let result = e.target.result;
                 if (result === null) {
                     result;
@@ -321,16 +339,16 @@ module.exports = {
                 }
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("elements", elements);
                 reportsConnection.reports = elements;
                 resolve();
             }
         });
     },
-    "addReportLog": function(reportId, operation, status) {
+    "addReportLog": function (reportId, operation, status) {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["reportsLog"], "readwrite");
             let object = data.objectStore("reportsLog");
@@ -341,26 +359,26 @@ module.exports = {
                 operationDate: "" + new Date(),
             });
 
-            request.onerror = function(e) {
+            request.onerror = function (e) {
                 console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
                 reject(e);
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("The report was added to the Log");
                 resolve();
             }
         });
     },
-    getReportsLog: function() {
+    getReportsLog: function () {
         let reference = this;
-        return new Promise(function(resolve, reject) {
+        return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["reportsLog"], "readonly");
             let object = data.objectStore("reportsLog");
             let elements = [];
 
-            object.openCursor().onsuccess = function(e) {
+            object.openCursor().onsuccess = function (e) {
                 let result = e.target.result;
                 if (result === null) {
                     result;
@@ -371,7 +389,7 @@ module.exports = {
                 }
             }
 
-            data.oncomplete = function(e) {
+            data.oncomplete = function (e) {
                 console.log("elements", elements);
                 reportsConnection.reportsLog = elements;
                 resolve();
