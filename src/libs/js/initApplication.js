@@ -41,7 +41,7 @@ let uidGenerator = require("./uidGenerator");
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
-                    indexDb.getVisits().then(function () {
+                    visits.getVisits().then(function () {
                         message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         return visits.uploadVisitsToCloud();
                     }).then(function(){
@@ -49,7 +49,7 @@ let uidGenerator = require("./uidGenerator");
                     }).then(function(){
                         return visits.updateLocalVisits();
                     }).then(function(){
-                        return indexDb.getVisits();
+                        return visits.getVisits();
                     }).then(function () {
                         console.log("Visits Saved ", visits.getVisits())
                         return reference.updateSiteExternal();
@@ -203,7 +203,7 @@ let uidGenerator = require("./uidGenerator");
                     message.changeMessageLoader("Consultando Sitios Almacenados");
                     indexDb.getSites().then(function () {
                         message.changeMessageLoader("Consultando Visitas Almacenadas");
-                        return indexDb.getVisits();
+                        return visits.getVisits();
                     }).then(function () {
                         reference.fillVisitsPage();
                         reference.loadEventNewVisit();

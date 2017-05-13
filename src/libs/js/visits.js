@@ -5,7 +5,13 @@ module.exports = {
     "visitSelected": {},
     "getVisits": function () {
         let reference = this;
-        return reference.visits;
+        return new Promise(function(resolve,reject){
+            indexDb.getVisits().then(function(){
+                resolve(reference.visits);
+            });
+        }).catch(function(err){
+            reject(err);
+        });
     },
     "uploadVisitsToCloud": function () {
         console.log("Upload to Visit on Action");
@@ -34,7 +40,6 @@ module.exports = {
         });
     },
     "uploadVisit": function (dataToUpdate) {
-
         let updateVisitLocal = new Promise(function (resolve, reject) {
             indexDb.updateVisit(dataToUpdate.visitId).then(function (resolve, reject) {
                 resolve();

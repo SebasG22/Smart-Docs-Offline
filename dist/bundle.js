@@ -10844,7 +10844,13 @@ module.exports = {
     "visitSelected": {},
     "getVisits": function () {
         let reference = this;
-        return reference.visits;
+        return new Promise(function(resolve,reject){
+            indexDb.getVisits().then(function(){
+                resolve(reference.visits);
+            });
+        }).catch(function(err){
+            reject(err);
+        });
     },
     "uploadVisitsToCloud": function () {
         console.log("Upload to Visit on Action");
@@ -10873,7 +10879,6 @@ module.exports = {
         });
     },
     "uploadVisit": function (dataToUpdate) {
-
         let updateVisitLocal = new Promise(function (resolve, reject) {
             indexDb.updateVisit(dataToUpdate.visitId).then(function (resolve, reject) {
                 resolve();
@@ -15282,7 +15287,7 @@ let uidGenerator = __webpack_require__(14);
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
-                    indexDb.getVisits().then(function () {
+                    visits.getVisits().then(function () {
                         message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         return visits.uploadVisitsToCloud();
                     }).then(function(){
@@ -15290,7 +15295,7 @@ let uidGenerator = __webpack_require__(14);
                     }).then(function(){
                         return visits.updateLocalVisits();
                     }).then(function(){
-                        return indexDb.getVisits();
+                        return visits.getVisits();
                     }).then(function () {
                         console.log("Visits Saved ", visits.getVisits())
                         return reference.updateSiteExternal();
@@ -15444,7 +15449,7 @@ let uidGenerator = __webpack_require__(14);
                     message.changeMessageLoader("Consultando Sitios Almacenados");
                     indexDb.getSites().then(function () {
                         message.changeMessageLoader("Consultando Visitas Almacenadas");
-                        return indexDb.getVisits();
+                        return visits.getVisits();
                     }).then(function () {
                         reference.fillVisitsPage();
                         reference.loadEventNewVisit();
