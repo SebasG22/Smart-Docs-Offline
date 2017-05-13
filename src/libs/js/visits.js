@@ -64,7 +64,7 @@ module.exports = {
                 url: "https://smart-docs.herokuapp.com/visits/",
             })
                 .done(function (sitesSavedCloud) {
-                    reference.visits = sitesSavedCloud();
+                    reference.visits = sitesSavedCloud;
                     resolve();
                 });
         });
