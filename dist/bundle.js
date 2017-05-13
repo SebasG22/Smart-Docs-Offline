@@ -10552,9 +10552,13 @@ module.exports = {
         }
 
         return new Promise(function (resolve, reject) {
-            Promise.all[updateVisits].then(function () {
+            if (updateVisits.length > 0) {
+                Promise.all[updateVisits].then(function () {
+                    resolve();
+                });
+            } else {
                 resolve();
-            });
+            }
         });
     }
 };

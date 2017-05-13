@@ -34,7 +34,7 @@ module.exports = {
         });
     },
     "uploadVisit": function (dataToUpdate) {
-    
+
         let updateVisitLocal = new Promise(function (resolve, reject) {
             indexDb.updateVisit(dataToUpdate.visitId).then(function (resolve, reject) {
                 resolve();
@@ -51,7 +51,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             Promise.all([updateVisitLocal, updateVisitCloud]).then(function () {
                 resolve();
-            }).catch(function(err){
+            }).catch(function (err) {
                 reject(err);
             });
         });
@@ -79,10 +79,15 @@ module.exports = {
             cont++;
         }
         return new Promise(function (resolve, reject) {
-            Promise.all[updateVisits].then(function () {
+            if (updateVisits.length > 0) {
+                Promise.all[updateVisits].then(function () {
+                    resolve();
+                });
+            }
+            else {
                 resolve();
-            });
+            }
         });
 
-    }
+}
 }
