@@ -4,6 +4,7 @@ const mongooseUniqueValidator = require("mongoose-unique-validator");
 
 let schema = new Schema({
     siteId: { type: String, required: true },
+    name: { type: String, required: true },
     visitId: { type: String, required: true },
     author: { type: String, required: true },
     creationDate: { type: String, required: true }

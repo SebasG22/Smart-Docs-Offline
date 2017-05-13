@@ -21,6 +21,7 @@ router.post('/', function (req, res, next) {
             //Not founded
             var visitEntry = new Visit({
                     siteId: req.body.siteId,
+                    name: req.body.name,
                     visitId: req.body.visitId,
                     author: req.body.author,
                     creationDate: req.body.creationDate

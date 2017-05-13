@@ -114,7 +114,7 @@ module.exports = {
             }
         });
     },
-    "addVisit": function (name, siteId, user) {
+    "addVisit": function (siteId, name, author , cloud , creationDate = "" + new Date(),) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -124,9 +124,9 @@ module.exports = {
             var request = object.put({
                 siteId: siteId,
                 name: name,
-                user: user,
-                update: 'yes',
-                creationDate: "" + new Date()
+                author: author,
+                cloud: cloud,
+                creationDate: creationDate
             });
 
             request.onerror = function (e) {
@@ -142,6 +142,35 @@ module.exports = {
                 console.log("The Visit was register on SmartDocsOffline");
                 resolve();
             }
+        });
+    },
+    "updateVisit": function (visitId, cloud = true) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            var objectStore = active.transaction(["visits"], "readwrite").objectStore("visits");
+            var request = objectStore.get(visitId);
+            request.onerror = function (event) {
+                // Handle errors!
+                reject(request.error.name);
+            };
+            request.onsuccess = function (event) {
+                // Get the old value that we want to update
+                var data = request.result;
+
+                // update the value(s) in the object that you want to change
+                data.cloud = yes;
+                // Put this updated object back into the database.
+                var requestUpdate = objectStore.put(data);
+                requestUpdate.onerror = function (event) {
+                    // Do something with the error
+                    reject(requestUpdate.error.name);
+                };
+                requestUpdate.onsuccess = function (event) {
+                    // Success - the data is updated!
+                    resolve();
+                };
+            };
         });
     },
     "getVisits": function () {
