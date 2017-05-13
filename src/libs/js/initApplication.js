@@ -10,6 +10,7 @@ let indexDb = require("./indexedDb");
 let message = require("./messages");
 let notification = require("./notifications");
 let sites = require("./sites");
+let uidGenerator = require("./uidGenerator");
 
 (function () {
     let smartDocsOffline = {
@@ -297,7 +298,8 @@ let sites = require("./sites");
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    indexDb.addVisit(siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
+                    
+                    indexDb.addVisit(uidGenerator.uidGen() + "-" + localStorage.getItem("username"),siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });

@@ -74,7 +74,7 @@ module.exports = {
         let cont = 0;
         let updateVisits = [];
         for (let siteRes of reference.getVisits()) {
-            this["updateVisit" + cont] = indexDb.addVisit(siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
+            this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId,siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
             updateVisits.push(this["updateVisit" + cont]);
             cont++;
         }

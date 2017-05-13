@@ -10,7 +10,7 @@ module.exports = {
     "startIndexedDB": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
-            reference.dataBase = indexedDB.open("SmartDocsOffline", 3);
+            reference.dataBase = indexedDB.open("SmartDocsOffline", 4);
             reference.dataBase.onupgradeneeded = function (e) {
                 let active = reference.dataBase.result;
                 let sites = active.createObjectStore("sites", { keyPath: 'siteId' });
@@ -20,12 +20,11 @@ module.exports = {
                 sites.createIndex("by_creationDate", "creationDate", { unique: false });
                 sites.createIndex("by_lastModification", "lastModification", { unique: false });
 
-                let visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
+                let visits = active.createObjectStore("visits", { keyPath: 'visitId'});
                 visits.createIndex("by_visitId", "visitId", { unique: true });
                 visits.createIndex("by_site", "site", { unique: false });
                 visits.createIndex("by_user", "user", { unique: false });
                 visits.createIndex("by_creationDate", "creationDate", { unique: false });
-
 
                 let templates = active.createObjectStore("templates", { keyPath: 'templateId' });
                 templates.createIndex("by_templateId", "templateId", { unique: true });
@@ -114,7 +113,7 @@ module.exports = {
             }
         });
     },
-    "addVisit": function (siteId, name, author , cloud , creationDate = "" + new Date(),) {
+    "addVisit": function (visitId,siteId, name, author , cloud , creationDate = "" + new Date(),) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -122,6 +121,7 @@ module.exports = {
             var object = data.objectStore("visits");
 
             var request = object.put({
+                visitId: visitId,
                 siteId: siteId,
                 name: name,
                 author: author,
