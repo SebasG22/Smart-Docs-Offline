@@ -80,7 +80,7 @@ module.exports = {
         }
         return new Promise(function (resolve, reject) {
             if (updateVisits.length > 0) {
-                Promise.all[updateVisits].then(function () {
+                Promise.all(updateVisits).then(function () {
                     resolve();
                 });
             }
