@@ -10445,7 +10445,7 @@ module.exports = {
             }
         });
     },
-    "addVisit": function (visitId,siteId, name, author , cloud , creationDate = "" + new Date(),) {
+    "addVisit": function (visitId,siteId, name, author , cloud , creationDate = "" + new Date()) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
