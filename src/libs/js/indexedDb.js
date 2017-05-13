@@ -135,7 +135,8 @@ module.exports = {
             }
 
             request.onsuccess = function (e) {
-                visitsConnection.visitSelected.visitId = e.target.result;
+                visitsConnection.visitSelected = e.target.result;
+                console.log("Visit Selected ", e.target.result);
             }
 
             data.oncomplete = function (e) {
