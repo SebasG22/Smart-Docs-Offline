@@ -18,7 +18,7 @@ module.exports = {
         let reference = this;
         let cont = 0
         let visitsToUpdate = [];
-        for (let visitsToUpd of reference.getVisits()) {
+        for (let visitsToUpd of reference.visits) {
             if (!visitsToUpd.cloud) {
                 this["visitsToUpdate" + cont] = reference.uploadVisit({
                     siteId: visitsToUpd.siteId,
