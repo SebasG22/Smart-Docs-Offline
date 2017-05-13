@@ -9907,6 +9907,442 @@ var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
+
+
+var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+var dataBase = void 0;
+var visitsConnection = __webpack_require__(6);
+var templatesConnection = __webpack_require__(5);
+var reportsConnection = __webpack_require__(3);
+var siteConnection = __webpack_require__(4);
+
+module.exports = {
+    "dataBase": "",
+    "startIndexedDB": function startIndexedDB() {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            reference.dataBase = indexedDB.open("SmartDocsOffline", 3);
+            reference.dataBase.onupgradeneeded = function (e) {
+                var active = reference.dataBase.result;
+                var sites = active.createObjectStore("sites", { keyPath: 'siteId' });
+                sites.createIndex("by_siteId", "siteId", { unique: true });
+                sites.createIndex("by_project", "project", { unique: false });
+                sites.createIndex("by_fmOffice", "fmOffice", { unique: false });
+                sites.createIndex("by_creationDate", "creationDate", { unique: false });
+                sites.createIndex("by_lastModification", "lastModification", { unique: false });
+
+                var visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
+                visits.createIndex("by_visitId", "visitId", { unique: true });
+                visits.createIndex("by_site", "site", { unique: false });
+                visits.createIndex("by_user", "user", { unique: false });
+                visits.createIndex("by_creationDate", "creationDate", { unique: false });
+
+                var templates = active.createObjectStore("templates", { keyPath: 'templateId' });
+                templates.createIndex("by_templateId", "templateId", { unique: true });
+                templates.createIndex("by_creationDate", "creationDate", { unique: false });
+                templates.createIndex("by_lastModification", "lastModification", { unique: false });
+                templates.createIndex("by_taskType", "taskType", { unique: false });
+                templates.createIndex("by_project", "project", { unique: false });
+
+                var reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
+                reports.createIndex("by_reportId", "reportId", { unique: true });
+                reports.createIndex("by_site", "site", { unique: false });
+                reports.createIndex("by_creation_date", "creationDate", { unique: false });
+                reports.createIndex("by_lastModification", "lastModification", { unique: false });
+
+                var reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
+                reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
+                reportsLog.createIndex("by_reportId", "reportId", { unique: false });
+                reportsLog.createIndex("by_site", "site", { unique: false });
+                reportsLog.createIndex("by_creation_date", "creationDate", { unique: false });
+                reportsLog.createIndex("by_operation", "operation", { unique: false });
+                reportsLog.createIndex("by_operationDate", "operationDate", { unique: false });
+            };
+
+            reference.dataBase.onsuccess = function (e) {
+                console.log("Smart Docs Offline DB was loaded");
+                resolve();
+            };
+
+            reference.dataBase.onerror = function (e) {
+                console.error("An error ocurred " + e);
+                reject(e);
+            };
+        });
+    },
+    "addSite": function addSite(siteId, name, fmOffice, project) {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["sites"], "readwrite");
+            var object = data.objectStore("sites");
+
+            var request = object.put({
+                siteId: siteId,
+                name: name,
+                fmOffice: fmOffice,
+                project: project,
+                creationDate: "" + new Date(),
+                lastModification: "" + new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(request.error.name);
+            };
+
+            data.oncomplete = function (e) {
+                console.log("The Site was register on SmartDocsOffline");
+                resolve();
+            };
+        });
+    },
+    "getSites": function getSites() {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["sites"], "readonly");
+            var object = data.objectStore("sites");
+            var elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                var result = e.target.result;
+                if (result === null) {
+                    result;
+                } else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            };
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                siteConnection.sites = elements;
+                resolve();
+            };
+        });
+    },
+    "addVisit": function addVisit(siteId, name, author, cloud) {
+        var creationDate = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : "" + new Date();
+
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["visits"], "readwrite");
+            var object = data.objectStore("visits");
+
+            var request = object.put({
+                siteId: siteId,
+                name: name,
+                author: author,
+                cloud: cloud,
+                creationDate: creationDate
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(request.error.name);
+            };
+
+            request.onsuccess = function (e) {
+                visitsConnection.visitSelected.visitId = e.target.result;
+            };
+
+            data.oncomplete = function (e) {
+                console.log("The Visit was register on SmartDocsOffline");
+                resolve();
+            };
+        });
+    },
+    "updateVisit": function updateVisit(visitId) {
+        var cloud = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : true;
+
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var objectStore = active.transaction(["visits"], "readwrite").objectStore("visits");
+            var request = objectStore.get(visitId);
+            request.onerror = function (event) {
+                // Handle errors!
+                reject(request.error.name);
+            };
+            request.onsuccess = function (event) {
+                // Get the old value that we want to update
+                var data = request.result;
+
+                // update the value(s) in the object that you want to change
+                data.cloud = yes;
+                // Put this updated object back into the database.
+                var requestUpdate = objectStore.put(data);
+                requestUpdate.onerror = function (event) {
+                    // Do something with the error
+                    reject(requestUpdate.error.name);
+                };
+                requestUpdate.onsuccess = function (event) {
+                    // Success - the data is updated!
+                    resolve();
+                };
+            };
+        });
+    },
+    "getVisits": function getVisits() {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["visits"], "readonly");
+            var object = data.objectStore("visits");
+            var elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                var result = e.target.result;
+                if (result === null) {
+                    result;
+                } else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            };
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                visitsConnection.visits = elements;
+                resolve();
+            };
+        });
+    },
+    "addTemplate": function addTemplate(templateId, name, project, taskType, icon, content) {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["templates"], "readwrite");
+            var object = data.objectStore("templates");
+
+            var request = object.put({
+                templateId: templateId,
+                name: name,
+                project: project,
+                taskType: taskType,
+                icon: icon,
+                content: content,
+                creationDate: "" + new Date(),
+                lastModification: "" + new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(request.error.name);
+            };
+
+            data.oncomplete = function (e) {
+                console.log("The template was added to SmartDocsOffline");
+                resolve();
+            };
+        });
+    },
+    "getTemplates": function getTemplates() {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["templates"], "readonly");
+            var object = data.objectStore("templates");
+            var elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                var result = e.target.result;
+                if (result === null) {
+                    result;
+                } else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            };
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                templatesConnection.templates = elements;
+                resolve();
+            };
+        });
+    },
+    "getTemplateByTemplateId": function getTemplateByTemplateId(templateId) {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["templates"], "readonly");
+            var object = data.objectStore("templates");
+            var request = object.get(templateId);
+            request.onsuccess = function () {
+                if (request.result !== undefined) {
+                    resolve(request.result);
+                }
+            };
+        });
+    },
+    "addReport": function addReport(templateId, visitId, status, checkbox_answer, date_answer, datetime_answer, list_answer, month_answer, multiselect_answer, number_answer, radio_answer, select_answer, table_answer, text_answer, textarea_answer, time_answer, week_answer) {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["reports", "reportsLog"], "readwrite");
+            var object = data.objectStore("reports");
+            var request = object.put({
+                visitId: visitId,
+                templateId: templateId,
+                checkbox_answer: checkbox_answer,
+                date_answer: date_answer,
+                datetime_answer: datetime_answer,
+                list_answer: list_answer,
+                month_answer: month_answer,
+                multiselect_answer: multiselect_answer,
+                number_answer: number_answer,
+                radio_answer: radio_answer,
+                select_answer: select_answer,
+                table_answer: table_answer,
+                text_answer: text_answer,
+                textarea_answer: textarea_answer,
+                time_answer: time_answer,
+                week_answer: week_answer,
+                update: 'yes',
+                author: '',
+                completedDate: status == 'SM-Status002' ? "" + new Date() : "",
+                creationDate: "" + new Date(),
+                lastModification: "" + new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(e);
+            };
+
+            request.onsuccess = function (e) {
+                reference.addReportLog(e.target.result, "Creacion", status);
+            };
+
+            data.oncomplete = function (e) {
+                console.log("The report was added to SmartDocsOffline", e);
+                resolve();
+            };
+        });
+    },
+    "updateReport": function updateReport(reportId, status, content) {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var objectStore = active.transaction(["reports"], "readwrite").objectStore("reports");
+            var request = objectStore.get(reportId);
+            request.onerror = function (event) {
+                // Handle errors!
+                reject(request.error.name);
+            };
+            request.onsuccess = function (event) {
+                // Get the old value that we want to update
+                var data = request.result;
+
+                // update the value(s) in the object that you want to change
+                data.content = content;
+                data.status = status;
+                data.lastModification = "" + new Date();
+
+                // Put this updated object back into the database.
+                var requestUpdate = objectStore.put(data);
+                requestUpdate.onerror = function (event) {
+                    // Do something with the error
+                    reject(requestUpdate.error.name);
+                };
+                requestUpdate.onsuccess = function (event) {
+                    // Success - the data is updated!
+                    reference.addReportLog(reportId, "Actualizacion", status).then(function () {
+                        resolve();
+                    });
+                };
+            };
+        });
+    },
+    "getReports": function getReports() {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["reports"], "readonly");
+            var object = data.objectStore("reports");
+            var elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                var result = e.target.result;
+                if (result === null) {
+                    result;
+                } else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            };
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                reportsConnection.reports = elements;
+                resolve();
+            };
+        });
+    },
+    "addReportLog": function addReportLog(reportId, operation, status) {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["reportsLog"], "readwrite");
+            var object = data.objectStore("reportsLog");
+            var request = object.put({
+                reportId: reportId,
+                operation: operation,
+                status: status,
+                operationDate: "" + new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(e);
+            };
+
+            data.oncomplete = function (e) {
+                console.log("The report was added to the Log");
+                resolve();
+            };
+        });
+    },
+    getReportsLog: function getReportsLog() {
+        var reference = this;
+        return new Promise(function (resolve, reject) {
+            var active = reference.dataBase.result;
+            var data = active.transaction(["reportsLog"], "readonly");
+            var object = data.objectStore("reportsLog");
+            var elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                var result = e.target.result;
+                if (result === null) {
+                    result;
+                } else {
+                    elements.push(result.value);
+                    console.log(elements);
+                    result.continue();
+                }
+            };
+
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                reportsConnection.reportsLog = elements;
+                resolve();
+            };
+        });
+    }
+};
+
+/***/ }),
+/* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
 module.exports = {
@@ -9935,7 +10371,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9956,7 +10392,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9971,7 +10407,7 @@ module.exports = {
 };
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9987,11 +10423,13 @@ module.exports = {
 };
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
+
+var indexDb = __webpack_require__(1);
 
 module.exports = {
     "visits": [],
@@ -10000,13 +10438,122 @@ module.exports = {
         var reference = this;
         return reference.visits;
     },
-    showVisitsSaveonCloud: function showVisitsSaveonCloud() {
+    "uploadVisitsToCloud": function uploadVisitsToCloud() {
+        console.log("Upload to Visit on Action");
+        var reference = this;
+        var cont = 0;
+        var visitsToUpdate = [];
+        var _iteratorNormalCompletion = true;
+        var _didIteratorError = false;
+        var _iteratorError = undefined;
+
+        try {
+            for (var _iterator = reference.getVisits()[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
+                var visitsToUpd = _step.value;
+
+                if (!visitsToUpd.cloud) {
+                    this["visitsToUpdate" + cont] = reference.uploadVisit({
+                        siteId: visitsToUpd.siteId,
+                        visitId: visitsToUpd.visitId,
+                        author: visitsToUpd.user,
+                        creationDate: visitsToUpd.creationDate
+                    });
+                    visitsToUpdate.push(this["visitsToUpdate" + cont]);
+                    cont += 1;
+                }
+            }
+        } catch (err) {
+            _didIteratorError = true;
+            _iteratorError = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion && _iterator.return) {
+                    _iterator.return();
+                }
+            } finally {
+                if (_didIteratorError) {
+                    throw _iteratorError;
+                }
+            }
+        }
+
+        return new Promise(function (resolve, reject) {
+            Promise.all(promisesUpdate).then(function (values) {
+                console.log("Visits Update ", values);
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    },
+    "uploadVisit": function uploadVisit(dataToUpdate) {
+
+        var updateVisitLocal = new Promise(function (resolve, reject) {
+            indexDb.updateVisit(dataToUpdate.visitId).then(function (resolve, reject) {
+                resolve();
+            });
+        });
+
+        var updateVisitCloud = new Promise(function (resolve, reject) {
+            $.post("https://smart-docs.herokuapp.com/visits/", dataToUpdate).done(function (data) {
+                resolve(data);
+            });
+        });
+
+        return new Promise(function (resolve, reject) {
+            Promise.all([updateVisitLocal, updateVisitCloud]).then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    },
+    getVisitsSaveonCloud: function getVisitsSaveonCloud() {
+        var reference = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
                 url: "https://smart-docs.herokuapp.com/visits/"
-            }).done(function (res) {
-                alert("Visits on DB: " + res);
+            }).done(function (sitesSavedCloud) {
+                reference.visits = sitesSavedCloud();
+                resolve();
+            });
+        });
+    },
+    updateLocalVisits: function updateLocalVisits() {
+        var reference = this;
+        var cont = 0;
+        var updateVisits = [];
+        var _iteratorNormalCompletion2 = true;
+        var _didIteratorError2 = false;
+        var _iteratorError2 = undefined;
+
+        try {
+            for (var _iterator2 = reference.getVisits()[Symbol.iterator](), _step2; !(_iteratorNormalCompletion2 = (_step2 = _iterator2.next()).done); _iteratorNormalCompletion2 = true) {
+                var siteRes = _step2.value;
+
+                this["updateVisit" + cont] = indexDb.addVisit(siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
+                updateVisits.push(this["updateVisit" + cont]);
+                cont++;
+            }
+        } catch (err) {
+            _didIteratorError2 = true;
+            _iteratorError2 = err;
+        } finally {
+            try {
+                if (!_iteratorNormalCompletion2 && _iterator2.return) {
+                    _iterator2.return();
+                }
+            } finally {
+                if (_didIteratorError2) {
+                    throw _iteratorError2;
+                }
+            }
+        }
+
+        return new Promise(function (resolve, reject) {
+            Promise.all[updateVisits].then(function () {
+                resolve();
             });
         });
     }
@@ -10014,7 +10561,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10096,7 +10643,7 @@ function toComment(sourceMap) {
 }
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -10409,7 +10956,7 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10428,409 +10975,6 @@ __webpack_require__(21);
 __webpack_require__(22);
 __webpack_require__(23);
 __webpack_require__(14);
-
-/***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-var indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
-var dataBase = void 0;
-var visitsConnection = __webpack_require__(5);
-var templatesConnection = __webpack_require__(4);
-var reportsConnection = __webpack_require__(2);
-var siteConnection = __webpack_require__(3);
-
-module.exports = {
-    "dataBase": "",
-    "startIndexedDB": function startIndexedDB() {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            reference.dataBase = indexedDB.open("SmartDocsOffline", 3);
-            reference.dataBase.onupgradeneeded = function (e) {
-                var active = reference.dataBase.result;
-                var sites = active.createObjectStore("sites", { keyPath: 'siteId' });
-                sites.createIndex("by_siteId", "siteId", { unique: true });
-                sites.createIndex("by_project", "project", { unique: false });
-                sites.createIndex("by_fmOffice", "fmOffice", { unique: false });
-                sites.createIndex("by_creationDate", "creationDate", { unique: false });
-                sites.createIndex("by_lastModification", "lastModification", { unique: false });
-
-                var visits = active.createObjectStore("visits", { keyPath: 'visitId', autoIncrement: true });
-                visits.createIndex("by_visitId", "visitId", { unique: true });
-                visits.createIndex("by_site", "site", { unique: false });
-                visits.createIndex("by_user", "user", { unique: false });
-                visits.createIndex("by_creationDate", "creationDate", { unique: false });
-
-                var templates = active.createObjectStore("templates", { keyPath: 'templateId' });
-                templates.createIndex("by_templateId", "templateId", { unique: true });
-                templates.createIndex("by_creationDate", "creationDate", { unique: false });
-                templates.createIndex("by_lastModification", "lastModification", { unique: false });
-                templates.createIndex("by_taskType", "taskType", { unique: false });
-                templates.createIndex("by_project", "project", { unique: false });
-
-                var reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
-                reports.createIndex("by_reportId", "reportId", { unique: true });
-                reports.createIndex("by_site", "site", { unique: false });
-                reports.createIndex("by_creation_date", "creationDate", { unique: false });
-                reports.createIndex("by_lastModification", "lastModification", { unique: false });
-
-                var reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
-                reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
-                reportsLog.createIndex("by_reportId", "reportId", { unique: false });
-                reportsLog.createIndex("by_site", "site", { unique: false });
-                reportsLog.createIndex("by_creation_date", "creationDate", { unique: false });
-                reportsLog.createIndex("by_operation", "operation", { unique: false });
-                reportsLog.createIndex("by_operationDate", "operationDate", { unique: false });
-            };
-
-            reference.dataBase.onsuccess = function (e) {
-                console.log("Smart Docs Offline DB was loaded");
-                resolve();
-            };
-
-            reference.dataBase.onerror = function (e) {
-                console.error("An error ocurred " + e);
-                reject(e);
-            };
-        });
-    },
-    "addSite": function addSite(siteId, name, fmOffice, project) {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["sites"], "readwrite");
-            var object = data.objectStore("sites");
-
-            var request = object.put({
-                siteId: siteId,
-                name: name,
-                fmOffice: fmOffice,
-                project: project,
-                creationDate: "" + new Date(),
-                lastModification: "" + new Date()
-            });
-
-            request.onerror = function (e) {
-                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
-                reject(request.error.name);
-            };
-
-            data.oncomplete = function (e) {
-                console.log("The Site was register on SmartDocsOffline");
-                resolve();
-            };
-        });
-    },
-    "getSites": function getSites() {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["sites"], "readonly");
-            var object = data.objectStore("sites");
-            var elements = [];
-
-            object.openCursor().onsuccess = function (e) {
-                var result = e.target.result;
-                if (result === null) {
-                    result;
-                } else {
-                    elements.push(result.value);
-                    console.log(elements);
-                    result.continue();
-                }
-            };
-
-            data.oncomplete = function (e) {
-                console.log("elements", elements);
-                siteConnection.sites = elements;
-                resolve();
-            };
-        });
-    },
-    "addVisit": function addVisit(name, siteId, user) {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["visits"], "readwrite");
-            var object = data.objectStore("visits");
-
-            var request = object.put({
-                siteId: siteId,
-                name: name,
-                user: user,
-                update: 'yes',
-                creationDate: "" + new Date()
-            });
-
-            request.onerror = function (e) {
-                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
-                reject(request.error.name);
-            };
-
-            request.onsuccess = function (e) {
-                visitsConnection.visitSelected.visitId = e.target.result;
-            };
-
-            data.oncomplete = function (e) {
-                console.log("The Visit was register on SmartDocsOffline");
-                resolve();
-            };
-        });
-    },
-    "getVisits": function getVisits() {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["visits"], "readonly");
-            var object = data.objectStore("visits");
-            var elements = [];
-
-            object.openCursor().onsuccess = function (e) {
-                var result = e.target.result;
-                if (result === null) {
-                    result;
-                } else {
-                    elements.push(result.value);
-                    console.log(elements);
-                    result.continue();
-                }
-            };
-
-            data.oncomplete = function (e) {
-                console.log("elements", elements);
-                visitsConnection.visits = elements;
-                resolve();
-            };
-        });
-    },
-    "addTemplate": function addTemplate(templateId, name, project, taskType, icon, content) {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["templates"], "readwrite");
-            var object = data.objectStore("templates");
-
-            var request = object.put({
-                templateId: templateId,
-                name: name,
-                project: project,
-                taskType: taskType,
-                icon: icon,
-                content: content,
-                creationDate: "" + new Date(),
-                lastModification: "" + new Date()
-            });
-
-            request.onerror = function (e) {
-                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
-                reject(request.error.name);
-            };
-
-            data.oncomplete = function (e) {
-                console.log("The template was added to SmartDocsOffline");
-                resolve();
-            };
-        });
-    },
-    "getTemplates": function getTemplates() {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["templates"], "readonly");
-            var object = data.objectStore("templates");
-            var elements = [];
-
-            object.openCursor().onsuccess = function (e) {
-                var result = e.target.result;
-                if (result === null) {
-                    result;
-                } else {
-                    elements.push(result.value);
-                    console.log(elements);
-                    result.continue();
-                }
-            };
-
-            data.oncomplete = function (e) {
-                console.log("elements", elements);
-                templatesConnection.templates = elements;
-                resolve();
-            };
-        });
-    },
-    "getTemplateByTemplateId": function getTemplateByTemplateId(templateId) {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["templates"], "readonly");
-            var object = data.objectStore("templates");
-            var request = object.get(templateId);
-            request.onsuccess = function () {
-                if (request.result !== undefined) {
-                    resolve(request.result);
-                }
-            };
-        });
-    },
-    "addReport": function addReport(templateId, visitId, status, checkbox_answer, date_answer, datetime_answer, list_answer, month_answer, multiselect_answer, number_answer, radio_answer, select_answer, table_answer, text_answer, textarea_answer, time_answer, week_answer) {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["reports", "reportsLog"], "readwrite");
-            var object = data.objectStore("reports");
-            var request = object.put({
-                visitId: visitId,
-                templateId: templateId,
-                checkbox_answer: checkbox_answer,
-                date_answer: date_answer,
-                datetime_answer: datetime_answer,
-                list_answer: list_answer,
-                month_answer: month_answer,
-                multiselect_answer: multiselect_answer,
-                number_answer: number_answer,
-                radio_answer: radio_answer,
-                select_answer: select_answer,
-                table_answer: table_answer,
-                text_answer: text_answer,
-                textarea_answer: textarea_answer,
-                time_answer: time_answer,
-                week_answer: week_answer,
-                update: 'yes',
-                author: '',
-                completedDate: status == 'SM-Status002' ? "" + new Date() : "",
-                creationDate: "" + new Date(),
-                lastModification: "" + new Date()
-            });
-
-            request.onerror = function (e) {
-                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
-                reject(e);
-            };
-
-            request.onsuccess = function (e) {
-                reference.addReportLog(e.target.result, "Creacion", status);
-            };
-
-            data.oncomplete = function (e) {
-                console.log("The report was added to SmartDocsOffline", e);
-                resolve();
-            };
-        });
-    },
-    "updateReport": function updateReport(reportId, status, content) {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var objectStore = active.transaction(["reports"], "readwrite").objectStore("reports");
-            var request = objectStore.get(reportId);
-            request.onerror = function (event) {
-                // Handle errors!
-                reject(request.error.name);
-            };
-            request.onsuccess = function (event) {
-                // Get the old value that we want to update
-                var data = request.result;
-
-                // update the value(s) in the object that you want to change
-                data.content = content;
-                data.status = status;
-                data.lastModification = "" + new Date();
-
-                // Put this updated object back into the database.
-                var requestUpdate = objectStore.put(data);
-                requestUpdate.onerror = function (event) {
-                    // Do something with the error
-                    reject(requestUpdate.error.name);
-                };
-                requestUpdate.onsuccess = function (event) {
-                    // Success - the data is updated!
-                    reference.addReportLog(reportId, "Actualizacion", status).then(function () {
-                        resolve();
-                    });
-                };
-            };
-        });
-    },
-    "getReports": function getReports() {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["reports"], "readonly");
-            var object = data.objectStore("reports");
-            var elements = [];
-
-            object.openCursor().onsuccess = function (e) {
-                var result = e.target.result;
-                if (result === null) {
-                    result;
-                } else {
-                    elements.push(result.value);
-                    console.log(elements);
-                    result.continue();
-                }
-            };
-
-            data.oncomplete = function (e) {
-                console.log("elements", elements);
-                reportsConnection.reports = elements;
-                resolve();
-            };
-        });
-    },
-    "addReportLog": function addReportLog(reportId, operation, status) {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["reportsLog"], "readwrite");
-            var object = data.objectStore("reportsLog");
-            var request = object.put({
-                reportId: reportId,
-                operation: operation,
-                status: status,
-                operationDate: "" + new Date()
-            });
-
-            request.onerror = function (e) {
-                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
-                reject(e);
-            };
-
-            data.oncomplete = function (e) {
-                console.log("The report was added to the Log");
-                resolve();
-            };
-        });
-    },
-    getReportsLog: function getReportsLog() {
-        var reference = this;
-        return new Promise(function (resolve, reject) {
-            var active = reference.dataBase.result;
-            var data = active.transaction(["reportsLog"], "readonly");
-            var object = data.objectStore("reportsLog");
-            var elements = [];
-
-            object.openCursor().onsuccess = function (e) {
-                var result = e.target.result;
-                if (result === null) {
-                    result;
-                } else {
-                    elements.push(result.value);
-                    console.log(elements);
-                    result.continue();
-                }
-            };
-
-            data.oncomplete = function (e) {
-                console.log("elements", elements);
-                reportsConnection.reportsLog = elements;
-                resolve();
-            };
-        });
-    }
-};
 
 /***/ }),
 /* 10 */
@@ -10863,7 +11007,7 @@ module.exports = {
 "use strict";
 /* WEBPACK VAR INJECTION */(function($) {
 
-var message = __webpack_require__(1);
+var message = __webpack_require__(2);
 
 module.exports = {
     "imgTo64": function imgTo64(input) {
@@ -12040,7 +12184,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(7)(content, options);
+var update = __webpack_require__(8)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -12071,7 +12215,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(7)(content, options);
+var update = __webpack_require__(8)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -14485,20 +14629,20 @@ module.exports = function (module) {
 
 __webpack_require__(0);
 
-__webpack_require__(8);
+__webpack_require__(9);
 
 __webpack_require__(12);
 
 __webpack_require__(13);
 
-var visits = __webpack_require__(5);
+var visits = __webpack_require__(6);
 var smartEngine = __webpack_require__(11);
-var templates = __webpack_require__(4);
-var reports = __webpack_require__(2);
-var indexDb = __webpack_require__(9);
-var message = __webpack_require__(1);
+var templates = __webpack_require__(5);
+var reports = __webpack_require__(3);
+var indexDb = __webpack_require__(1);
+var message = __webpack_require__(2);
 var notification = __webpack_require__(10);
-var sites = __webpack_require__(3);
+var sites = __webpack_require__(4);
 
 (function () {
     var smartDocsOffline = {
@@ -14522,14 +14666,24 @@ var sites = __webpack_require__(3);
                 reference.grantPermissionPosition();
                 message.addMessageLoder("loaderMessage", "#mainContent2");
                 message.changeMessageLoader("loaderMessage", "Consultando Plantillas");
+                /**
+                 * Detect if the user has an internet connection available
+                 * If it's true == Connection Available
+                 */
                 if (navigator.onLine == true) {
                     message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
+
                     indexDb.getVisits().then(function () {
                         message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
-                        reference.uploadToVisitToDB();
-                        message.changeMessageLoader("loaderMessage", "Actualizando Sitios");
-                        return visits.showVisitsSaveonCloud();
+                        return visits.uploadVisitsToCloud();
                     }).then(function () {
+                        return visits.getVisitsSaveonCloud();
+                    }).then(function () {
+                        return visits.updateLocalVisits();
+                    }).then(function () {
+                        return indexDb.getVisits();
+                    }).then(function () {
+                        console.log("Visits Saved ", visits.getVisits());
                         return reference.updateSiteExternal();
                     }).then(function () {
                         message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
@@ -14857,7 +15011,7 @@ var sites = __webpack_require__(3);
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    indexDb.addVisit(siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), siteFilter[0].siteId, localStorage.getItem("username")).then(function () {
+                    indexDb.addVisit(siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });
@@ -15192,7 +15346,6 @@ var sites = __webpack_require__(3);
         "uploadToVisitToDB": function uploadToVisitToDB() {
             console.log("Upload to Visit on Action");
             var reference = this;
-            var visitsToUpdate = visits.getVisits();
             var cont = 0;
             var promisesUpdate = [];
             var _iteratorNormalCompletion11 = true;
@@ -15200,17 +15353,19 @@ var sites = __webpack_require__(3);
             var _iteratorError11 = undefined;
 
             try {
-                for (var _iterator11 = visitsToUpdate[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
+                for (var _iterator11 = visits.getVisits()[Symbol.iterator](), _step11; !(_iteratorNormalCompletion11 = (_step11 = _iterator11.next()).done); _iteratorNormalCompletion11 = true) {
                     var visitsToUpd = _step11.value;
 
-                    this["visitsToUpdate" + cont] = reference.postVisitRequest({
-                        siteId: visitsToUpd.siteId,
-                        visitId: visitsToUpd.visitId,
-                        author: visitsToUpd.user,
-                        creationDate: visitsToUpd.creationDate
-                    });
-                    promisesUpdate.push(this["visitsToUpdate" + cont]);
-                    cont += 1;
+                    if (!visitsToUpd.cloud) {
+                        this["visitsToUpdate" + cont] = reference.postVisitRequest({
+                            siteId: visitsToUpd.siteId,
+                            visitId: visitsToUpd.visitId,
+                            author: visitsToUpd.user,
+                            creationDate: visitsToUpd.creationDate
+                        });
+                        promisesUpdate.push(this["visitsToUpdate" + cont]);
+                        cont += 1;
+                    }
                 }
             } catch (err) {
                 _didIteratorError11 = true;
@@ -15227,11 +15382,18 @@ var sites = __webpack_require__(3);
                 }
             }
 
-            Promise.all(promisesUpdate).then(function (values) {
-                console.log("Visits Update ", values);
+            return new Promise(function (resolve, reject) {
+                Promise.all(promisesUpdate).then(function (values) {
+                    console.log("Visits Update ", values);
+                    resolve();
+                }).catch(function (err) {
+                    reject(err);
+                });
             });
         },
         "postVisitRequest": function postVisitRequest(dataToUpdate) {
+            var updateVisitLocal = new Promise(function (resolve, reject) {});
+
             return new Promise(function (resolve, reject) {
                 $.post("https://smart-docs.herokuapp.com/visits/", dataToUpdate).done(function (data) {
                     resolve(data);
@@ -15257,7 +15419,7 @@ var sites = __webpack_require__(3);
 /* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(undefined);
+exports = module.exports = __webpack_require__(7)(undefined);
 // imports
 
 
@@ -15271,7 +15433,7 @@ exports.push([module.i, ".flat-blue {\n  background-color: #F9F9F9;\n  /* small 
 /* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(6)(undefined);
+exports = module.exports = __webpack_require__(7)(undefined);
 // imports
 
 
