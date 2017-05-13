@@ -17,7 +17,7 @@ module.exports = {
                     'css-loader'
                     ]
             },
-            
+            /*
             {
                 test: /\.js$/,
                 use: {
@@ -26,7 +26,7 @@ module.exports = {
                         presets: ['es2015']
                     }
                 }
-            }
+            }*/
         ]
     }
     ,
