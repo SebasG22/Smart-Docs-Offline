@@ -10855,7 +10855,8 @@ module.exports = {
     "uploadVisitsToCloud": function () {
         console.log("Upload to Visit on Action");
         let reference = this;
-        let cont = 0
+        reference.getVisits().then(function(visits){
+            let cont = 0
         let visitsToUpdate = [];
         for (let visitsToUpd of reference.visits) {
             if (!visitsToUpd.cloud) {
@@ -10877,6 +10878,8 @@ module.exports = {
                 reject(err);
             })
         });
+        });
+        
     },
     "uploadVisit": function (dataToUpdate) {
         let updateVisitLocal = new Promise(function (resolve, reject) {
