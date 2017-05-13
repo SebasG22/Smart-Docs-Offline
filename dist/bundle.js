@@ -10478,7 +10478,7 @@ module.exports = {
         }
 
         return new Promise(function (resolve, reject) {
-            Promise.all(promisesUpdate).then(function (values) {
+            Promise.all(visitsToUpdate).then(function (values) {
                 console.log("Visits Update ", values);
                 resolve();
             }).catch(function (err) {
