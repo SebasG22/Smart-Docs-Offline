@@ -15581,7 +15581,7 @@ let uidGenerator = __webpack_require__(14);
         },
         fillVisitsPage: function () {
             let reference = this;
-            let visitsResponse = visits.getVisits();
+            let visitsResponse = visits.visits;
             let cont = 0;
             for (let visit of visitsResponse) {
                 $("#visitsNotFound").remove();
@@ -15738,44 +15738,6 @@ let uidGenerator = __webpack_require__(14);
                 }
                 $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
             }
-        },
-        "uploadToVisitToDB": function () {
-            console.log("Upload to Visit on Action");
-            let reference = this;
-            let cont = 0
-            let promisesUpdate = [];
-            for (let visitsToUpd of visits.getVisits()) {
-                if (!visitsToUpd.cloud) {
-                    this["visitsToUpdate" + cont] = reference.postVisitRequest({
-                        siteId: visitsToUpd.siteId,
-                        visitId: visitsToUpd.visitId,
-                        author: visitsToUpd.user,
-                        creationDate: visitsToUpd.creationDate
-                    });
-                    promisesUpdate.push(this["visitsToUpdate" + cont]);
-                    cont += 1;
-                }
-            }
-            return new Promise(function (resolve, reject) {
-                Promise.all(promisesUpdate).then(function (values) {
-                    console.log("Visits Update ", values);
-                    resolve();
-                }).catch(function (err) {
-                    reject(err);
-                })
-            });
-        },
-        "postVisitRequest": function (dataToUpdate) {
-            let updateVisitLocal = new Promise(function (resolve, reject) {
-
-            });
-
-            return new Promise(function (resolve, reject) {
-                $.post("https://smart-docs.herokuapp.com/visits/", dataToUpdate)
-                    .done(function (data) {
-                        resolve(data);
-                    });
-            });
         }
     }
 
