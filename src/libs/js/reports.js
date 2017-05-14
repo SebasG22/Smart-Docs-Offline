@@ -2,8 +2,10 @@ let indexDb = require("./indexedDb");
 module.exports = {
     "reports":[],
     "getReports": function(){
+        let reference = this;
         return new Promise(function(resolve,reject){
             indexDb.getReports().then(function(reportsResponse){
+                reference.reports= reportsResponse;
                 resolve(reportsResponse);
             }).catch(function(err){
                 reject(err);
