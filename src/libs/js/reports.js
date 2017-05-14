@@ -83,7 +83,7 @@ module.exports = {
                 author: dataToUpdate.author,
                 completedDate: dataToUpdate.completedDate,
                 creationDate: dataToUpdate.creationDate,
-            })
+            }) 
                 .done(function () {
                     let updateReportProCloud = new Promise(function (resolve, reject) {
                         let answerDate = reference.uploadReportProp(dataToUpdate.reportId, "date_answer", dataToUpdate.date_answer);
