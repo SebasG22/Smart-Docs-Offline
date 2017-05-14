@@ -84,13 +84,7 @@ module.exports = {
                 creationDate: dataToUpdate.creationDate,
             })
                 .done(function () {
-                    updateReportProCloud.then(function(){
-                        resolve();
-                    });
-                });
-        });
-
-        let updateReportProCloud = new Promise(function (resolve, reject) {
+                    let updateReportProCloud = new Promise(function (resolve, reject) {
             let answerDate = reference.uploadReportProp(dataToUpdate.idReport, "date_answer", dataToUpdate.date_answer);
             let answerDateTime = reference.uploadReportProp(dataToUpdate.idReport, "datetime_answer", dataToUpdate.date_answer);
             let answerWeek = reference.uploadReportProp(dataToUpdate.idReport, "week_answer", dataToUpdate.date_answer);
@@ -112,6 +106,12 @@ module.exports = {
                     resolve();
                 });
         });
+                    updateReportProCloud.then(function(){
+                        resolve();
+                    });
+                });
+        });
+
 
         return new Promise(function (resolve, reject) {
             Promise.all([updateReportLocal, updateReportCloud]).then(function () {
