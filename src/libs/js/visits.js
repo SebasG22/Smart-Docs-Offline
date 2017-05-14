@@ -23,9 +23,10 @@ module.exports = {
             for (let visitsToUpd of reference.visits) {
                 if (!visitsToUpd.cloud) {
                     this["visitsToUpdate" + cont] = reference.uploadVisit({
+                        name:visitsToUpd.name,
                         siteId: visitsToUpd.siteId,
                         visitId: visitsToUpd.visitId,
-                        author: visitsToUpd.user,
+                        author: visitsToUpd.author,
                         creationDate: visitsToUpd.creationDate
                     });
                     visitsToUpdate.push(this["visitsToUpdate" + cont]);

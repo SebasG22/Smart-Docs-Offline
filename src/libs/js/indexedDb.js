@@ -158,7 +158,7 @@ module.exports = {
                 var data = request.result;
 
                 // update the value(s) in the object that you want to change
-                data.cloud = yes;
+                data.cloud = cloud;
                 // Put this updated object back into the database.
                 var requestUpdate = objectStore.put(data);
                 requestUpdate.onerror = function (event) {

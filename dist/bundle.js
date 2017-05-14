@@ -10490,7 +10490,7 @@ module.exports = {
                 var data = request.result;
 
                 // update the value(s) in the object that you want to change
-                data.cloud = yes;
+                data.cloud = cloud;
                 // Put this updated object back into the database.
                 var requestUpdate = objectStore.put(data);
                 requestUpdate.onerror = function (event) {
@@ -12597,9 +12597,10 @@ module.exports = {
             for (let visitsToUpd of reference.visits) {
                 if (!visitsToUpd.cloud) {
                     this["visitsToUpdate" + cont] = reference.uploadVisit({
+                        name:visitsToUpd.name,
                         siteId: visitsToUpd.siteId,
                         visitId: visitsToUpd.visitId,
-                        author: visitsToUpd.user,
+                        author: visitsToUpd.author,
                         creationDate: visitsToUpd.creationDate
                     });
                     visitsToUpdate.push(this["visitsToUpdate" + cont]);
