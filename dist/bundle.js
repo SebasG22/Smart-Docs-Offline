@@ -12620,7 +12620,7 @@ module.exports = {
     },
     "uploadVisit": function (dataToUpdate) {
         let updateVisitLocal = new Promise(function (resolve, reject) {
-            indexDb.updateVisit(dataToUpdate.visitId).then(function (resolve, reject) {
+            indexDb.updateVisit(dataToUpdate.visitId).then(function () {
                 resolve();
             });
         });
