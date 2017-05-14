@@ -11349,8 +11349,8 @@ module.exports = {
                 }
             }
             return new Promise(function (resolve, reject) {
-                Promise.all(visitsToUpdate).then(function (values) {
-                    console.log("Visits Update ", values);
+                Promise.all(reportsToUpdate).then(function (values) {
+                    console.log("Reports Update ", values);
                     resolve();
                 }).catch(function (err) {
                     reject(err);
