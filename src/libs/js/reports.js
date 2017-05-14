@@ -11,8 +11,6 @@ module.exports = {
                 reject(err);
             })
         });
-        let reference = this;
-        return reference.reports;
     },
     "reportsLog": [],
     "getReportsLog":function(){
