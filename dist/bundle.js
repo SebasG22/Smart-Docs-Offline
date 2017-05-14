@@ -10364,7 +10364,7 @@ module.exports = {
                 templates.createIndex("by_taskType", "taskType", { unique: false })
                 templates.createIndex("by_project", "project", { unique: false });
 
-                let reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
+                let reports = active.createObjectStore("reports", { keyPath: 'reportId'});
                 reports.createIndex("by_reportId", "reportId", { unique: true });
                 reports.createIndex("by_site", "site", { unique: false });
                 reports.createIndex("by_creation_date", "creationDate", { unique: false });
@@ -10598,34 +10598,18 @@ module.exports = {
             }
         });
     },
-    "addReport": function (templateId, visitId, status, checkbox_answer,
-        date_answer, datetime_answer, list_answer, month_answer,multiselect_answer,
-        number_answer, radio_answer, select_answer, table_answer, text_answer,
-        textarea_answer, time_answer, week_answer ) {
+    "addReport": function (reportId, templateId, visitId, status, author) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["reports", "reportsLog"], "readwrite");
             let object = data.objectStore("reports");
             let request = object.put({
+                reportId: reportId,
                 visitId: visitId,
                 templateId: templateId,
-                checkbox_answer: checkbox_answer,
-                date_answer: date_answer,
-                datetime_answer: datetime_answer,
-                list_answer: list_answer,
-                month_answer: month_answer,
-                multiselect_answer: multiselect_answer,
-                number_answer: number_answer,
-                radio_answer: radio_answer,
-                select_answer: select_answer,
-                table_answer: table_answer,
-                text_answer: text_answer,
-                textarea_answer: textarea_answer,
-                time_answer: time_answer,
-                week_answer: week_answer,
-                update: 'yes',
-                author: '',
+                cloud: false,
+                author: author,
                 completedDate: status == 'SM-Status002' ? "" + new Date() : "",
                 creationDate: "" + new Date(),
                 lastModification: "" + new Date(),
@@ -10646,7 +10630,7 @@ module.exports = {
             }
         });
     },
-    "updateReport": function (reportId, status, content) {
+    "updateReport": function (reportId, property, propValue) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -10661,9 +10645,7 @@ module.exports = {
                 var data = request.result;
 
                 // update the value(s) in the object that you want to change
-                data.content = content;
-                data.status = status;
-                data.lastModification = "" + new Date()
+                data[property] = propValue;
 
                 // Put this updated object back into the database.
                 var requestUpdate = objectStore.put(data);
@@ -10673,9 +10655,7 @@ module.exports = {
                 };
                 requestUpdate.onsuccess = function (event) {
                     // Success - the data is updated!
-                    reference.addReportLog(reportId, "Actualizacion", status).then(function () {
-                        resolve();
-                    });
+                    resolve();
                 };
             };
         });
@@ -15688,6 +15668,7 @@ let uidGenerator = __webpack_require__(13);
             $("#emptyFieldsText").text(emptyFields);
             $("#incompleteReport").modal({ backdrop: 'static', keyboard: false });
         },
+        userAnswer: "",
         saveAnswerEvent: function () {
             let reference = this;
             $("#btnSave").click(function () {
@@ -15702,19 +15683,61 @@ let uidGenerator = __webpack_require__(13);
                         status = "SM-Status002";
                         break;
                 }
-
-                let answerObj = JSON.parse(answer.userAnswer);
+                reference.userAnswer = JSON.parse(answer.userAnswer);
 
                 if (Object.keys(reports.reportSelected).length == 0) {
-                    indexDb.addReport(templates.templateSelected.templateId, visits.visitSelected.visitId, answerObj, status).then(function () {
-                        if (answer.completed) {
-                            reference.launchAnswerCompletedModal();
-                        } else {
-                            reference.launchAnswerInCompleteModal(answer.fieldsEmpty);
-                        }
-                        //notification.sendNotification("Smart Docs", "Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status);
-                        reference.changePage("allVisits");
-                    })
+
+                    let answerDate; let answerDateTime; let answerTime; let answerWeek; let answerMonth;
+                    let answerText; let answerTextArea; let answerNumber; let answerRadio; let answerCheckbox;
+                    let answerSelect; let answerMultiSelect; let answerList; let answerTable; let answerImages;
+
+                    answerDate = reference.filterByAnswerType('date');
+                    answerDateTime = reference.filterByAnswerType('datetime');
+                    answerTime = reference.filterByAnswerType('time');
+                    answerWeek = reference.filterByAnswerType('week');
+                    answerMonth = reference.filterByAnswerType('month');
+                    answerText = reference.filterByAnswerType('text');
+                    answerTextArea = reference.filterByAnswerType('textArea');
+                    answerNumber = reference.filterByAnswerType('number');
+                    answerTime = reference.filterByAnswerType('time');
+                    answerRadio = reference.filterByAnswerType('radio');
+                    answerCheckbox = reference.filterByAnswerType('checkbox');
+                    answerSelect = reference.filterByAnswerType('select');
+                    answerMultiSelect = reference.filterByAnswerType('multiSelect');
+                    answerList = reference.filterByAnswerType('list');
+                    answerTable = reference.filterByAnswerType('table');
+
+                    let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
+                    indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
+                        status, localStorage.getItem("username")).then(function () {
+
+                            let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", answerDate, idReport);
+                            let saveAnswerDateTime = indexDb.updateReport(keyGenerated, "datetime_answer", answerDateTime);
+                            let saveAnswerTime = indexDb.updateReport(keyGenerated, "time_answer", answerTime);
+                            let saveAnswerWeek = indexDb.updateReport(keyGenerated, "week_answer", answerWeek);
+                            let saveAnswerMonth = indexDb.updateReport(keyGenerated, "month_answer", answerMonth);
+                            let saveAnswerText = indexDb.updateReport(keyGenerated, "text_answer", answerText);
+                            let saveAnswerTextArea = indexDb.updateReport(keyGenerated, "textarea_answer", answerTextArea);
+                            let saveAnswerNumber = indexDb.updateReport(keyGenerated, "number_answer", answerNumber);
+                            let saveAnswerRadio = indexDb.updateReport(keyGenerated, "radio_answer", answerRadio);
+                            let saveAnswerCheckBox = indexDb.updateReport(keyGenerated, "radio_answer", answerCheckbox);
+                            let saveAnswerSelect = indexDb.updateReport(keyGenerated, "select_answer", answerSelect);
+                            let saveAnswerMultiSelect = indexDb.updateReport(keyGenerated, "multiselect_answer", answerMultiSelect);
+                            let saveAnswerList = indexDb.updateReport(keyGenerated, "list_answer", answerList);
+                            let saveAnswerTable = indexDb.updateReport(keyGenerated, "table_answer", answerTable);
+
+                            Promise.all([saveAnswerDate, saveAnswerDateTime, saveAnswerTime, saveAnswerWeek, saveAnswerMonth, saveAnswerText, saveAnswerTextArea, saveAnswerNumber, saveAnswerRadio, answerCheckbox, saveAnswerSelect, saveAnswerMultiSelect, saveAnswerList, saveAnswerTable]).then(values => {
+                                message.addMessageLoder("loaderMessage", "#mainContent2");
+                                message.changeMessageLoader("loaderMessage", "Guardando Reporte");
+                                if (answer.completed) {
+                                    reference.launchAnswerCompletedModal();
+                                } else {
+                                    reference.launchAnswerInCompleteModal(answer.fieldsEmpty);
+                                }
+                                //notification.sendNotification("Smart Docs", "Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status);
+                                reference.changePage("allVisits");
+                            });
+                        })
                         .catch(function (err) {
                             console.log(err);
                         });
@@ -15725,6 +15748,17 @@ let uidGenerator = __webpack_require__(13);
                     });
                 }
             });
+        },
+        filterByAnswerType: function (type) {
+            let reference = this;
+            var answerFiltered = reference.userAnswer.filter(function (e, index) {
+                if (e.type == type) {
+                    //reference.userAnswer.splice(index, 1);
+                    return e;
+                }
+            });
+            return (answerFiltered.length == 0) ? JSON.stringify(answerFiltered) : "[" + JSON.stringify(answerFiltered) + "]";
+
         },
         fillReportsPage: function (reportsResponse) {
             let reference = this;

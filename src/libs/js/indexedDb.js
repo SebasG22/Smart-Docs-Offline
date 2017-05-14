@@ -32,7 +32,7 @@ module.exports = {
                 templates.createIndex("by_taskType", "taskType", { unique: false })
                 templates.createIndex("by_project", "project", { unique: false });
 
-                let reports = active.createObjectStore("reports", { keyPath: 'reportId', autoIncrement: true });
+                let reports = active.createObjectStore("reports", { keyPath: 'reportId'});
                 reports.createIndex("by_reportId", "reportId", { unique: true });
                 reports.createIndex("by_site", "site", { unique: false });
                 reports.createIndex("by_creation_date", "creationDate", { unique: false });
@@ -266,34 +266,18 @@ module.exports = {
             }
         });
     },
-    "addReport": function (templateId, visitId, status, checkbox_answer,
-        date_answer, datetime_answer, list_answer, month_answer,multiselect_answer,
-        number_answer, radio_answer, select_answer, table_answer, text_answer,
-        textarea_answer, time_answer, week_answer ) {
+    "addReport": function (reportId, templateId, visitId, status, author) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["reports", "reportsLog"], "readwrite");
             let object = data.objectStore("reports");
             let request = object.put({
+                reportId: reportId,
                 visitId: visitId,
                 templateId: templateId,
-                checkbox_answer: checkbox_answer,
-                date_answer: date_answer,
-                datetime_answer: datetime_answer,
-                list_answer: list_answer,
-                month_answer: month_answer,
-                multiselect_answer: multiselect_answer,
-                number_answer: number_answer,
-                radio_answer: radio_answer,
-                select_answer: select_answer,
-                table_answer: table_answer,
-                text_answer: text_answer,
-                textarea_answer: textarea_answer,
-                time_answer: time_answer,
-                week_answer: week_answer,
-                update: 'yes',
-                author: '',
+                cloud: false,
+                author: author,
                 completedDate: status == 'SM-Status002' ? "" + new Date() : "",
                 creationDate: "" + new Date(),
                 lastModification: "" + new Date(),
@@ -314,7 +298,7 @@ module.exports = {
             }
         });
     },
-    "updateReport": function (reportId, status, content) {
+    "updateReport": function (reportId, property, propValue) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -329,9 +313,7 @@ module.exports = {
                 var data = request.result;
 
                 // update the value(s) in the object that you want to change
-                data.content = content;
-                data.status = status;
-                data.lastModification = "" + new Date()
+                data[property] = propValue;
 
                 // Put this updated object back into the database.
                 var requestUpdate = objectStore.put(data);
@@ -341,9 +323,7 @@ module.exports = {
                 };
                 requestUpdate.onsuccess = function (event) {
                     // Success - the data is updated!
-                    reference.addReportLog(reportId, "Actualizacion", status).then(function () {
-                        resolve();
-                    });
+                    resolve();
                 };
             };
         });
