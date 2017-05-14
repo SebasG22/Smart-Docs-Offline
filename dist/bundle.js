@@ -11359,6 +11359,7 @@ module.exports = {
         });
     },
     "uploadReport": function (dataToUpdate) {
+        console.log("Upload Reports to Cloud");
         let reference = this;
         let updateReportLocal = new Promise(function (resolve, reject) {
             indexDb.updateReport(dataToUpdate.reportId, "cloud", true).then(function () {
@@ -11378,28 +11379,28 @@ module.exports = {
             })
                 .done(function () {
                     let updateReportProCloud = new Promise(function (resolve, reject) {
-            let answerDate = reference.uploadReportProp(dataToUpdate.idReport, "date_answer", dataToUpdate.date_answer);
-            let answerDateTime = reference.uploadReportProp(dataToUpdate.idReport, "datetime_answer", dataToUpdate.date_answer);
-            let answerWeek = reference.uploadReportProp(dataToUpdate.idReport, "week_answer", dataToUpdate.date_answer);
-            let answerMonth = reference.uploadReportProp(dataToUpdate.idReport, "month_answer", dataToUpdate.date_answer);
-            let answerText = reference.uploadReportProp(dataToUpdate.idReport, "text_answer", dataToUpdate.date_answer);
-            let answerTextArea = reference.uploadReportProp(dataToUpdate.idReport, "textarea_answer", dataToUpdate.date_answer);
-            let answerNumber = reference.uploadReportProp(dataToUpdate.idReport, "number_answer", dataToUpdate.date_answer);
-            let answerTime = reference.uploadReportProp(dataToUpdate.idReport, "time_answer", dataToUpdate.date_answer);
-            let answerRadio = reference.uploadReportProp(dataToUpdate.idReport, "radio_answer", dataToUpdate.date_answer);
-            let answerCheckbox = reference.uploadReportProp(dataToUpdate.idReport, "checkbox_answer", dataToUpdate.date_answer);
-            let answerSelect = reference.uploadReportProp(dataToUpdate.idReport, "select_answer", dataToUpdate.date_answer);
-            let answerMultiSelect = reference.uploadReportProp(dataToUpdate.idReport, "multiselect_answer", dataToUpdate.date_answer);
-            let answerList = reference.uploadReportProp(dataToUpdate.idReport, "list_answer", dataToUpdate.date_answer);
-            let answerTable = reference.uploadReportProp(dataToUpdate.idReport, "table_answer", dataToUpdate.date_answer);
+                        let answerDate = reference.uploadReportProp(dataToUpdate.idReport, "date_answer", dataToUpdate.date_answer);
+                        let answerDateTime = reference.uploadReportProp(dataToUpdate.idReport, "datetime_answer", dataToUpdate.date_answer);
+                        let answerWeek = reference.uploadReportProp(dataToUpdate.idReport, "week_answer", dataToUpdate.date_answer);
+                        let answerMonth = reference.uploadReportProp(dataToUpdate.idReport, "month_answer", dataToUpdate.date_answer);
+                        let answerText = reference.uploadReportProp(dataToUpdate.idReport, "text_answer", dataToUpdate.date_answer);
+                        let answerTextArea = reference.uploadReportProp(dataToUpdate.idReport, "textarea_answer", dataToUpdate.date_answer);
+                        let answerNumber = reference.uploadReportProp(dataToUpdate.idReport, "number_answer", dataToUpdate.date_answer);
+                        let answerTime = reference.uploadReportProp(dataToUpdate.idReport, "time_answer", dataToUpdate.date_answer);
+                        let answerRadio = reference.uploadReportProp(dataToUpdate.idReport, "radio_answer", dataToUpdate.date_answer);
+                        let answerCheckbox = reference.uploadReportProp(dataToUpdate.idReport, "checkbox_answer", dataToUpdate.date_answer);
+                        let answerSelect = reference.uploadReportProp(dataToUpdate.idReport, "select_answer", dataToUpdate.date_answer);
+                        let answerMultiSelect = reference.uploadReportProp(dataToUpdate.idReport, "multiselect_answer", dataToUpdate.date_answer);
+                        let answerList = reference.uploadReportProp(dataToUpdate.idReport, "list_answer", dataToUpdate.date_answer);
+                        let answerTable = reference.uploadReportProp(dataToUpdate.idReport, "table_answer", dataToUpdate.date_answer);
 
-            Promise.all([answerDate, answerDateTime, answerTime, answerWeek, answerMonth, answerText,
-                answerTextArea, answerNumber, answerTime, answerRadio, answerCheckbox, answerSelect,
-                answerMultiSelect, answerList, answerTable]).then(function(){
-                    resolve();
-                });
-        });
-                    updateReportProCloud.then(function(){
+                        Promise.all([answerDate, answerDateTime, answerTime, answerWeek, answerMonth, answerText,
+                            answerTextArea, answerNumber, answerTime, answerRadio, answerCheckbox, answerSelect,
+                            answerMultiSelect, answerList, answerTable]).then(function () {
+                                resolve();
+                            });
+                    });
+                    updateReportProCloud.then(function () {
                         resolve();
                     });
                 });
@@ -15448,9 +15449,7 @@ let uidGenerator = __webpack_require__(13);
                         return visits.getVisitsSaveonCloud();
                     })/*.then(function(){
                         return visits.updateLocalVisits();
-                    })*/.then(function () {
-                            return visits.getVisits();
-                        })
+                    })*/
                         .then(function(){
                             return reports.uploadReportToCloud();
                         })

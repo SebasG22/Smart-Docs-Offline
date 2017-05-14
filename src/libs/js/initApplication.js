@@ -48,9 +48,7 @@ let uidGenerator = require("./uidGenerator");
                         return visits.getVisitsSaveonCloud();
                     })/*.then(function(){
                         return visits.updateLocalVisits();
-                    })*/.then(function () {
-                            return visits.getVisits();
-                        })
+                    })*/
                         .then(function(){
                             return reports.uploadReportToCloud();
                         })
