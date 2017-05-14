@@ -10701,8 +10701,7 @@ module.exports = {
 
             data.oncomplete = function (e) {
                 console.log("elements", elements);
-                reportsConnection.reports = elements;
-                resolve();
+                resolve(elements);
             }
         });
     },
@@ -10789,11 +10788,19 @@ module.exports = {
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
+let indexDb = __webpack_require__(1);
 module.exports = {
     "reports":[],
     "getReports": function(){
+        return new Promise(function(resolve,reject){
+            indexDb.getReports().then(function(reportsResponse){
+                resolve(reportsResponse);
+            }).catch(function(err){
+                reject(err);
+            })
+        });
         let reference = this;
         return reference.reports;
     },
@@ -15309,30 +15316,30 @@ let uidGenerator = __webpack_require__(13);
                     visits.getVisits().then(function () {
                         message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         return visits.uploadVisitsToCloud();
-                    }).then(function(){
+                    }).then(function () {
                         return visits.getVisitsSaveonCloud();
                     })/*.then(function(){
                         return visits.updateLocalVisits();
-                    })*/.then(function(){
-                        return visits.getVisits();
-                    }).then(function () {
-                        console.log("Visits Saved ", visits.getVisits())
-                        return reference.updateSiteExternal();
-                    }).then(function () {
-                        message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
-                        $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
-                            templates.templates = templatesResponse;
-                            for (let template of templates.templates) {
-                                indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
-                            }
-                            return indexDb.getTemplates();
+                    })*/.then(function () {
+                            return visits.getVisits();
                         }).then(function () {
-                            message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
-                            indexDb.getTemplates().then(function () {
-                                message.removeMessageLoader("#mainContent2");
+                            console.log("Visits Saved ", visits.getVisits())
+                            return reference.updateSiteExternal();
+                        }).then(function () {
+                            message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
+                            $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
+                                templates.templates = templatesResponse;
+                                for (let template of templates.templates) {
+                                    indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
+                                }
+                                return indexDb.getTemplates();
+                            }).then(function () {
+                                message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
+                                indexDb.getTemplates().then(function () {
+                                    message.removeMessageLoader("#mainContent2");
+                                });
                             });
                         });
-                    });
                 } else {
                     message.changeMessageLoader("Obteniendo Sitios Almacenados");
                     indexDb.getSites().then(function (resolve, reject) {
@@ -15480,9 +15487,9 @@ let uidGenerator = __webpack_require__(13);
                     message.changeMessageLoader("Consultando Plantillas Almacenadas");
                     indexDb.getTemplates().then(function () {
                         message.changeMessageLoader("Consultando Reportes Relacionados");
-                        return indexDb.getReports();
-                    }).then(function () {
-                        let reportsFiltered = reports.getReports().filter(function (report) {
+                        return reports.getReports();
+                    }).then(function (reportsReponse) {
+                        let reportsFiltered = reportsReponse.filter(function (report) {
                             return report.visitId == visits.visitSelected.visitId;
                         });
                         console.log("Reports Filtered", reportsFiltered);
@@ -15494,10 +15501,9 @@ let uidGenerator = __webpack_require__(13);
                 case "allTemplatesBoxes":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Plantillas Almacenadas");
-                    indexDb.getReports().then(function () {
-                        reference.getAllTemplates();
-                        message.removeMessageLoader("#mainContent2");
-                    });
+                    reference.getAllTemplates();
+                    message.removeMessageLoader("#mainContent2");
+
                     break;
                 case "newReport":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
@@ -15514,8 +15520,8 @@ let uidGenerator = __webpack_require__(13);
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Cargando Plantilla Seleccionada");
                     console.log("Start Fill Reports");
-                    indexDb.getReports().then(function () {
-                        reference.fillReportsPage();
+                    indexDb.getReports().then(function (reportsResponse) {
+                        reference.fillReportsPage(reportsResponse);
                         message.removeMessageLoader("#mainContent2");
                     });
                     break;
@@ -15563,8 +15569,8 @@ let uidGenerator = __webpack_require__(13);
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    
-                    indexDb.addVisit(uidGenerator.uidGen() + "-" + localStorage.getItem("username"),siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
+
+                    indexDb.addVisit(uidGenerator.uidGen() + "-" + localStorage.getItem("username"), siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
                         reference.changePage("allTemplatesBoxes");
                     });
                 });
@@ -15720,10 +15726,8 @@ let uidGenerator = __webpack_require__(13);
                 }
             });
         },
-        fillReportsPage: function () {
+        fillReportsPage: function (reportsResponse) {
             let reference = this;
-            //let templatesResponse = templates.getTemplates();
-            let reportsResponse = reports.getReports();
             console.log("Reports Response", reportsResponse);
             let cont = 0;
             for (let report of reportsResponse) {
