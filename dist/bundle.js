@@ -15852,7 +15852,6 @@ let uidGenerator = __webpack_require__(13);
                     answerText = reference.filterByAnswerType('text');
                     answerTextArea = reference.filterByAnswerType('textArea');
                     answerNumber = reference.filterByAnswerType('number');
-                    answerTime = reference.filterByAnswerType('time');
                     answerRadio = reference.filterByAnswerType('radio');
                     answerCheckbox = reference.filterByAnswerType('checkbox');
                     answerSelect = reference.filterByAnswerType('select');
