@@ -93,7 +93,6 @@ module.exports = {
         let updateReportProCloud = new Promise(function (resolve, reject) {
             let answerDate = reference.uploadReportProp(dataToUpdate.idReport, "date_answer", dataToUpdate.date_answer);
             let answerDateTime = reference.uploadReportProp(dataToUpdate.idReport, "datetime_answer", dataToUpdate.date_answer);
-            let answerTime = reference.uploadReportProp(dataToUpdate.idReport, "time_answer", dataToUpdate.date_answer);
             let answerWeek = reference.uploadReportProp(dataToUpdate.idReport, "week_answer", dataToUpdate.date_answer);
             let answerMonth = reference.uploadReportProp(dataToUpdate.idReport, "month_answer", dataToUpdate.date_answer);
             let answerText = reference.uploadReportProp(dataToUpdate.idReport, "text_answer", dataToUpdate.date_answer);
