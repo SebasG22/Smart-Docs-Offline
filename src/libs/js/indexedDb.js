@@ -1,6 +1,5 @@
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 let dataBase;
-let visitsConnection = require("./visits");
 let templatesConnection = require("./templates");
 let reportsConnection = require("./reports");
 let siteConnection = require("./sites");
@@ -135,7 +134,6 @@ module.exports = {
             }
 
             request.onsuccess = function (e) {
-                visitsConnection.visitSelected = e.target.result;
                 console.log("Visit Selected ", e.target.result);
             }
 
@@ -195,8 +193,7 @@ module.exports = {
 
             data.oncomplete = function (e) {
                 console.log("elements", elements);
-                visitsConnection.visits = elements;
-                resolve();
+                resolve(elements);
             }
         });
     },

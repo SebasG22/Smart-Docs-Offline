@@ -10332,7 +10332,6 @@ return jQuery;
 
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 let dataBase;
-let visitsConnection = __webpack_require__(6);
 let templatesConnection = __webpack_require__(5);
 let reportsConnection = __webpack_require__(3);
 let siteConnection = __webpack_require__(4);
@@ -10467,7 +10466,6 @@ module.exports = {
             }
 
             request.onsuccess = function (e) {
-                visitsConnection.visitSelected = e.target.result;
                 console.log("Visit Selected ", e.target.result);
             }
 
@@ -10527,8 +10525,7 @@ module.exports = {
 
             data.oncomplete = function (e) {
                 console.log("elements", elements);
-                visitsConnection.visits = elements;
-                resolve();
+                resolve(elements);
             }
         });
     },
@@ -10835,113 +10832,6 @@ module.exports = {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
-
-module.exports = {
-    "visits": [],
-    "visitSelected": {},
-    "getVisits": function () {
-        let reference = this;
-        return new Promise(function(resolve,reject){
-            indexDb.getVisits().then(function(){
-                resolve(reference.visits);
-            });
-        }).catch(function(err){
-            reject(err);
-        });
-    },
-    "uploadVisitsToCloud": function () {
-        console.log("Upload to Visit on Action");
-        let reference = this;
-        reference.getVisits().then(function(visits){
-            let cont = 0
-        let visitsToUpdate = [];
-        for (let visitsToUpd of reference.visits) {
-            if (!visitsToUpd.cloud) {
-                this["visitsToUpdate" + cont] = reference.uploadVisit({
-                    siteId: visitsToUpd.siteId,
-                    visitId: visitsToUpd.visitId,
-                    author: visitsToUpd.user,
-                    creationDate: visitsToUpd.creationDate
-                });
-                visitsToUpdate.push(this["visitsToUpdate" + cont]);
-                cont += 1;
-            }
-        }
-        return new Promise(function (resolve, reject) {
-            Promise.all(visitsToUpdate).then(function (values) {
-                console.log("Visits Update ", values);
-                resolve();
-            }).catch(function (err) {
-                reject(err);
-            })
-        });
-        });
-        
-    },
-    "uploadVisit": function (dataToUpdate) {
-        let updateVisitLocal = new Promise(function (resolve, reject) {
-            indexDb.updateVisit(dataToUpdate.visitId).then(function (resolve, reject) {
-                resolve();
-            });
-        });
-
-        let updateVisitCloud = new Promise(function (resolve, reject) {
-            $.post("https://smart-docs.herokuapp.com/visits/", dataToUpdate)
-                .done(function (data) {
-                    resolve(data);
-                });
-        });
-
-        return new Promise(function (resolve, reject) {
-            Promise.all([updateVisitLocal, updateVisitCloud]).then(function () {
-                resolve();
-            }).catch(function (err) {
-                reject(err);
-            });
-        });
-    },
-    getVisitsSaveonCloud: function () {
-        let reference = this;
-        return new Promise(function (resolve, reject) {
-            $.ajax({
-                method: "GET",
-                url: "https://smart-docs.herokuapp.com/visits/",
-            })
-                .done(function (sitesSavedCloud) {
-                    reference.visits = sitesSavedCloud;
-                    resolve();
-                });
-        });
-    },
-    updateLocalVisits: function () {
-        let reference = this;
-        let cont = 0;
-        let updateVisits = [];
-        for (let siteRes of reference.visits) {
-            this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId,siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
-            updateVisits.push(this["updateVisit" + cont]);
-            cont++;
-        }
-        return new Promise(function (resolve, reject) {
-            if (updateVisits.length > 0) {
-                Promise.all(updateVisits).then(function () {
-                    resolve();
-                });
-            }
-            else {
-                resolve();
-            }
-        });
-
-}
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 7 */
 /***/ (function(module, exports) {
 
 /*
@@ -11023,7 +10913,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 8 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11336,7 +11226,7 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
@@ -11354,7 +11244,7 @@ __webpack_require__(24)
 __webpack_require__(15)
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -11368,7 +11258,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(8)(content, options);
+var update = __webpack_require__(7)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11385,7 +11275,7 @@ if(false) {
 }
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
@@ -11399,7 +11289,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(8)(content, options);
+var update = __webpack_require__(7)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11416,7 +11306,7 @@ if(false) {
 }
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -11437,7 +11327,7 @@ module.exports = {
 }
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {let message = __webpack_require__(2);
@@ -12663,7 +12553,7 @@ allInputsFilled : [],
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -12677,6 +12567,116 @@ module.exports = {
             s4() + '-' + s4() + s4() + s4();
     }
 }
+
+/***/ }),
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
+
+module.exports = {
+    "visits": [],
+    "visitSelected": {},
+    "getVisits": function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            indexDb.getVisits().then(function (visitsResponse) {
+                reference.visits = visitsResponse;
+                resolve(reference.visits);
+            });
+        }).catch(function (err) {
+            reject(err);
+        });
+    },
+    "uploadVisitsToCloud": function () {
+        console.log("Upload to Visit on Action");
+        let reference = this;
+        reference.getVisits().then(function (visits) {
+            let cont = 0
+            let visitsToUpdate = [];
+            for (let visitsToUpd of reference.visits) {
+                if (!visitsToUpd.cloud) {
+                    this["visitsToUpdate" + cont] = reference.uploadVisit({
+                        siteId: visitsToUpd.siteId,
+                        visitId: visitsToUpd.visitId,
+                        author: visitsToUpd.user,
+                        creationDate: visitsToUpd.creationDate
+                    });
+                    visitsToUpdate.push(this["visitsToUpdate" + cont]);
+                    cont += 1;
+                }
+            }
+            return new Promise(function (resolve, reject) {
+                Promise.all(visitsToUpdate).then(function (values) {
+                    console.log("Visits Update ", values);
+                    resolve();
+                }).catch(function (err) {
+                    reject(err);
+                })
+            });
+        });
+
+    },
+    "uploadVisit": function (dataToUpdate) {
+        let updateVisitLocal = new Promise(function (resolve, reject) {
+            indexDb.updateVisit(dataToUpdate.visitId).then(function (resolve, reject) {
+                resolve();
+            });
+        });
+
+        let updateVisitCloud = new Promise(function (resolve, reject) {
+            $.post("https://smart-docs.herokuapp.com/visits/", dataToUpdate)
+                .done(function (data) {
+                    resolve(data);
+                });
+        });
+
+        return new Promise(function (resolve, reject) {
+            Promise.all([updateVisitLocal, updateVisitCloud]).then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    },
+    getVisitsSaveonCloud: function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                method: "GET",
+                url: "https://smart-docs.herokuapp.com/visits/",
+            })
+                .done(function (sitesSavedCloud) {
+                    reference.visits = sitesSavedCloud;
+                    resolve();
+                });
+        });
+    },
+    updateLocalVisits: function () {
+        let reference = this;
+        let cont = 0;
+        let updateVisits = [];
+        reference.getVisits().then(function (visits) {
+            for (let siteRes of reference.visits) {
+                this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
+                updateVisits.push(this["updateVisit" + cont]);
+                cont++;
+            }
+            return new Promise(function (resolve, reject) {
+                if (updateVisits.length > 0) {
+                    Promise.all(updateVisits).then(function () {
+                        resolve();
+                    });
+                }
+                else {
+                    resolve();
+                }
+            });
+        })
+
+    }
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 15 */
@@ -15114,7 +15114,7 @@ module.exports = {
 /* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(undefined);
+exports = module.exports = __webpack_require__(6)(undefined);
 // imports
 
 
@@ -15128,7 +15128,7 @@ exports.push([module.i, ".flat-blue {\n  background-color: #F9F9F9;\n  /* small 
 /* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(7)(undefined);
+exports = module.exports = __webpack_require__(6)(undefined);
 // imports
 
 
@@ -15241,25 +15241,25 @@ module.exports = function (css) {
 /* WEBPACK VAR INJECTION */(function($) {Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery__ = __webpack_require__(0);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_bootstrap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__css_flat_blue_css__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__css_flat_blue_css__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__css_flat_blue_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__css_flat_blue_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_style_css__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_style_css__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_style_css__);
 
 
 
 
-let visits = __webpack_require__(6);
-let smartEngine = __webpack_require__(13);
+let visits = __webpack_require__(14);
+let smartEngine = __webpack_require__(12);
 let templates = __webpack_require__(5);
 let reports = __webpack_require__(3);
 let indexDb = __webpack_require__(1);
 let message = __webpack_require__(2);
-let notification = __webpack_require__(12);
+let notification = __webpack_require__(11);
 let sites = __webpack_require__(4);
-let uidGenerator = __webpack_require__(14);
+let uidGenerator = __webpack_require__(13);
 
 (function () {
     let smartDocsOffline = {

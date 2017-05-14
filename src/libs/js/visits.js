@@ -5,42 +5,43 @@ module.exports = {
     "visitSelected": {},
     "getVisits": function () {
         let reference = this;
-        return new Promise(function(resolve,reject){
-            indexDb.getVisits().then(function(){
+        return new Promise(function (resolve, reject) {
+            indexDb.getVisits().then(function (visitsResponse) {
+                reference.visits = visitsResponse;
                 resolve(reference.visits);
             });
-        }).catch(function(err){
+        }).catch(function (err) {
             reject(err);
         });
     },
     "uploadVisitsToCloud": function () {
         console.log("Upload to Visit on Action");
         let reference = this;
-        reference.getVisits().then(function(visits){
+        reference.getVisits().then(function (visits) {
             let cont = 0
-        let visitsToUpdate = [];
-        for (let visitsToUpd of reference.visits) {
-            if (!visitsToUpd.cloud) {
-                this["visitsToUpdate" + cont] = reference.uploadVisit({
-                    siteId: visitsToUpd.siteId,
-                    visitId: visitsToUpd.visitId,
-                    author: visitsToUpd.user,
-                    creationDate: visitsToUpd.creationDate
-                });
-                visitsToUpdate.push(this["visitsToUpdate" + cont]);
-                cont += 1;
+            let visitsToUpdate = [];
+            for (let visitsToUpd of reference.visits) {
+                if (!visitsToUpd.cloud) {
+                    this["visitsToUpdate" + cont] = reference.uploadVisit({
+                        siteId: visitsToUpd.siteId,
+                        visitId: visitsToUpd.visitId,
+                        author: visitsToUpd.user,
+                        creationDate: visitsToUpd.creationDate
+                    });
+                    visitsToUpdate.push(this["visitsToUpdate" + cont]);
+                    cont += 1;
+                }
             }
-        }
-        return new Promise(function (resolve, reject) {
-            Promise.all(visitsToUpdate).then(function (values) {
-                console.log("Visits Update ", values);
-                resolve();
-            }).catch(function (err) {
-                reject(err);
-            })
+            return new Promise(function (resolve, reject) {
+                Promise.all(visitsToUpdate).then(function (values) {
+                    console.log("Visits Update ", values);
+                    resolve();
+                }).catch(function (err) {
+                    reject(err);
+                })
+            });
         });
-        });
-        
+
     },
     "uploadVisit": function (dataToUpdate) {
         let updateVisitLocal = new Promise(function (resolve, reject) {
@@ -81,21 +82,23 @@ module.exports = {
         let reference = this;
         let cont = 0;
         let updateVisits = [];
-        for (let siteRes of reference.visits) {
-            this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId,siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
-            updateVisits.push(this["updateVisit" + cont]);
-            cont++;
-        }
-        return new Promise(function (resolve, reject) {
-            if (updateVisits.length > 0) {
-                Promise.all(updateVisits).then(function () {
+        reference.getVisits().then(function (visits) {
+            for (let siteRes of reference.visits) {
+                this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
+                updateVisits.push(this["updateVisit" + cont]);
+                cont++;
+            }
+            return new Promise(function (resolve, reject) {
+                if (updateVisits.length > 0) {
+                    Promise.all(updateVisits).then(function () {
+                        resolve();
+                    });
+                }
+                else {
                     resolve();
-                });
-            }
-            else {
-                resolve();
-            }
-        });
+                }
+            });
+        })
 
-}
+    }
 }
