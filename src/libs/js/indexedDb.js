@@ -369,8 +369,7 @@ module.exports = {
 
             data.oncomplete = function (e) {
                 console.log("elements", elements);
-                reportsConnection.reports = elements;
-                resolve();
+                resolve(elements);
             }
         });
     },
