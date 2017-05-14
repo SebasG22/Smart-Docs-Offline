@@ -3,9 +3,9 @@ import 'bootstrap';
 import './../css/flat-blue.css';
 import './../css/style.css';
 let visits = require("./visits");
+let reports = require("./reports");
 let smartEngine = require("./smartEngine");
 let templates = require("./templates");
-let reports = require("./reports");
 let indexDb = require("./indexedDb");
 let message = require("./messages");
 let notification = require("./notifications");
@@ -459,7 +459,7 @@ let uidGenerator = require("./uidGenerator");
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
                         status, localStorage.getItem("username")).then(function () {
 
-                            let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", answerDate, idReport);
+                            let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", answerDate);
                             let saveAnswerDateTime = indexDb.updateReport(keyGenerated, "datetime_answer", answerDateTime);
                             let saveAnswerTime = indexDb.updateReport(keyGenerated, "time_answer", answerTime);
                             let saveAnswerWeek = indexDb.updateReport(keyGenerated, "week_answer", answerWeek);

@@ -15255,9 +15255,9 @@ module.exports = function (css) {
 
 
 let visits = __webpack_require__(14);
+let reports = __webpack_require__(3);
 let smartEngine = __webpack_require__(12);
 let templates = __webpack_require__(5);
-let reports = __webpack_require__(3);
 let indexDb = __webpack_require__(1);
 let message = __webpack_require__(2);
 let notification = __webpack_require__(11);
@@ -15711,7 +15711,7 @@ let uidGenerator = __webpack_require__(13);
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
                         status, localStorage.getItem("username")).then(function () {
 
-                            let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", answerDate, idReport);
+                            let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", answerDate);
                             let saveAnswerDateTime = indexDb.updateReport(keyGenerated, "datetime_answer", answerDateTime);
                             let saveAnswerTime = indexDb.updateReport(keyGenerated, "time_answer", answerTime);
                             let saveAnswerWeek = indexDb.updateReport(keyGenerated, "week_answer", answerWeek);
