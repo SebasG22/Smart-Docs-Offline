@@ -1,7 +1,6 @@
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 let dataBase;
 let templatesConnection = require("./templates");
-let reportsConnection = require("./reports");
 let siteConnection = require("./sites");
 
 module.exports = {
