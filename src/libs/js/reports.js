@@ -122,12 +122,12 @@ module.exports = {
             });
         });
     },
-    "uploadReportProp": function (idReport, prop, valuePro) {
+    "uploadReportProp": function (reportId, prop, valuePro) {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 url: 'https://smart-docs.herokuapp.com/reports/update/' + prop,
                 type: 'PATCH',
-                data: { idReport: idReport, prop: valuePro },
+                data: { reportId: reportId, prop: valuePro },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // log the error to the console
                     console.log("The following error occured: " + textStatus, errorThrown);
