@@ -28,7 +28,7 @@ module.exports = {
             for (let reportToUpd of reference.reports) {
                 if (!reportToUpd.cloud) {
                     this["reportToUpdate" + cont] = reference.uploadReport({
-                        idReport: reportToUpd.idReport,
+                        reportId: reportToUpd.reportId,
                         templateId: reportToUpd.templateId,
                         visitId: reportToUpd.visitId,
                         status: reportToUpd.status,
