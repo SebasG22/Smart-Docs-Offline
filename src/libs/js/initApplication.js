@@ -46,9 +46,9 @@ let uidGenerator = require("./uidGenerator");
                         return visits.uploadVisitsToCloud();
                     }).then(function(){
                         return visits.getVisitsSaveonCloud();
-                    }).then(function(){
+                    })/*.then(function(){
                         return visits.updateLocalVisits();
-                    }).then(function(){
+                    })*/.then(function(){
                         return visits.getVisits();
                     }).then(function () {
                         console.log("Visits Saved ", visits.getVisits())

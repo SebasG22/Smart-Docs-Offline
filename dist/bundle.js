@@ -12597,7 +12597,7 @@ module.exports = {
             for (let visitsToUpd of reference.visits) {
                 if (!visitsToUpd.cloud) {
                     this["visitsToUpdate" + cont] = reference.uploadVisit({
-                        name:visitsToUpd.name,
+                        name: visitsToUpd.name,
                         siteId: visitsToUpd.siteId,
                         visitId: visitsToUpd.visitId,
                         author: visitsToUpd.author,
@@ -12647,12 +12647,26 @@ module.exports = {
                 method: "GET",
                 url: "https://smart-docs.herokuapp.com/visits/",
             })
-                .done(function (sitesSavedCloud) {
-                    reference.visits = sitesSavedCloud;
-                    resolve();
+                .done(function (visitSavedCloud) {
+                    let cont = 0;
+                    let updateVisits = [];
+                    for (let siteRes of visitSavedCloud) {
+                        this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
+                        updateVisits.push(this["updateVisit" + cont]);
+                        cont++;
+                    }
+                    if (updateVisits.length > 0) {
+                        Promise.all(updateVisits).then(function () {
+                            resolve();
+                        });
+                    }
+                    else {
+                        resolve();
+                    }
                 });
         });
     },
+    /*
     updateLocalVisits: function () {
         let reference = this;
         let cont = 0;
@@ -12676,6 +12690,7 @@ module.exports = {
         })
 
     }
+    */
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -15296,9 +15311,9 @@ let uidGenerator = __webpack_require__(13);
                         return visits.uploadVisitsToCloud();
                     }).then(function(){
                         return visits.getVisitsSaveonCloud();
-                    }).then(function(){
+                    })/*.then(function(){
                         return visits.updateLocalVisits();
-                    }).then(function(){
+                    })*/.then(function(){
                         return visits.getVisits();
                     }).then(function () {
                         console.log("Visits Saved ", visits.getVisits())
