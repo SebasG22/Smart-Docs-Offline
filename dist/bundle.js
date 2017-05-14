@@ -11368,7 +11368,7 @@ module.exports = {
         });
         let updateReportCloud = new Promise(function (resolve, reject) {
             $.post("https://smart-docs.herokuapp.com/reports/", {
-                reportId: dataToUpdate.reportId,
+                idReport: dataToUpdate.idReport,
                 templateId: dataToUpdate.templateId,
                 visitId: dataToUpdate.visitId,
                 status: dataToUpdate.status,
