@@ -10,7 +10,7 @@ let answerSchema = new Schema({
 });
 
 let schema = new Schema({
-    idReport: { type: String, required: true },
+    reportId: { type: String, required: true },
     templateId: { type: String },
     visitId: { type: String },
     status: { type: String },

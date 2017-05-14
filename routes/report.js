@@ -377,7 +377,7 @@ router.get('/basicInf/:id', function (req, res, next) {
         res.status(200).json({
             message: 'Report Founded',
             obj: {
-                idReport: report.idReport,
+                reportId: report.reportId,
                 templateId: report.templateId,
                 visitId: report.visitId,
                 status: report.status,
@@ -395,7 +395,7 @@ router.get('/basicInf/:id', function (req, res, next) {
 router.post('/', function (req, res, next) {
 
     var report = new Report({
-        idReport: req.body.idReport,
+        reportId: req.body.reportId,
         templateId: req.body.templateId,
         visitId: req.body.visitId,
         status: req.body.status,
@@ -423,7 +423,7 @@ router.post('/', function (req, res, next) {
 
 router.patch('/update/checkbox_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -454,7 +454,7 @@ router.patch('/update/checkbox_answer', function (req, res, next) {
 
 router.patch('/update/date_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -484,7 +484,7 @@ router.patch('/update/date_answer', function (req, res, next) {
 
 router.patch('/update/datetime_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -514,7 +514,7 @@ router.patch('/update/datetime_answer', function (req, res, next) {
 
 router.patch('/update/list_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -545,7 +545,7 @@ router.patch('/update/list_answer', function (req, res, next) {
 
 router.patch('/update/month_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -576,7 +576,7 @@ router.patch('/update/month_answer', function (req, res, next) {
 
 router.patch('/update/multiselect_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -606,7 +606,7 @@ router.patch('/update/multiselect_answer', function (req, res, next) {
 
 router.patch('/update/number_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -636,7 +636,7 @@ router.patch('/update/number_answer', function (req, res, next) {
 
 router.patch('/update/radio_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -666,7 +666,7 @@ router.patch('/update/radio_answer', function (req, res, next) {
 
 router.patch('/update/select_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -696,7 +696,7 @@ router.patch('/update/select_answer', function (req, res, next) {
 
 router.patch('/update/table_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -726,7 +726,7 @@ router.patch('/update/table_answer', function (req, res, next) {
 
 router.patch('/update/text_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -756,7 +756,7 @@ router.patch('/update/text_answer', function (req, res, next) {
 
 router.patch('/update/textarea_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -786,7 +786,7 @@ router.patch('/update/textarea_answer', function (req, res, next) {
 
 router.patch('/update/time_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -816,7 +816,7 @@ router.patch('/update/time_answer', function (req, res, next) {
 
 router.patch('/update/week_answer', function (req, res, next) {
 
-    Report.findOne({ idReport: req.body.idReport }, function (err, reportResponse) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
