@@ -440,7 +440,7 @@ router.patch('/update/checkbox_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.checkbox_answer = req.body.checkbox_answer;
+            reportResponse.checkbox_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - checkbox Answer',
@@ -471,7 +471,7 @@ router.patch('/update/date_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.date_answer = req.body.date_answer;
+            reportResponse.date_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Date Answer',
@@ -501,7 +501,7 @@ router.patch('/update/datetime_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.datetime_answer = req.body.datetime_answer;
+            reportResponse.datetime_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Date Time Answer',
@@ -531,7 +531,7 @@ router.patch('/update/list_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.list_answer = req.body.list_answer;
+            reportResponse.list_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - List Answer',
@@ -562,7 +562,7 @@ router.patch('/update/month_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.month_answer = req.body.month_answer;
+            reportResponse.month_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Month Answer',
@@ -593,7 +593,7 @@ router.patch('/update/multiselect_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.multiselect_answer = req.body.multiselect_answer;
+            reportResponse.multiselect_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Multi Select Answer',
@@ -623,7 +623,7 @@ router.patch('/update/number_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.number_answer = req.body.number_answer;
+            reportResponse.number_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Number Answer',
@@ -653,7 +653,7 @@ router.patch('/update/radio_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.radio_answer = req.body.radio_answer;
+            reportResponse.radio_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Radio Answer',
@@ -683,7 +683,7 @@ router.patch('/update/select_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.select_answer = req.body.select_answer;
+            reportResponse.select_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Select Answer',
@@ -713,7 +713,7 @@ router.patch('/update/table_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.table_answer = req.body.table_answer;
+            reportResponse.table_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Table Answer',
@@ -743,7 +743,7 @@ router.patch('/update/text_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.select_answer = req.body.select_answer;
+            reportResponse.select_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Text Answer',
@@ -773,7 +773,7 @@ router.patch('/update/textarea_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.textarea_answer = req.body.textarea_answer;
+            reportResponse.textarea_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Textarea Answer',
@@ -803,7 +803,7 @@ router.patch('/update/time_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.time_answer = req.body.time_answer;
+            reportResponse.time_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Time Answer',
@@ -833,7 +833,7 @@ router.patch('/update/week_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.week_answer = req.body.week_answer;
+            reportResponse.week_answer = req.body.content;
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Week Answer',

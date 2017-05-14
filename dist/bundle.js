@@ -11416,11 +11416,12 @@ module.exports = {
         });
     },
     "uploadReportProp": function (reportId, prop, valuePro) {
+        let reference = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
                 url: 'https://smart-docs.herokuapp.com/reports/update/' + prop,
                 type: 'PATCH',
-                data: { reportId: reportId, prop: valuePro },
+                data: { reportId: reportId, content: valuePro },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // log the error to the console
                     console.log("The following error occured: " + textStatus, errorThrown);
