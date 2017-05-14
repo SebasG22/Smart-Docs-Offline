@@ -50,7 +50,11 @@ let uidGenerator = require("./uidGenerator");
                         return visits.updateLocalVisits();
                     })*/.then(function () {
                             return visits.getVisits();
-                        }).then(function () {
+                        })
+                        .then(function(){
+                            return reports.uploadReportToCloud();
+                        })
+                        .then(function () {
                             console.log("Visits Saved ", visits.getVisits())
                             return reference.updateSiteExternal();
                         }).then(function () {

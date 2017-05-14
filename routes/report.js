@@ -402,7 +402,7 @@ router.post('/', function (req, res, next) {
         lastModification: req.body.lastModification,
         author: req.body.author,
         completedDate: req.body.completedDate,
-        creationDate: req.body.creationDate,
+        creationDate: req.body.creationDate
     });
 
     report.save(function (err, result) {
