@@ -276,6 +276,7 @@ module.exports = {
                 visitId: visitId,
                 templateId: templateId,
                 cloud: false,
+                status: status,
                 author: author,
                 completedDate: status == 'SM-Status002' ? "" + new Date() : "",
                 creationDate: "" + new Date(),
