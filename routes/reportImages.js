@@ -51,7 +51,7 @@ router.patch('/', function (req, res, next) {
         }
         else {
             //Founded
-            reportImageReponse.image_1 = JSON.parse( req.body.image_1);
+            reportImageResponse.image_1 = JSON.parse(req.body.image_1);
             reportImageResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report Image was update - Image 1',
