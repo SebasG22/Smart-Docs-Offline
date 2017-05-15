@@ -83,7 +83,7 @@ module.exports = {
                 author: dataToUpdate.author,
                 completedDate: dataToUpdate.completedDate,
                 creationDate: dataToUpdate.creationDate,
-            }) 
+            })
                 .done(function () {
                     let updateReportProCloud = new Promise(function (resolve, reject) {
                         let answerDate = reference.uploadReportProp(dataToUpdate.reportId, "date_answer", dataToUpdate.date_answer);
@@ -148,17 +148,56 @@ module.exports = {
                 method: "GET",
                 url: "https://smart-docs.herokuapp.com/reports/",
             })
-                .done(function (visitSavedCloud) {
+                .done(function (reportsSaveonCloud) {
                     let cont = 0;
-                    let updateVisits = [];
-                    for (let siteRes of visitSavedCloud) {
-                        this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
-                        updateVisits.push(this["updateVisit" + cont]);
+                    let updateReports = [];
+
+                    for (let reportRes of reportsSaveonCloud) {
+                        this["updateReport" + cont] = indexDb.addReport(reportRes.reportId, reportRes.templateId,
+                            reportRes.visitId, reportRes.status, reportRes.author, true);
+                        updateReports.push(this["updateReport" + cont]);
                         cont++;
                     }
-                    if (updateVisits.length > 0) {
-                        Promise.all(updateVisits).then(function () {
-                            resolve();
+                    if (updateReports.length > 0) {
+                        Promise.all(updateReports).then(function () {
+                            let cont = 0;
+                            let updateReportsPro = [];
+                            for (let reportRes of reportsSaveonCloud) {
+                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", reportRes.checkbox);
+                                updateReportsPro.push(this["updateReportProCheck" + cont]);
+                                this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", reportRes.date_answer);
+                                updateReportsPro.push(this["updateReportProDate" + cont]);
+                                this["updateReportProDatetime" + cont] = indexDb.updateReport(reportRes.reportId, "datetime_answer", reportRes.datetime_answer);
+                                updateReportsPro.push(this["updateReportProDatetime" + cont]);
+                                this["updateReportProTime" + cont] = indexDb.updateReport(reportRes.reportId, "time_answer", reportRes.time_answer);
+                                updateReportsPro.push(this["updateReportProTime" + cont]);
+                                this["updateReportProWeek" + cont] = indexDb.updateReport(reportRes.reportId, "week_answer", reportRes.week_answer);
+                                updateReportsPro.push(this["updateReportProWeek" + cont]);
+                                this["updateReportProMonth" + cont] = indexDb.updateReport(reportRes.reportId, "month_answer", reportRes.month_answer);
+                                updateReportsPro.push(this["updateReportProMonth" + cont]);
+                                this["updateReportProText" + cont] = indexDb.updateReport(reportRes.reportId, "text_answer", reportRes.text_answer);
+                                updateReportsPro.push(this["updateReportProText" + cont]);
+                                this["updateReportProTextarea" + cont] = indexDb.updateReport(reportRes.reportId, "textarea_answer", reportRes.textarea_answer);
+                                updateReportsPro.push(this["updateReportTextarea" + cont]);
+                                this["updateReportProNumber" + cont] = indexDb.updateReport(reportRes.reportId, "number_answer", reportRes.number_answer);
+                                updateReportsPro.push(this["updateReportProNumber" + cont]);
+                                this["updateReportProRadio" + cont] = indexDb.updateReport(reportRes.reportId, "radio_answer", reportRes.radio_answer);
+                                updateReportsPro.push(this["updateReportProRadio" + cont]);
+                                this["updateReportProSelect" + cont] = indexDb.updateReport(reportRes.reportId, "select_answer", reportRes.select_answer);
+                                updateReportsPro.push(this["updateReportProSelect" + cont]);
+                                this["updateReportProMultiselect" + cont] = indexDb.updateReport(reportRes.reportId, "multiselect_answer", reportRes.multiselect_answer);
+                                updateReportsPro.push(this["updateReportProMultiselect" + cont]);
+                                this["updateReportProList" + cont] = indexDb.updateReport(reportRes.reportId, "list_answer", reportRes.list_answer);
+                                updateReportsPro.push(this["updateReportProList" + cont]);
+                                this["updateReportProTable" + cont] = indexDb.updateReport(reportRes.reportId, "table_answer", reportRes.table_answer);
+                                updateReportsPro.push(this["updateReportProTable" + cont]);
+                            }
+                            Promise.all(updateReportsPro).then(function () {
+                                resolve();
+                            }).catch(function (err) {
+                                reject(err);
+                            })
+
                         });
                     }
                     else {

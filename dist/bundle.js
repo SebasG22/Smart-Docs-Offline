@@ -10350,7 +10350,7 @@ module.exports = {
                 sites.createIndex("by_creationDate", "creationDate", { unique: false });
                 sites.createIndex("by_lastModification", "lastModification", { unique: false });
 
-                let visits = active.createObjectStore("visits", { keyPath: 'visitId'});
+                let visits = active.createObjectStore("visits", { keyPath: 'visitId' });
                 visits.createIndex("by_visitId", "visitId", { unique: true });
                 visits.createIndex("by_site", "site", { unique: false });
                 visits.createIndex("by_user", "user", { unique: false });
@@ -10363,7 +10363,7 @@ module.exports = {
                 templates.createIndex("by_taskType", "taskType", { unique: false })
                 templates.createIndex("by_project", "project", { unique: false });
 
-                let reports = active.createObjectStore("reports", { keyPath: 'reportId'});
+                let reports = active.createObjectStore("reports", { keyPath: 'reportId' });
                 reports.createIndex("by_reportId", "reportId", { unique: true });
                 reports.createIndex("by_site", "site", { unique: false });
                 reports.createIndex("by_creation_date", "creationDate", { unique: false });
@@ -10443,7 +10443,7 @@ module.exports = {
             }
         });
     },
-    "addVisit": function (visitId,siteId, name, author , cloud , creationDate = "" + new Date()) {
+    "addVisit": function (visitId, siteId, name, author, cloud, creationDate = "" + new Date()) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -10597,7 +10597,7 @@ module.exports = {
             }
         });
     },
-    "addReport": function (reportId, templateId, visitId, status, author) {
+    "addReport": function (reportId, templateId, visitId, status, author, cloud = false, ) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -10607,12 +10607,26 @@ module.exports = {
                 reportId: reportId,
                 visitId: visitId,
                 templateId: templateId,
-                cloud: false,
+                cloud: cloud,
                 status: status,
                 author: author,
                 completedDate: status == 'SM-Status002' ? "" + new Date() : "",
                 creationDate: "" + new Date(),
                 lastModification: "" + new Date(),
+                checkbox_answer: [],
+                date_answer: [],
+                datetime_answer: [],
+                list_answer: [],
+                month_answer: [],
+                multiselect_answer: [],
+                number_answer: [],
+                radio_answer: [],
+                select_answer: [],
+                table_answer: [],
+                text_answer: [],
+                textarea_answer: [],
+                time_answer: [],
+                week_answer: []
             });
 
             request.onerror = function (e) {
@@ -11376,7 +11390,7 @@ module.exports = {
                 author: dataToUpdate.author,
                 completedDate: dataToUpdate.completedDate,
                 creationDate: dataToUpdate.creationDate,
-            }) 
+            })
                 .done(function () {
                     let updateReportProCloud = new Promise(function (resolve, reject) {
                         let answerDate = reference.uploadReportProp(dataToUpdate.reportId, "date_answer", dataToUpdate.date_answer);
@@ -11441,17 +11455,56 @@ module.exports = {
                 method: "GET",
                 url: "https://smart-docs.herokuapp.com/reports/",
             })
-                .done(function (visitSavedCloud) {
+                .done(function (reportsSaveonCloud) {
                     let cont = 0;
-                    let updateVisits = [];
-                    for (let siteRes of visitSavedCloud) {
-                        this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
-                        updateVisits.push(this["updateVisit" + cont]);
+                    let updateReports = [];
+
+                    for (let reportRes of reportsSaveonCloud) {
+                        this["updateReport" + cont] = indexDb.addReport(reportRes.reportId, reportRes.templateId,
+                            reportRes.visitId, reportRes.status, reportRes.author, true);
+                        updateReports.push(this["updateReport" + cont]);
                         cont++;
                     }
-                    if (updateVisits.length > 0) {
-                        Promise.all(updateVisits).then(function () {
-                            resolve();
+                    if (updateReports.length > 0) {
+                        Promise.all(updateReports).then(function () {
+                            let cont = 0;
+                            let updateReportsPro = [];
+                            for (let reportRes of reportsSaveonCloud) {
+                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", reportRes.checkbox);
+                                updateReportsPro.push(this["updateReportProCheck" + cont]);
+                                this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", reportRes.date_answer);
+                                updateReportsPro.push(this["updateReportProDate" + cont]);
+                                this["updateReportProDatetime" + cont] = indexDb.updateReport(reportRes.reportId, "datetime_answer", reportRes.datetime_answer);
+                                updateReportsPro.push(this["updateReportProDatetime" + cont]);
+                                this["updateReportProTime" + cont] = indexDb.updateReport(reportRes.reportId, "time_answer", reportRes.time_answer);
+                                updateReportsPro.push(this["updateReportProTime" + cont]);
+                                this["updateReportProWeek" + cont] = indexDb.updateReport(reportRes.reportId, "week_answer", reportRes.week_answer);
+                                updateReportsPro.push(this["updateReportProWeek" + cont]);
+                                this["updateReportProMonth" + cont] = indexDb.updateReport(reportRes.reportId, "month_answer", reportRes.month_answer);
+                                updateReportsPro.push(this["updateReportProMonth" + cont]);
+                                this["updateReportProText" + cont] = indexDb.updateReport(reportRes.reportId, "text_answer", reportRes.text_answer);
+                                updateReportsPro.push(this["updateReportProText" + cont]);
+                                this["updateReportProTextarea" + cont] = indexDb.updateReport(reportRes.reportId, "textarea_answer", reportRes.textarea_answer);
+                                updateReportsPro.push(this["updateReportTextarea" + cont]);
+                                this["updateReportProNumber" + cont] = indexDb.updateReport(reportRes.reportId, "number_answer", reportRes.number_answer);
+                                updateReportsPro.push(this["updateReportProNumber" + cont]);
+                                this["updateReportProRadio" + cont] = indexDb.updateReport(reportRes.reportId, "radio_answer", reportRes.radio_answer);
+                                updateReportsPro.push(this["updateReportProRadio" + cont]);
+                                this["updateReportProSelect" + cont] = indexDb.updateReport(reportRes.reportId, "select_answer", reportRes.select_answer);
+                                updateReportsPro.push(this["updateReportProSelect" + cont]);
+                                this["updateReportProMultiselect" + cont] = indexDb.updateReport(reportRes.reportId, "multiselect_answer", reportRes.multiselect_answer);
+                                updateReportsPro.push(this["updateReportProMultiselect" + cont]);
+                                this["updateReportProList" + cont] = indexDb.updateReport(reportRes.reportId, "list_answer", reportRes.list_answer);
+                                updateReportsPro.push(this["updateReportProList" + cont]);
+                                this["updateReportProTable" + cont] = indexDb.updateReport(reportRes.reportId, "table_answer", reportRes.table_answer);
+                                updateReportsPro.push(this["updateReportProTable" + cont]);
+                            }
+                            Promise.all(updateReportsPro).then(function () {
+                                resolve();
+                            }).catch(function (err) {
+                                reject(err);
+                            })
+
                         });
                     }
                     else {

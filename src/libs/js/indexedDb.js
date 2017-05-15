@@ -18,7 +18,7 @@ module.exports = {
                 sites.createIndex("by_creationDate", "creationDate", { unique: false });
                 sites.createIndex("by_lastModification", "lastModification", { unique: false });
 
-                let visits = active.createObjectStore("visits", { keyPath: 'visitId'});
+                let visits = active.createObjectStore("visits", { keyPath: 'visitId' });
                 visits.createIndex("by_visitId", "visitId", { unique: true });
                 visits.createIndex("by_site", "site", { unique: false });
                 visits.createIndex("by_user", "user", { unique: false });
@@ -31,7 +31,7 @@ module.exports = {
                 templates.createIndex("by_taskType", "taskType", { unique: false })
                 templates.createIndex("by_project", "project", { unique: false });
 
-                let reports = active.createObjectStore("reports", { keyPath: 'reportId'});
+                let reports = active.createObjectStore("reports", { keyPath: 'reportId' });
                 reports.createIndex("by_reportId", "reportId", { unique: true });
                 reports.createIndex("by_site", "site", { unique: false });
                 reports.createIndex("by_creation_date", "creationDate", { unique: false });
@@ -111,7 +111,7 @@ module.exports = {
             }
         });
     },
-    "addVisit": function (visitId,siteId, name, author , cloud , creationDate = "" + new Date()) {
+    "addVisit": function (visitId, siteId, name, author, cloud, creationDate = "" + new Date()) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -265,7 +265,7 @@ module.exports = {
             }
         });
     },
-    "addReport": function (reportId, templateId, visitId, status, author) {
+    "addReport": function (reportId, templateId, visitId, status, author, cloud = false, ) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -275,12 +275,26 @@ module.exports = {
                 reportId: reportId,
                 visitId: visitId,
                 templateId: templateId,
-                cloud: false,
+                cloud: cloud,
                 status: status,
                 author: author,
                 completedDate: status == 'SM-Status002' ? "" + new Date() : "",
                 creationDate: "" + new Date(),
                 lastModification: "" + new Date(),
+                checkbox_answer: [],
+                date_answer: [],
+                datetime_answer: [],
+                list_answer: [],
+                month_answer: [],
+                multiselect_answer: [],
+                number_answer: [],
+                radio_answer: [],
+                select_answer: [],
+                table_answer: [],
+                text_answer: [],
+                textarea_answer: [],
+                time_answer: [],
+                week_answer: []
             });
 
             request.onerror = function (e) {
