@@ -51,10 +51,14 @@ router.patch('/', function (req, res, next) {
         }
         else {
             //Founded
-            res.status(201).json({
+            reportResponse.image_1 = ['test'];
+            reportResponse.save(function(err,resulta){
+                res.status(201).json({
                     message: 'Report Image was update - Image 1',
-                    obj: reportResponse
+                    obj: resulta
                 });
+            });
+            
             /*    
             reportResponse.image_1 = req.body.image_1;
             reportResponse.save(function (err, result) {
