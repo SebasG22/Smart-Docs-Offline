@@ -63,9 +63,9 @@ module.exports = {
     },
     uploadReportCreate: function (dataToUpdate) {
         return new Promise(function (resolve, reject) {
-            $.post("https://smart-docs.herokuapp.com/reportsImg/", {
+            $.post("https://smart-docs.herokuapp.com/reportsImg/", 
                 dataToUpdate
-            }).done(function () {
+            ).done(function () {
                 resolve();
             });
         });
