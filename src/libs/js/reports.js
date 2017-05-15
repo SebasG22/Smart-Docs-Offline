@@ -166,7 +166,7 @@ module.exports = {
                             let cont = 0;
                             let updateReportsPro = [];
                             for (let reportRes of reportsSaveonCloud) {
-                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", JSON.parse(reportRes.checkbox_answer));
+                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", (Array.isArray(reportRes.checkbox_answer)) ? JSON.parse(reportRes.checkbox_answer[0]) : '' );
                                 updateReportsPro.push(this["updateReportProCheck" + cont]);
                                 this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", JSON.parse(reportRes.date_answer));
                                 updateReportsPro.push(this["updateReportProDate" + cont]);
