@@ -16020,7 +16020,6 @@ let uidGenerator = __webpack_require__(13);
                                 let promisesSaveImg = []
                                 do {
                                     if (contProImg % 2 == 0) {
-                                        reportImgId, reportId, images, images_1, author,
                                             this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(keyGenerated + subId + subIdNumber, keyGenerated, JSON.stringify(this["answerImages_" + contProImg]) + "]", localStorage.getItem("username"));
                                         promisesSaveImg.push(this["saveAnswerImage_" + contProImg]);
                                         subIdNumber++;
