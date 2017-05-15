@@ -16035,6 +16035,7 @@ let uidGenerator = __webpack_require__(13);
             });
         },
         saveImageLocally: function () {
+            let reference = this;
             let answerImages;
             let contImages; let total_images_saved;
             answerImages = reference.filterByAnswerTypeImage();
@@ -16069,6 +16070,7 @@ let uidGenerator = __webpack_require__(13);
 
         },
         updateImageLocally: function () {
+            let reference = this;
             let answerImages;
             let contImages; let total_images_saved;
             answerImages = reference.filterByAnswerTypeImage();

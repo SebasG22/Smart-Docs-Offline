@@ -510,6 +510,7 @@ let uidGenerator = require("./uidGenerator");
             });
         },
         saveImageLocally: function () {
+            let reference = this;
             let answerImages;
             let contImages; let total_images_saved;
             answerImages = reference.filterByAnswerTypeImage();
@@ -544,6 +545,7 @@ let uidGenerator = require("./uidGenerator");
 
         },
         updateImageLocally: function () {
+            let reference = this;
             let answerImages;
             let contImages; let total_images_saved;
             answerImages = reference.filterByAnswerTypeImage();
