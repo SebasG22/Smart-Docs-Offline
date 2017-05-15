@@ -10597,7 +10597,7 @@ module.exports = {
             }
         });
     },
-    "addReport": function (reportId, templateId, visitId, status, author, cloud = false, ) {
+    "addReport": function (reportId, templateId, visitId, status, author, cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
