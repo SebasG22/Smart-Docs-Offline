@@ -15990,7 +15990,7 @@ let uidGenerator = __webpack_require__(13);
                     answerCheckbox = reference.filterByAnswerType('checkbox');
                     answerSelect = reference.filterByAnswerType('select');
                     answerMultiSelect = reference.filterByAnswerType('multiSelect');
-                    answerList = reference.filterByAnswerTgitype('list');
+                    answerList = reference.filterByAnswerType('list');
                     answerTable = reference.filterByAnswerType('table');
 
                     let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
