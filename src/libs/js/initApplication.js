@@ -52,6 +52,9 @@ let uidGenerator = require("./uidGenerator");
                         .then(function(){
                             return reports.uploadReportToCloud();
                         })
+                        .then(function(){
+                            return reports.getReportsSaveonCloud();
+                        })
                         .then(function () {
                             console.log("Visits Saved ", visits.getVisits())
                             return reference.updateSiteExternal();

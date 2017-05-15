@@ -15507,6 +15507,9 @@ let uidGenerator = __webpack_require__(13);
                         .then(function(){
                             return reports.uploadReportToCloud();
                         })
+                        .then(function(){
+                            return reports.getReportsSaveonCloud();
+                        })
                         .then(function () {
                             console.log("Visits Saved ", visits.getVisits())
                             return reference.updateSiteExternal();
