@@ -15938,7 +15938,7 @@ let uidGenerator = __webpack_require__(13);
                                 "time_answer"];
             for (let check of checkAnswers) {
                 if (Array.isArray(reports.reportSelected[check][0])) {
-                    smartEngine.matchAnswers(reports.reportSelected[check]);        
+                    smartEngine.matchAnswers(reports.reportSelected[check][0]);        
                 }
              }
         },
