@@ -11394,19 +11394,19 @@ module.exports = {
                 .done(function () {
                     let updateReportProCloud = new Promise(function (resolve, reject) {
                         let answerDate = reference.uploadReportProp(dataToUpdate.reportId, "date_answer", dataToUpdate.date_answer);
-                        let answerDateTime = reference.uploadReportProp(dataToUpdate.reportId, "datetime_answer", dataToUpdate.date_answer);
-                        let answerWeek = reference.uploadReportProp(dataToUpdate.reportId, "week_answer", dataToUpdate.date_answer);
-                        let answerMonth = reference.uploadReportProp(dataToUpdate.reportId, "month_answer", dataToUpdate.date_answer);
-                        let answerText = reference.uploadReportProp(dataToUpdate.reportId, "text_answer", dataToUpdate.date_answer);
-                        let answerTextArea = reference.uploadReportProp(dataToUpdate.reportId, "textarea_answer", dataToUpdate.date_answer);
+                        let answerDateTime = reference.uploadReportProp(dataToUpdate.reportId, "datetime_answer", dataToUpdate.datetime_answer);
+                        let answerWeek = reference.uploadReportProp(dataToUpdate.reportId, "week_answer", dataToUpdate.week_answer);
+                        let answerMonth = reference.uploadReportProp(dataToUpdate.reportId, "month_answer", dataToUpdate.month_answer);
+                        let answerText = reference.uploadReportProp(dataToUpdate.reportId, "text_answer", dataToUpdate.text_answer);
+                        let answerTextArea = reference.uploadReportProp(dataToUpdate.reportId, "textarea_answer", dataToUpdate.textarea_answer);
                         let answerNumber = reference.uploadReportProp(dataToUpdate.reportId, "number_answer", dataToUpdate.date_answer);
-                        let answerTime = reference.uploadReportProp(dataToUpdate.reportId, "time_answer", dataToUpdate.date_answer);
-                        let answerRadio = reference.uploadReportProp(dataToUpdate.reportId, "radio_answer", dataToUpdate.date_answer);
+                        let answerTime = reference.uploadReportProp(dataToUpdate.reportId, "time_answer", dataToUpdate.time_answer);
+                        let answerRadio = reference.uploadReportProp(dataToUpdate.reportId, "radio_answer", dataToUpdate.radio_answer);
                         let answerCheckbox = reference.uploadReportProp(dataToUpdate.reportId, "checkbox_answer", dataToUpdate.checkbox_answer);
-                        let answerSelect = reference.uploadReportProp(dataToUpdate.reportId, "select_answer", dataToUpdate.date_answer);
-                        let answerMultiSelect = reference.uploadReportProp(dataToUpdate.reportId, "multiselect_answer", dataToUpdate.date_answer);
-                        let answerList = reference.uploadReportProp(dataToUpdate.reportId, "list_answer", dataToUpdate.date_answer);
-                        let answerTable = reference.uploadReportProp(dataToUpdate.reportId, "table_answer", dataToUpdate.date_answer);
+                        let answerSelect = reference.uploadReportProp(dataToUpdate.reportId, "select_answer", dataToUpdate.select_answer);
+                        let answerMultiSelect = reference.uploadReportProp(dataToUpdate.reportId, "multiselect_answer", dataToUpdate.multiselect_answer);
+                        let answerList = reference.uploadReportProp(dataToUpdate.reportId, "list_answer", dataToUpdate.list_answer);
+                        let answerTable = reference.uploadReportProp(dataToUpdate.reportId, "table_answer", dataToUpdate.table_answer);
 
                         Promise.all([answerDate, answerDateTime, answerTime, answerWeek, answerMonth, answerText,
                             answerTextArea, answerNumber, answerTime, answerRadio, answerCheckbox, answerSelect,
