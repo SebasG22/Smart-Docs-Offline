@@ -33,9 +33,9 @@ router.post('/', function (req, res, next) {
 });
 
 router.patch('/update', function (req, res, next) {
-    ReportImages.find({reportImgId:req.body.reportImgId, reportId: req.body.reportId},
-    function(err,reportResponse){
-         if (err) {
+
+    Report.findOne({ reportImgId: req.body.reportImgId , reportId: req.body.reportId }, function (err, reportResponse) {
+        if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
@@ -51,25 +51,16 @@ router.patch('/update', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.image_1 = ['test'];
-            reportResponse.save(function(err,resulta){
-                res.status(201).json({
-                    message: 'Report Image was update - Image 1',
-                    obj: resulta
-                });
-            });
-            
-            /*    
-            reportResponse.image_1 = req.body.image_1;
+            reportResponse.image_1 = JSON.parse(req.body.image_1);
             reportResponse.save(function (err, result) {
                 res.status(201).json({
-                    message: 'Report Image was update - Image 1',
+                    message: 'Report Image was update',
                     obj: result
                 });
             });
-            */
         }
-    });
-})
+    })
+
+});
 
 module.exports = router;
