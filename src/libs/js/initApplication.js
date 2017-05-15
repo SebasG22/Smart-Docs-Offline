@@ -422,6 +422,7 @@ let uidGenerator = require("./uidGenerator");
             $("#incompleteReport").modal({ backdrop: 'static', keyboard: false });
         },
         userAnswer: "",
+        keyGenerated: "",
         saveAnswerEvent: function () {
             let reference = this;
             $("#btnSave").click(function () {
@@ -460,9 +461,9 @@ let uidGenerator = require("./uidGenerator");
                     answerList = reference.filterByAnswerType('list');
                     answerTable = reference.filterByAnswerType('table');
 
-
-
                     let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
+                    reference.keyGenerated = keyGenerated;
+                    
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
                         status, localStorage.getItem("username")).then(function () {
 
@@ -526,7 +527,7 @@ let uidGenerator = require("./uidGenerator");
             let promisesSaveImg = []
             do {
                 if (contProImg % 2 == 0) {
-                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(keyGenerated + subId + subIdNumber, keyGenerated, JSON.stringify(this["answerImages_" + contProImg]) + "]", localStorage.getItem("username"));
+                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(reference.keyGenerated + subId + subIdNumber, keyGenerated, JSON.stringify(this["answerImages_" + contProImg]) + "]", localStorage.getItem("username"));
                     promisesSaveImg.push(this["saveAnswerImage_" + contProImg]);
                     subIdNumber++;
                 }
@@ -560,7 +561,7 @@ let uidGenerator = require("./uidGenerator");
             do {
                 console.log(this["answerImages_" + contProImg]);
                 if (contProImg % 2 != 0) {
-                    this["saveAnswerImage_" + contProImg] = indexDb.updateReportImages(keyGenerated + subId + subIdNumber, "image_1", "[" + JSON.stringify(this["answerImages_" + contProImg]) + "]");
+                    this["saveAnswerImage_" + contProImg] = indexDb.updateReportImages(reference.keyGenerated + subId + subIdNumber, "image_1", "[" + JSON.stringify(this["answerImages_" + contProImg]) + "]");
                     promisesUpdateImg.push(this["saveAnswerImage_" + contProImg]);
                     subIdNumber++;
                 }

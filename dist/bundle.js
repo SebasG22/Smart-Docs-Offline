@@ -15947,6 +15947,7 @@ let uidGenerator = __webpack_require__(13);
             $("#incompleteReport").modal({ backdrop: 'static', keyboard: false });
         },
         userAnswer: "",
+        keyGenerated: "",
         saveAnswerEvent: function () {
             let reference = this;
             $("#btnSave").click(function () {
@@ -15985,9 +15986,9 @@ let uidGenerator = __webpack_require__(13);
                     answerList = reference.filterByAnswerType('list');
                     answerTable = reference.filterByAnswerType('table');
 
-
-
                     let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
+                    reference.keyGenerated = keyGenerated;
+                    
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
                         status, localStorage.getItem("username")).then(function () {
 
