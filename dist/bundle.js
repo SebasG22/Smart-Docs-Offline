@@ -11425,7 +11425,7 @@ module.exports = {
                 reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
             }
         });
-        return Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             Promise.all(reportsToImgCreate).then(function () {
                 reference.uploadReportsImages1().then(function () {
                     resolve();
@@ -11448,7 +11448,7 @@ module.exports = {
                 reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
             }
         });
-        return Promise(function (resolve, reject) {
+        return new Promise(function (resolve, reject) {
             Promise.all(reportsToImgCreate).then(function () {
                 resolve();
             }).catch(function (err) {
