@@ -11413,6 +11413,7 @@ module.exports = {
         console.log("Upload Reports Images on Action");
         let reference = this;
         let reportsToImgCreate = [];
+        let cont = 0;
         reference.getReportsImages().then(function () {
             for (let reportImgToCreate of reference.reportsImages) {
                 this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
@@ -11438,6 +11439,7 @@ module.exports = {
     uploadReportsImages1: function () {
         let reference = this;
         let reportsToImgCreate = [];
+        let cont = 0;
         reference.getReportsImages().then(function () {
             for (let reportImgToCreate of reference.reportsImages) {
                 this["reportImgToCreateUpd" + cont] = reference.uploadReportUpdate({
