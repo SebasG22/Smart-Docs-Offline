@@ -32,7 +32,7 @@ router.post('/', function (req, res, next) {
     });
 });
 
-router.patch('/', function (req, res, next) {
+router.patch('/update', function (req, res, next) {
     ReportImages.find({reportImgId:req.body.reportImgId, reportId: req.body.reportId},
     function(err,reportResponse){
          if (err) {
