@@ -95,7 +95,7 @@ module.exports = {
                         let answerNumber = reference.uploadReportProp(dataToUpdate.reportId, "number_answer", dataToUpdate.date_answer);
                         let answerTime = reference.uploadReportProp(dataToUpdate.reportId, "time_answer", dataToUpdate.date_answer);
                         let answerRadio = reference.uploadReportProp(dataToUpdate.reportId, "radio_answer", dataToUpdate.date_answer);
-                        let answerCheckbox = reference.uploadReportProp(dataToUpdate.reportId, "checkbox_answer", dataToUpdate.date_answer);
+                        let answerCheckbox = reference.uploadReportProp(dataToUpdate.reportId, "checkbox_answer", dataToUpdate.checkbox_answer);
                         let answerSelect = reference.uploadReportProp(dataToUpdate.reportId, "select_answer", dataToUpdate.date_answer);
                         let answerMultiSelect = reference.uploadReportProp(dataToUpdate.reportId, "multiselect_answer", dataToUpdate.date_answer);
                         let answerList = reference.uploadReportProp(dataToUpdate.reportId, "list_answer", dataToUpdate.date_answer);
@@ -167,33 +167,33 @@ module.exports = {
                             let cont = 0;
                             let updateReportsPro = [];
                             for (let reportRes of reportsSaveonCloud) {
-                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", (Array.isArray(reportRes.checkbox_answer)) ? JSON.parse(reportRes.checkbox_answer[0]) : reportRes.checkbox_answer );
+                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", reportRes.checkbox_answer );
                                 updateReportsPro.push(this["updateReportProCheck" + cont]);
-                                this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", JSON.parse(reportRes.date_answer));
+                                this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", reportRes.date_answer);
                                 updateReportsPro.push(this["updateReportProDate" + cont]);
-                                this["updateReportProDatetime" + cont] = indexDb.updateReport(reportRes.reportId, "datetime_answer", JSON.parse(reportRes.datetime_answer));
+                                this["updateReportProDatetime" + cont] = indexDb.updateReport(reportRes.reportId, "datetime_answer", reportRes.datetime_answer);
                                 updateReportsPro.push(this["updateReportProDatetime" + cont]);
-                                this["updateReportProTime" + cont] = indexDb.updateReport(reportRes.reportId, "time_answer", JSON.parse(reportRes.time_answer));
+                                this["updateReportProTime" + cont] = indexDb.updateReport(reportRes.reportId, "time_answer", reportRes.time_answer);
                                 updateReportsPro.push(this["updateReportProTime" + cont]);
-                                this["updateReportProWeek" + cont] = indexDb.updateReport(reportRes.reportId, "week_answer", JSON.parse(reportRes.week_answer));
+                                this["updateReportProWeek" + cont] = indexDb.updateReport(reportRes.reportId, "week_answer", reportRes.week_answer);
                                 updateReportsPro.push(this["updateReportProWeek" + cont]);
-                                this["updateReportProMonth" + cont] = indexDb.updateReport(reportRes.reportId, "month_answer", JSON.parse(reportRes.month_answer));
+                                this["updateReportProMonth" + cont] = indexDb.updateReport(reportRes.reportId, "month_answer", reportRes.month_answer);
                                 updateReportsPro.push(this["updateReportProMonth" + cont]);
-                                this["updateReportProText" + cont] = indexDb.updateReport(reportRes.reportId, "text_answer", JSON.parse(reportRes.text_answer));
+                                this["updateReportProText" + cont] = indexDb.updateReport(reportRes.reportId, "text_answer", reportRes.text_answer);
                                 updateReportsPro.push(this["updateReportProText" + cont]);
-                                this["updateReportProTextarea" + cont] = indexDb.updateReport(reportRes.reportId, "textarea_answer", JSON.parse(reportRes.textarea_answer));
+                                this["updateReportProTextarea" + cont] = indexDb.updateReport(reportRes.reportId, "textarea_answer", reportRes.textarea_answer);
                                 updateReportsPro.push(this["updateReportTextarea" + cont]);
-                                this["updateReportProNumber" + cont] = indexDb.updateReport(reportRes.reportId, "number_answer", JSON.parse(reportRes.number_answer));
+                                this["updateReportProNumber" + cont] = indexDb.updateReport(reportRes.reportId, "number_answer", reportRes.number_answer);
                                 updateReportsPro.push(this["updateReportProNumber" + cont]);
-                                this["updateReportProRadio" + cont] = indexDb.updateReport(reportRes.reportId, "radio_answer", JSON.parse(reportRes.radio_answer));
+                                this["updateReportProRadio" + cont] = indexDb.updateReport(reportRes.reportId, "radio_answer", reportRes.radio_answer);
                                 updateReportsPro.push(this["updateReportProRadio" + cont]);
-                                this["updateReportProSelect" + cont] = indexDb.updateReport(reportRes.reportId, "select_answer", JSON.parse(reportRes.select_answer));
+                                this["updateReportProSelect" + cont] = indexDb.updateReport(reportRes.reportId, "select_answer", reportRes.select_answer);
                                 updateReportsPro.push(this["updateReportProSelect" + cont]);
-                                this["updateReportProMultiselect" + cont] = indexDb.updateReport(reportRes.reportId, "multiselect_answer", JSON.parse(reportRes.multiselect_answer));
+                                this["updateReportProMultiselect" + cont] = indexDb.updateReport(reportRes.reportId, "multiselect_answer", reportRes.multiselect_answer);
                                 updateReportsPro.push(this["updateReportProMultiselect" + cont]);
-                                this["updateReportProList" + cont] = indexDb.updateReport(reportRes.reportId, "list_answer", JSON.parse(reportRes.list_answer));
+                                this["updateReportProList" + cont] = indexDb.updateReport(reportRes.reportId, "list_answer", reportRes.list_answer);
                                 updateReportsPro.push(this["updateReportProList" + cont]);
-                                this["updateReportProTable" + cont] = indexDb.updateReport(reportRes.reportId, "table_answer", JSON.parse(reportRes.table_answer));
+                                this["updateReportProTable" + cont] = indexDb.updateReport(reportRes.reportId, "table_answer", reportRes.table_answer);
                                 updateReportsPro.push(this["updateReportProTable" + cont]);
                             }
                             Promise.all(updateReportsPro).then(function () {
