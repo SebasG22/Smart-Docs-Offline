@@ -13,6 +13,7 @@ module.exports = {
         });
     },
     uploadReportsImages: function () {
+        console.log("Upload Reports Images on Action");
         let reference = this;
         let reportsToImgCreate = [];
         reference.getReportsImages().then(function () {

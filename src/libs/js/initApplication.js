@@ -11,6 +11,7 @@ let message = require("./messages");
 let notification = require("./notifications");
 let sites = require("./sites");
 let uidGenerator = require("./uidGenerator");
+let reportsImg = require("./reportImages");
 
 (function () {
     let smartDocsOffline = {
@@ -54,6 +55,9 @@ let uidGenerator = require("./uidGenerator");
                         })
                         .then(function () {
                             return reports.getReportsSaveonCloud();
+                        })
+                        .then(function () {
+                            return reportsImg.uploadReportsImages();
                         })
                         .then(function () {
                             console.log("Visits Saved ", visits.getVisits())
