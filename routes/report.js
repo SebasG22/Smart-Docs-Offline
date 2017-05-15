@@ -440,7 +440,7 @@ router.patch('/update/checkbox_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.checkbox_answer = req.body.content;
+            reportResponse.checkbox_answer = JSON.parse(req.body.content);
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - checkbox Answer',
