@@ -64,11 +64,7 @@ module.exports = {
     uploadReportCreate: function (dataToUpdate) {
         return new Promise(function (resolve, reject) {
             $.post("https://smart-docs.herokuapp.com/reportsImg/", {
-                reportImgId: dataToUpdate.reportImgId,
-                reportId: dataToUpdate.reportId,
-                images: dataToUpdate.images,
-                author: dataToUpdate.author,
-                lastModification: dataToUpdate.lastModification
+                dataToUpdate
             }).done(function () {
                 resolve();
             });
@@ -77,7 +73,7 @@ module.exports = {
     uploadReportUpdate: function (dataToUpdate) {
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/reportsImg/update/' + prop,
+                url: 'https://smart-docs.herokuapp.com/reportsImg/update/',
                 type: 'PATCH',
                 data: { reportImgId: dataToUpdate.reportImgId, reportId: dataToUpdate.reportId, image_1: dataToUpdate.image_1 },
                 dataType:'json',
