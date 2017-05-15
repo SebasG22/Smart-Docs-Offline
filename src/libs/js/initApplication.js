@@ -459,14 +459,8 @@ let uidGenerator = require("./uidGenerator");
                     answerMultiSelect = reference.filterByAnswerType('multiSelect');
                     answerList = reference.filterByAnswerType('list');
                     answerTable = reference.filterByAnswerType('table');
-                    answerImages = reference.filterByAnswerTypeImage();
-                    contImages = 0;
-                    do {
-                        this["answerImages_" + contImages] = answerImages.splice(0, 1);
-                        contImages++;
-                    }
-                    while (answerImages.length > 0);
-                    total_images_saved = 0;
+
+
 
                     let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
@@ -491,34 +485,8 @@ let uidGenerator = require("./uidGenerator");
                                 message.addMessageLoder("loaderMessage", "#mainContent2");
                                 message.changeMessageLoader("loaderMessage", "Guardando Reporte");
 
-                                let contProImg = 0; let subIdNumber = 0; let subId = "-SB";
-                                let promisesSaveImg = []
-                                do {
-                                    if (contProImg % 2 == 0) {
-                                            this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(keyGenerated + subId + subIdNumber, keyGenerated, JSON.stringify(this["answerImages_" + contProImg]) + "]", localStorage.getItem("username"));
-                                        promisesSaveImg.push(this["saveAnswerImage_" + contProImg]);
-                                        subIdNumber++;
-                                    }
-                                    console.log(contProImg);
-                                    contProImg++;
-                                }
-                                while (contProImg <= contImages);
-                                contProImg = 0; subIdNumber = 0;
-
-                                Promise.all(promisesSaveImg).then(function () {
-                                    let promisesUpdateImg = [];
-                                    do {
-                                        console.log(this["answerImages_" + contProImg]);
-                                        if (contProImg % 2 != 0) {
-                                            this["saveAnswerImage_" + contProImg] = indexDb.updateReportImages(keyGenerated + subId + subIdNumber, "image_1", "[" + JSON.stringify(this["answerImages_" + contProImg]) + "]");
-                                            promisesUpdateImg.push(this["saveAnswerImage_" + contProImg]);
-                                            subIdNumber++;
-                                        }
-                                        console.log(contProImg);
-                                        contProImg++;
-                                    }
-                                    while (contProImg <= contImages);
-                                    Promise.all(promisesUpdateImg).then(function () {
+                                reference.saveImageLocally().then(function () {
+                                    reference.updateImageLocally().then(function () {
                                         if (answer.completed) {
                                             reference.launchAnswerCompletedModal();
                                         } else {
@@ -541,6 +509,70 @@ let uidGenerator = require("./uidGenerator");
                 }
             });
         },
+        saveImageLocally: function () {
+            let answerImages;
+            let contImages; let total_images_saved;
+            answerImages = reference.filterByAnswerTypeImage();
+            contImages = 0;
+            do {
+                this["answerImages_" + contImages] = answerImages.splice(0, 1);
+                contImages++;
+            }
+            while (answerImages.length > 0);
+            total_images_saved = 0;
+
+            let contProImg = 0; let subIdNumber = 0; let subId = "-SB";
+            let promisesSaveImg = []
+            do {
+                if (contProImg % 2 == 0) {
+                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(keyGenerated + subId + subIdNumber, keyGenerated, JSON.stringify(this["answerImages_" + contProImg]) + "]", localStorage.getItem("username"));
+                    promisesSaveImg.push(this["saveAnswerImage_" + contProImg]);
+                    subIdNumber++;
+                }
+                console.log(contProImg);
+                contProImg++;
+            }
+            while (contProImg <= contImages);
+
+            return new Promise(function (resolve, reject) {
+                Promise.all(promisesSaveImg).then(function () {
+                    resolve();
+                }).catch(function (err) {
+                    reject(err);
+                })
+            });
+
+        },
+        updateImageLocally: function () {
+            let answerImages;
+            let contImages; let total_images_saved;
+            answerImages = reference.filterByAnswerTypeImage();
+            contImages = 0;
+            do {
+                this["answerImages_" + contImages] = answerImages.splice(0, 1);
+                contImages++;
+            }
+            while (answerImages.length > 0);
+            let contProImg = 0; let subIdNumber = 0; let subId = "-SB";
+            let promisesUpdateImg = [];
+            do {
+                console.log(this["answerImages_" + contProImg]);
+                if (contProImg % 2 != 0) {
+                    this["saveAnswerImage_" + contProImg] = indexDb.updateReportImages(keyGenerated + subId + subIdNumber, "image_1", "[" + JSON.stringify(this["answerImages_" + contProImg]) + "]");
+                    promisesUpdateImg.push(this["saveAnswerImage_" + contProImg]);
+                    subIdNumber++;
+                }
+                console.log(contProImg);
+                contProImg++;
+            }
+            while (contProImg <= contImages);
+
+            return new Promise(function (resolve, reject) {
+                Promise.all(promisesUpdateImg).then(function () {
+                    resolve();
+                });
+            });
+        },
         filterByAnswerType: function (type) {
             let reference = this;
             var answerFiltered = reference.userAnswer.filter(function (e, index) {
@@ -553,16 +585,15 @@ let uidGenerator = require("./uidGenerator");
 
         },
         filterByAnswerTypeImage: function () {
-        let reference = this;
-        var answerFiltered = reference.userAnswer.filter(function (e, index) {
-            if (e.type == 'image1Label' || e.type == "image2Labels") {
-                //reference.userAnswer.splice(index, 1);
-                return e;
-            }
-        });
-        return answerFiltered;
-
-    },
+            let reference = this;
+            var answerFiltered = reference.userAnswer.filter(function (e, index) {
+                if (e.type == 'image1Label' || e.type == "image2Labels") {
+                    //reference.userAnswer.splice(index, 1);
+                    return e;
+                }
+            });
+            return answerFiltered;
+        },
         fillReportsPage: function (reportsResponse) {
             let reference = this;
             console.log("Reports Response", reportsResponse);
