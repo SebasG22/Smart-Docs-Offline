@@ -15933,7 +15933,14 @@ let uidGenerator = __webpack_require__(13);
         },
         fillAnswer: function () {
             let reference = this;
-            smartEngine.matchAnswers(reports.reportSelected.content);
+            let checkAnswers = ["checkbox_answer","date_answer","datetime_answer","list_answer","month_answer","multiselect_answer",
+                                "number_answer","radio_answer","select_answer","table_answer","text_answer","textarea_answer",
+                                "time_answer"];
+            for (let check of checkAnswers) {
+                if (Array.isArray(reports.reportSelected[check][0])) {
+                    smartEngine.matchAnswers(reports.reportSelected[check]);        
+                }
+             }
         },
         launchAnswerCompletedModal: function () {
             $("#completedReport").remove();
@@ -15983,12 +15990,12 @@ let uidGenerator = __webpack_require__(13);
                     answerCheckbox = reference.filterByAnswerType('checkbox');
                     answerSelect = reference.filterByAnswerType('select');
                     answerMultiSelect = reference.filterByAnswerType('multiSelect');
-                    answerList = reference.filterByAnswerType('list');
+                    answerList = reference.filterByAnswerTgitype('list');
                     answerTable = reference.filterByAnswerType('table');
 
                     let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
                     reference.keyGenerated = keyGenerated;
-                    
+
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
                         status, localStorage.getItem("username")).then(function () {
 
