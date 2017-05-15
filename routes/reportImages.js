@@ -61,3 +61,5 @@ router.patch('/', function (req, res, next) {
         }
     });
 })
+
+module.exports = router;
