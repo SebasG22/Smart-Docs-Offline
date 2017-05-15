@@ -471,7 +471,7 @@ router.patch('/update/date_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.date_answer = req.body.content;
+            reportResponse.date_answer = JSON.parse(req.body.content);
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Date Answer',
