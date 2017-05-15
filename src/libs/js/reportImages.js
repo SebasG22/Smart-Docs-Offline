@@ -24,7 +24,7 @@ module.exports = {
                     reportId: reportImgToCreate.reportId,
                     images: reportImgToCreate.images,
                     author: reportImgToCreate.author,
-                    lastModification: reportImgToCreate
+                    lastModification: reportImgToCreate.lastModification
                 });
                 reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
             }
