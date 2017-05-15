@@ -11435,7 +11435,7 @@ module.exports = {
             $.ajax({
                 url: 'https://smart-docs.herokuapp.com/reports/update/' + prop,
                 type: 'PATCH',
-                data: { reportId: reportId, content: valuePro },
+                data: { reportId: reportId, content: JSON.parse(valuePro) },
                 dataType:'json',
                 error: function (jqXHR, textStatus, errorThrown) {
                     // log the error to the console
