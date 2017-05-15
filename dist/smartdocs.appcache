@@ -25,11 +25,10 @@ bundle.js
 manifest.json
 service-worker.js
 
-
 NETWORK:
 https://smart-docs.herokuapp.com/templates/
 https://smart-docs.herokuapp.com/sites/
 https://smart-docs.herokuapp.com/visits/
 https://smart-docs.herokuapp.com/reports/
+https://smart-docs.herokuapp.com/reportsImg/
 FALLBACK:
-
