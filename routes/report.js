@@ -743,7 +743,7 @@ router.patch('/update/text_answer', function (req, res, next) {
         }
         else {
             //Founded
-            reportResponse.select_answer = JSON.parse(req.body.content);
+            reportResponse.text_answer = JSON.parse(req.body.content);
             reportResponse.save(function (err, result) {
                 res.status(201).json({
                     message: 'Report was update - Text Answer',
