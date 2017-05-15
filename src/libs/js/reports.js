@@ -147,6 +147,9 @@ module.exports = {
             $.ajax({
                 method: "GET",
                 url: "https://smart-docs.herokuapp.com/reports/",
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log("request failed" + textStatus);
+                }
             })
                 .done(function (reportsSaveonCloud) {
                     let cont = 0;
@@ -204,6 +207,7 @@ module.exports = {
                         resolve();
                     }
                 });
+
         });
     },
 }
