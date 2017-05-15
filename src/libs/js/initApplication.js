@@ -49,10 +49,10 @@ let uidGenerator = require("./uidGenerator");
                     })/*.then(function(){
                         return visits.updateLocalVisits();
                     })*/
-                        .then(function(){
+                        .then(function () {
                             return reports.uploadReportToCloud();
                         })
-                        .then(function(){
+                        .then(function () {
                             return reports.getReportsSaveonCloud();
                         })
                         .then(function () {
@@ -443,6 +443,7 @@ let uidGenerator = require("./uidGenerator");
                     let answerDate; let answerDateTime; let answerTime; let answerWeek; let answerMonth;
                     let answerText; let answerTextArea; let answerNumber; let answerRadio; let answerCheckbox;
                     let answerSelect; let answerMultiSelect; let answerList; let answerTable; let answerImages;
+                    let contImages; let answerImages; let total_images_saved;
 
                     answerDate = reference.filterByAnswerType('date');
                     answerDateTime = reference.filterByAnswerType('datetime');
@@ -458,6 +459,14 @@ let uidGenerator = require("./uidGenerator");
                     answerMultiSelect = reference.filterByAnswerType('multiSelect');
                     answerList = reference.filterByAnswerType('list');
                     answerTable = reference.filterByAnswerType('table');
+                    answerImages = reference.filterByAnswerTypeImage();
+                    contImages = 0;
+                    do {
+                        this["answerImages_" + contImages] = answerImages.splice(0, 1);
+                        contImages++;
+                    }
+                    while (answerImages.length > 0);
+                    total_images_saved = 0;
 
                     let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
@@ -481,13 +490,45 @@ let uidGenerator = require("./uidGenerator");
                             Promise.all([saveAnswerDate, saveAnswerDateTime, saveAnswerTime, saveAnswerWeek, saveAnswerMonth, saveAnswerText, saveAnswerTextArea, saveAnswerNumber, saveAnswerRadio, answerCheckbox, saveAnswerSelect, saveAnswerMultiSelect, saveAnswerList, saveAnswerTable]).then(values => {
                                 message.addMessageLoder("loaderMessage", "#mainContent2");
                                 message.changeMessageLoader("loaderMessage", "Guardando Reporte");
-                                if (answer.completed) {
-                                    reference.launchAnswerCompletedModal();
-                                } else {
-                                    reference.launchAnswerInCompleteModal(answer.fieldsEmpty);
+
+                                let contProImg = 0; let subIdNumber = 0; let subId = "-SB";
+                                let promisesSaveImg = []
+                                do {
+                                    if (contProImg % 2 == 0) {
+                                        reportImgId, reportId, images, images_1, author,
+                                            this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(keyGenerated + subId + subIdNumber, keyGenerated, JSON.stringify(this["answerImages_" + contProImg]) + "]", localStorage.getItem("username"));
+                                        promisesSaveImg.push(this["saveAnswerImage_" + contProImg]);
+                                        subIdNumber++;
+                                    }
+                                    console.log(contProImg);
+                                    contProImg++;
                                 }
-                                //notification.sendNotification("Smart Docs", "Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status);
-                                reference.changePage("allVisits");
+                                while (contProImg <= contImages);
+                                contProImg = 0; subIdNumber = 0;
+
+                                Promise.all(promisesSaveImg).then(function () {
+                                    let promisesUpdateImg = [];
+                                    do {
+                                        console.log(this["answerImages_" + contProImg]);
+                                        if (contProImg % 2 != 0) {
+                                            this["saveAnswerImage_" + contProImg] = indexDb.updateReportImages(keyGenerated + subId + subIdNumber, "image_1", "[" + JSON.stringify(this["answerImages_" + contProImg]) + "]");
+                                            promisesUpdateImg.push(this["saveAnswerImage_" + contProImg]);
+                                            subIdNumber++;
+                                        }
+                                        console.log(contProImg);
+                                        contProImg++;
+                                    }
+                                    while (contProImg <= contImages);
+                                    Promise.all(promisesUpdateImg).then(function () {
+                                        if (answer.completed) {
+                                            reference.launchAnswerCompletedModal();
+                                        } else {
+                                            reference.launchAnswerInCompleteModal(answer.fieldsEmpty);
+                                        }
+                                        //notification.sendNotification("Smart Docs", "Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status);
+                                        reference.changePage("allVisits");
+                                    });
+                                });
                             });
                         })
                         .catch(function (err) {

@@ -8,7 +8,7 @@ module.exports = {
     "startIndexedDB": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
-            reference.dataBase = indexedDB.open("SmartDocsOffline", 4);
+            reference.dataBase = indexedDB.open("SmartDocsOffline", 5);
             reference.dataBase.onupgradeneeded = function (e) {
                 let active = reference.dataBase.result;
                 let sites = active.createObjectStore("sites", { keyPath: 'siteId' });
@@ -36,6 +36,10 @@ module.exports = {
                 reports.createIndex("by_site", "site", { unique: false });
                 reports.createIndex("by_creation_date", "creationDate", { unique: false });
                 reports.createIndex("by_lastModification", "lastModification", { unique: false });
+
+                let reportsImages = active.createObjectStore("reportsImage", {keyPath: 'reportImgId'});
+                reportsImages.createIndex("by_reportId","reportId",{ unique: false });
+                reportsImages.createIndex("by_lastModification","lastModification",{ unique: false});
 
                 let reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
                 reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
@@ -365,6 +369,67 @@ module.exports = {
                 console.log("elements", elements);
                 resolve(elements);
             }
+        });
+    },
+    "addReportImages": function (reportImgId, reportId, images, author,image_1 = [], cloud = false) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsImage"], "readwrite");
+            let object = data.objectStore("reportsImage");
+            let request = object.put({
+                reportImgId: reportImgId,
+                reportId: reportId,
+                images: images,
+                image_1: image_1,
+                cloud: cloud,
+                author: author,
+                lastModification: "" + new Date()
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(e);
+            }
+
+            request.onsuccess = function (e) {
+                //reference.addReportLog(e.target.result, "Creacion", status);
+            }
+
+            data.oncomplete = function (e) {
+                console.log("The image was added to SmartDocsOffline", e);
+                resolve();
+            }
+        });
+    },
+    "updateReportImages": function (reportImgId, property, propValue) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            var objectStore = active.transaction(["reportsImage"], "readwrite").objectStore("reportsImage");
+            var request = objectStore.get(reportImgId);
+            request.onerror = function (event) {
+                // Handle errors!
+                reject(request.error.name);
+            };
+            request.onsuccess = function (event) {
+                // Get the old value that we want to update
+                var data = request.result;
+
+                // update the value(s) in the object that you want to change
+                data[property] = propValue;
+
+                // Put this updated object back into the database.
+                var requestUpdate = objectStore.put(data);
+                requestUpdate.onerror = function (event) {
+                    // Do something with the error
+                    reject(requestUpdate.error.name);
+                };
+                requestUpdate.onsuccess = function (event) {
+                    // Success - the data is updated!
+                    resolve();
+                };
+            };
         });
     },
     "addReportLog": function (reportId, operation, status) {
