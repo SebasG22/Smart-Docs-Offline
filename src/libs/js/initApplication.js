@@ -463,20 +463,20 @@ let uidGenerator = require("./uidGenerator");
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
                         status, localStorage.getItem("username")).then(function () {
 
-                            let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", answerDate);
-                            let saveAnswerDateTime = indexDb.updateReport(keyGenerated, "datetime_answer", answerDateTime);
-                            let saveAnswerTime = indexDb.updateReport(keyGenerated, "time_answer", answerTime);
-                            let saveAnswerWeek = indexDb.updateReport(keyGenerated, "week_answer", answerWeek);
-                            let saveAnswerMonth = indexDb.updateReport(keyGenerated, "month_answer", answerMonth);
-                            let saveAnswerText = indexDb.updateReport(keyGenerated, "text_answer", answerText);
-                            let saveAnswerTextArea = indexDb.updateReport(keyGenerated, "textarea_answer", answerTextArea);
-                            let saveAnswerNumber = indexDb.updateReport(keyGenerated, "number_answer", answerNumber);
-                            let saveAnswerRadio = indexDb.updateReport(keyGenerated, "radio_answer", answerRadio);
-                            let saveAnswerCheckBox = indexDb.updateReport(keyGenerated, "radio_answer", answerCheckbox);
-                            let saveAnswerSelect = indexDb.updateReport(keyGenerated, "select_answer", answerSelect);
-                            let saveAnswerMultiSelect = indexDb.updateReport(keyGenerated, "multiselect_answer", answerMultiSelect);
-                            let saveAnswerList = indexDb.updateReport(keyGenerated, "list_answer", answerList);
-                            let saveAnswerTable = indexDb.updateReport(keyGenerated, "table_answer", answerTable);
+                            let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", JSON.parse(answerDate));
+                            let saveAnswerDateTime = indexDb.updateReport(keyGenerated, "datetime_answer", JSON.parse(answerDateTime));
+                            let saveAnswerTime = indexDb.updateReport(keyGenerated, "time_answer", JSON.parse(answerTime));
+                            let saveAnswerWeek = indexDb.updateReport(keyGenerated, "week_answer", JSON.parse(answerWeek));
+                            let saveAnswerMonth = indexDb.updateReport(keyGenerated, "month_answer", JSON.parse(answerMonth));
+                            let saveAnswerText = indexDb.updateReport(keyGenerated, "text_answer", JSON.parse(answerText));
+                            let saveAnswerTextArea = indexDb.updateReport(keyGenerated, "textarea_answer", JSON.parse(answerTextArea));
+                            let saveAnswerNumber = indexDb.updateReport(keyGenerated, "number_answer", JSON.parse(answerNumber));
+                            let saveAnswerRadio = indexDb.updateReport(keyGenerated, "radio_answer", JSON.parse(answerRadio));
+                            let saveAnswerCheckBox = indexDb.updateReport(keyGenerated, "checkbox_answer", JSON.parse(answerCheckbox));
+                            let saveAnswerSelect = indexDb.updateReport(keyGenerated, "select_answer", JSON.parse(answerSelect));
+                            let saveAnswerMultiSelect = indexDb.updateReport(keyGenerated, "multiselect_answer", JSON.parse(answerMultiSelect));
+                            let saveAnswerList = indexDb.updateReport(keyGenerated, "list_answer", JSON.parse(answerList));
+                            let saveAnswerTable = indexDb.updateReport(keyGenerated, "table_answer", JSON.parse(answerTable));
 
                             Promise.all([saveAnswerDate, saveAnswerDateTime, saveAnswerTime, saveAnswerWeek, saveAnswerMonth, saveAnswerText, saveAnswerTextArea, saveAnswerNumber, saveAnswerRadio, answerCheckbox, saveAnswerSelect, saveAnswerMultiSelect, saveAnswerList, saveAnswerTable]).then(values => {
                                 message.addMessageLoder("loaderMessage", "#mainContent2");
