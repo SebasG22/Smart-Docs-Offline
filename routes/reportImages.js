@@ -34,7 +34,7 @@ router.post('/', function (req, res, next) {
 
 router.patch('/update', function (req, res, next) {
 
-    Report.findOne({ reportImgId: req.body.reportImgId , reportId: req.body.reportId }, function (err, reportResponse) {
+    ReportImages.findOne({ reportImgId: req.body.reportImgId , reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
