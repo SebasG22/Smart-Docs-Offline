@@ -15968,7 +15968,7 @@ let uidGenerator = __webpack_require__(13);
                     let answerDate; let answerDateTime; let answerTime; let answerWeek; let answerMonth;
                     let answerText; let answerTextArea; let answerNumber; let answerRadio; let answerCheckbox;
                     let answerSelect; let answerMultiSelect; let answerList; let answerTable; let answerImages;
-                    let contImages; let answerImages; let total_images_saved;
+                    let contImages; let total_images_saved;
 
                     answerDate = reference.filterByAnswerType('date');
                     answerDateTime = reference.filterByAnswerType('datetime');
