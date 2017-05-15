@@ -553,6 +553,17 @@ let uidGenerator = require("./uidGenerator");
             return (answerFiltered.length == 0) ? JSON.stringify(answerFiltered) : "[" + JSON.stringify(answerFiltered) + "]";
 
         },
+        filterByAnswerTypeImage: function () {
+        let reference = this;
+        var answerFiltered = reference.userAnswer.filter(function (e, index) {
+            if (e.type == 'image1Label' || e.type == "image2Labels") {
+                //reference.userAnswer.splice(index, 1);
+                return e;
+            }
+        });
+        return answerFiltered;
+
+    },
         fillReportsPage: function (reportsResponse) {
             let reference = this;
             console.log("Reports Response", reportsResponse);
