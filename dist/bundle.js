@@ -16149,11 +16149,10 @@ let reportsImg = __webpack_require__(11);
                         status = "SM-Status002";
                         break;
                 }
+                
                 reference.userAnswer = JSON.parse(answer.userAnswer);
 
-                if (Object.keys(reports.reportSelected).length == 0) {
-
-                    let answerDate; let answerDateTime; let answerTime; let answerWeek; let answerMonth;
+                let answerDate; let answerDateTime; let answerTime; let answerWeek; let answerMonth;
                     let answerText; let answerTextArea; let answerNumber; let answerRadio; let answerCheckbox;
                     let answerSelect; let answerMultiSelect; let answerList; let answerTable; let answerImages;
                     let contImages; let total_images_saved;
@@ -16172,6 +16171,8 @@ let reportsImg = __webpack_require__(11);
                     answerMultiSelect = reference.filterByAnswerType('multiSelect');
                     answerList = reference.filterByAnswerType('list');
                     answerTable = reference.filterByAnswerType('table');
+
+                if (Object.keys(reports.reportSelected).length == 0) {
 
                     let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
                     reference.keyGenerated = keyGenerated;
