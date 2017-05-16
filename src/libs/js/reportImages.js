@@ -49,7 +49,7 @@ module.exports = {
                 this["reportImgToCreateUpd" + cont] = reference.uploadReportUpdate({
                     reportImgId: reportImgToCreate.reportImgId,
                     reportId: reportImgToCreate.reportId,
-                    images_1: reportImgToCreate.images_1,
+                    image_1: reportImgToCreate.image_1,
                 });
                 reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
             }
