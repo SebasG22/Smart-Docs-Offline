@@ -8,10 +8,10 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/:reportId', function (req, res, next) {
+router.get('/:visitId', function (req, res, next) {
     Report.find().then(function (reports) {
         let reportFiltered = reports.filter(function(report){
-            return report.reportId == req.params.reportId;
+            return report.visitId == req.params.visitId;
         });
         res.send(reportFiltered);
     });
