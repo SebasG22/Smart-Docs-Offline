@@ -53,11 +53,20 @@ let reportsImg = require("./reportImages");
                         .then(function () {
                             return reports.uploadReportToCloud();
                         })
+                        .then(function(){
+                            return reports.deleteReports();
+                        })
                         .then(function () {
                             return reports.getReportsSaveonCloud();
                         })
                         .then(function () {
                             return reportsImg.uploadReportsImages();
+                        })
+                        .then(function(){
+                            return reportsImg.deleteReportsImg();
+                        })
+                        .then(function(){
+                            return reportsImg.getReportsImgSaveonCloud();
                         })
                         .then(function () {
                             console.log("Visits Saved ", visits.getVisits())

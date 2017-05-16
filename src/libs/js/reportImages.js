@@ -89,6 +89,15 @@ module.exports = {
             });
         });
     },
+    deleteReportsImg: function () {
+        return new Promise(function (resolve, reject) {
+            indexDb.deleteReportsImage().then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    },
     getReportsImgSaveonCloud: function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -100,18 +109,14 @@ module.exports = {
                     let cont = 0;
                     let updateReportImg = [];
                     for (let reportImgRes of reportImgResponse) {
-                        reportImgId, reportId, images, author,image_1
-                        this["updateReportImage" + cont] = indexDb.addReportImages(reportImgRes.reportImgId,reportImgRes.reportId,reportImgRes.images,reportImgRes.author,reportImgRes.image_1);
+                        reportImgId, reportId, images, author, image_1
+                        this["updateReportImage" + cont] = indexDb.addReportImages(reportImgRes.reportImgId, reportImgRes.reportId, reportImgRes.images, reportImgRes.author, reportImgRes.image_1);
                         updateReportImg.push(this["updateReportImage" + cont]);
                         cont++;
                     }
                     if (updateReportImg.length > 0) {
                         Promise.all(updateReportImg).then(function () {
-                            indexDb.deleteReportsImage().then(function(){
-                                resolve();
-                            }).catch(function(err){
-                                reject(err);
-                            });
+                            resolve();
                         });
                     }
                     else {

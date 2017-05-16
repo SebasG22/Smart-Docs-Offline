@@ -11560,6 +11560,15 @@ module.exports = {
             });
         });
     },
+    deleteReportsImg: function () {
+        return new Promise(function (resolve, reject) {
+            indexDb.deleteReportsImage().then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    },
     getReportsImgSaveonCloud: function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -11571,18 +11580,14 @@ module.exports = {
                     let cont = 0;
                     let updateReportImg = [];
                     for (let reportImgRes of reportImgResponse) {
-                        reportImgId, reportId, images, author,image_1
-                        this["updateReportImage" + cont] = indexDb.addReportImages(reportImgRes.reportImgId,reportImgRes.reportId,reportImgRes.images,reportImgRes.author,reportImgRes.image_1);
+                        reportImgId, reportId, images, author, image_1
+                        this["updateReportImage" + cont] = indexDb.addReportImages(reportImgRes.reportImgId, reportImgRes.reportId, reportImgRes.images, reportImgRes.author, reportImgRes.image_1);
                         updateReportImg.push(this["updateReportImage" + cont]);
                         cont++;
                     }
                     if (updateReportImg.length > 0) {
                         Promise.all(updateReportImg).then(function () {
-                            indexDb.deleteReportsImage().then(function(){
-                                resolve();
-                            }).catch(function(err){
-                                reject(err);
-                            });
+                            resolve();
                         });
                     }
                     else {
@@ -11729,7 +11734,7 @@ module.exports = {
                 url: 'https://smart-docs.herokuapp.com/reports/update/' + prop,
                 type: 'PATCH',
                 data: { reportId: reportId, content: JSON.stringify(valuePro) },
-                dataType:'json',
+                dataType: 'json',
                 error: function (jqXHR, textStatus, errorThrown) {
                     // log the error to the console
                     console.log("The following error occured: " + textStatus, errorThrown);
@@ -11739,6 +11744,15 @@ module.exports = {
                     console.log(prop + " was updated ");
                     resolve();
                 }
+            });
+        });
+    },
+    deleteReports: function () {
+        return new Promise(function (resolve, reject) {
+            indexDb.deleteReports().then(function () {
+                resolve();
+            }).catch(function(err){
+                reject(err);
             });
         });
     },
@@ -11767,7 +11781,7 @@ module.exports = {
                             let cont = 0;
                             let updateReportsPro = [];
                             for (let reportRes of reportsSaveonCloud) {
-                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", reportRes.checkbox_answer );
+                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", reportRes.checkbox_answer);
                                 updateReportsPro.push(this["updateReportProCheck" + cont]);
                                 this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", reportRes.date_answer);
                                 updateReportsPro.push(this["updateReportProDate" + cont]);
@@ -11797,16 +11811,10 @@ module.exports = {
                                 updateReportsPro.push(this["updateReportProTable" + cont]);
                             }
                             Promise.all(updateReportsPro).then(function () {
-                                indexDb.deleteReports().then(function(){
-                                resolve();    
-                                }).catch(function(err){
-                                    reject(err);
-                                });
-                                
+                                resolve();
                             }).catch(function (err) {
                                 reject(err);
                             })
-
                         });
                     }
                     else {
@@ -15811,11 +15819,20 @@ let reportsImg = __webpack_require__(11);
                         .then(function () {
                             return reports.uploadReportToCloud();
                         })
+                        .then(function(){
+                            return reports.deleteReports();
+                        })
                         .then(function () {
                             return reports.getReportsSaveonCloud();
                         })
                         .then(function () {
                             return reportsImg.uploadReportsImages();
+                        })
+                        .then(function(){
+                            return reportsImg.deleteReportsImg();
+                        })
+                        .then(function(){
+                            return reportsImg.getReportsImgSaveonCloud();
                         })
                         .then(function () {
                             console.log("Visits Saved ", visits.getVisits())
