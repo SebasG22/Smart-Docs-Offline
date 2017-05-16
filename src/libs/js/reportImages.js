@@ -103,7 +103,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reportImg/",
+                url: "https://smart-docs.herokuapp.com/reportsImg/",
             })
                 .done(function (reportImgResponse) {
                     let cont = 0;
