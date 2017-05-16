@@ -11,7 +11,7 @@ router.get('/', function (req, res, next) {
 router.get('/:idReport', function (req, res, next) {
     Report.find().then(function (reports) {
         let reportFiltered = reports.filter(function(report){
-            return report.idReport == req.params.idReport;
+            return report.reportId == req.params.reportId;
         });
         res.send(reportFiltered);
     });
