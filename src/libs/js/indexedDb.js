@@ -200,6 +200,20 @@ module.exports = {
             }
         });
     },
+    "getVisitByVisitId": function (visitId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["visits"], "readonly");
+            let object = data.objectStore("visits");
+            let request = object.get(visitId);
+            request.onsuccess = function () {
+                if (request.result !== undefined) {
+                    resolve(request.result);
+                }
+            }
+        });
+    },
     "addTemplate": function (templateId, name, project, taskType, icon, content) {
         let reference = this;
         return new Promise(function (resolve, reject) {

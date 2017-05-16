@@ -306,9 +306,12 @@ let reportsImg = require("./reportImages");
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-
-                    indexDb.addVisit(uidGenerator.uidGen() + "-" + localStorage.getItem("username"), siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
-                        reference.changePage("allTemplatesBoxes");
+                    let keyGenerateVisit = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
+                    indexDb.addVisit(keyGenerateVisit, siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
+                        indexDb.getVisitByVisitId(keyGenerateVisit).then(function(visitResponse){
+                            visits.visitSelected = visitResponse;
+                            reference.changePage("allTemplatesBoxes");
+                        });
                     });
                 });
             });

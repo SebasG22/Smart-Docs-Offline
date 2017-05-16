@@ -10532,6 +10532,20 @@ module.exports = {
             }
         });
     },
+    "getVisitByVisitId": function (visitId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["visits"], "readonly");
+            let object = data.objectStore("visits");
+            let request = object.get(visitId);
+            request.onsuccess = function () {
+                if (request.result !== undefined) {
+                    resolve(request.result);
+                }
+            }
+        });
+    },
     "addTemplate": function (templateId, name, project, taskType, icon, content) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -15980,9 +15994,12 @@ let reportsImg = __webpack_require__(11);
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-
-                    indexDb.addVisit(uidGenerator.uidGen() + "-" + localStorage.getItem("username"), siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
-                        reference.changePage("allTemplatesBoxes");
+                    let keyGenerateVisit = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
+                    indexDb.addVisit(keyGenerateVisit, siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
+                        indexDb.getVisitByVisitId(keyGenerateVisit).then(function(visitResponse){
+                            visits.visitSelected = visitResponse;
+                            reference.changePage("allTemplatesBoxes");
+                        });
                     });
                 });
             });
