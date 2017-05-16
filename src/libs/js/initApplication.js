@@ -420,6 +420,16 @@ let reportsImg = require("./reportImages");
                     smartEngine.matchAnswers(reports.reportSelected[check][0]);        
                 }
              }
+             indexDb.getReportImagesByReportId(reports.reportSelected.reportId).then(function(reportImagesResponse){
+                    for(let reportImgRes of reportImagesResponse){
+                        if(Array.isArray(reportImgRes.images)){
+                            smartEngine.matchAnswers(reportImgRes.images);
+                        }
+                        if(Array.isArray(reportImgRes.image_1)){
+                            smartEngine.matchAnswers(reportImgRes.image_1);
+                        }
+                    }
+             });
         },
         launchAnswerCompletedModal: function () {
             $("#completedReport").remove();

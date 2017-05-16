@@ -10789,6 +10789,32 @@ module.exports = {
             }
         });
     },
+    "getReportImagesByReportId": function (reportId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsImage"], "readonly");
+            let object = data.objectStore("reportsImage");
+            let elements = [];
+
+            object.openCursor().onsuccess = function (e) {
+                let result = e.target.result;
+                if (result === null) {
+                    result;
+                } else {
+                    if(result.value.reportId == reportId){
+                        elements.push(result.value);
+                        console.log(elements);
+                    }
+                    result.continue();
+                }
+            }
+            data.oncomplete = function (e) {
+                console.log("elements", elements);
+                resolve(elements);
+            }
+        });
+    },
     "addReportLog": function (reportId, operation, status) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -16068,6 +16094,16 @@ let reportsImg = __webpack_require__(11);
                     smartEngine.matchAnswers(reports.reportSelected[check][0]);        
                 }
              }
+             indexDb.getReportImagesByReportId(reports.reportSelected.reportId).then(function(reportImagesResponse){
+                    for(let reportImgRes of reportImagesResponse){
+                        if(Array.isArray(reportImgRes.images)){
+                            smartEngine.matchAnswers(reportImgRes.images);
+                        }
+                        if(Array.isArray(reportImgRes.image_1)){
+                            smartEngine.matchAnswers(reportImgRes.image_1);
+                        }
+                    }
+             });
         },
         launchAnswerCompletedModal: function () {
             $("#completedReport").remove();
