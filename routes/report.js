@@ -8,6 +8,15 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.get('/:idReport', function (req, res, next) {
+    Report.find().then(function (reports) {
+        let reportFiltered = reports.filter(function(report){
+            return report.idReport == req.params.idReport;
+        });
+        res.send(reportFiltered);
+    });
+});
+
 router.get('/checkbox_answer/:id', function (req, res, next) {
     Report.findById(req.params.id, function (err, report) {
         if (err) {
