@@ -11501,9 +11501,7 @@ module.exports = {
             }
             return new Promise(function (resolve, reject) {
                 Promise.all(reportsToImgCreate).then(function () {
-                    reference.uploadReportsImages1().then(function () {
                         resolve();
-                    });
                 }).catch(function (err) {
                     reject(err);
                 });
@@ -15826,6 +15824,9 @@ let reportsImg = __webpack_require__(11);
                         })
                         .then(function () {
                             return reportsImg.uploadReportsImages();
+                        })
+                        .then(function () {
+                            return reportsImg.uploadReportsImages1();
                         })
                         .then(function(){
                             return reportsImg.deleteReportsImg();

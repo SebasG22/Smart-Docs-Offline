@@ -30,9 +30,7 @@ module.exports = {
             }
             return new Promise(function (resolve, reject) {
                 Promise.all(reportsToImgCreate).then(function () {
-                    reference.uploadReportsImages1().then(function () {
                         resolve();
-                    });
                 }).catch(function (err) {
                     reject(err);
                 });

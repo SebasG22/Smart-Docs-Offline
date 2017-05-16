@@ -62,6 +62,9 @@ let reportsImg = require("./reportImages");
                         .then(function () {
                             return reportsImg.uploadReportsImages();
                         })
+                        .then(function () {
+                            return reportsImg.uploadReportsImages1();
+                        })
                         .then(function(){
                             return reportsImg.deleteReportsImg();
                         })
