@@ -28,16 +28,17 @@ module.exports = {
                 });
                 reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
             }
-        });
-        return new Promise(function (resolve, reject) {
-            Promise.all(reportsToImgCreate).then(function () {
-                reference.uploadReportsImages1().then(function () {
-                    resolve();
+            return new Promise(function (resolve, reject) {
+                Promise.all(reportsToImgCreate).then(function () {
+                    reference.uploadReportsImages1().then(function () {
+                        resolve();
+                    });
+                }).catch(function (err) {
+                    reject(err);
                 });
-            }).catch(function (err) {
-                reject(err);
             });
         });
+
     },
     uploadReportsImages1: function () {
         let reference = this;
@@ -63,7 +64,7 @@ module.exports = {
     },
     uploadReportCreate: function (dataToUpdate) {
         return new Promise(function (resolve, reject) {
-            $.post("https://smart-docs.herokuapp.com/reportsImg/", 
+            $.post("https://smart-docs.herokuapp.com/reportsImg/",
                 dataToUpdate
             ).done(function () {
                 resolve();
@@ -76,7 +77,7 @@ module.exports = {
                 url: 'https://smart-docs.herokuapp.com/reportsImg/update/',
                 type: 'PATCH',
                 data: { reportImgId: dataToUpdate.reportImgId, reportId: dataToUpdate.reportId, image_1: JSON.stringify(dataToUpdate.image_1) },
-                dataType:'json',
+                dataType: 'json',
                 error: function (jqXHR, textStatus, errorThrown) {
                     // log the error to the console
                     console.log("The following error occured: " + textStatus, errorThrown);
@@ -88,5 +89,4 @@ module.exports = {
             });
         });
     }
-
 }
