@@ -17,8 +17,8 @@ module.exports = {
         let reference = this;
         let reportsToImgCreate = [];
         let cont = 0;
-        reference.getReportsImages().then(function () {
-            for (let reportImgToCreate of reference.reportsImages) {
+        reference.getReportsImages().then(function (reportImagesResponse) {
+            for (let reportImgToCreate of reportImagesResponse) {
                 this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
                     reportImgId: reportImgToCreate.reportImgId,
                     reportId: reportImgToCreate.reportId,
@@ -44,8 +44,8 @@ module.exports = {
         let reference = this;
         let reportsToImgCreate = [];
         let cont = 0;
-        reference.getReportsImages().then(function () {
-            for (let reportImgToCreate of reference.reportsImages) {
+        reference.getReportsImages().then(function (reportImagesResponse) {
+            for (let reportImgToCreate of reportImagesResponse) {
                 this["reportImgToCreateUpd" + cont] = reference.uploadReportUpdate({
                     reportImgId: reportImgToCreate.reportImgId,
                     reportId: reportImgToCreate.reportId,
