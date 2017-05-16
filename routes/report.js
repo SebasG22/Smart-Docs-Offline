@@ -8,7 +8,7 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/:idReport', function (req, res, next) {
+router.get('/:reportId', function (req, res, next) {
     Report.find().then(function (reports) {
         let reportFiltered = reports.filter(function(report){
             return report.reportId == req.params.reportId;
