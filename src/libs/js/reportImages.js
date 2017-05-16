@@ -88,5 +88,36 @@ module.exports = {
                 }
             });
         });
-    }
+    },
+    getReportsImgSaveonCloud: function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                method: "GET",
+                url: "https://smart-docs.herokuapp.com/reportImg/",
+            })
+                .done(function (reportImgResponse) {
+                    let cont = 0;
+                    let updateReportImg = [];
+                    for (let reportImgRes of reportImgResponse) {
+                        reportImgId, reportId, images, author,image_1
+                        this["updateReportImage" + cont] = indexDb.addReportImages(reportImgRes.reportImgId,reportImgRes.reportId,reportImgRes.images,reportImgRes.author,reportImgRes.image_1);
+                        updateReportImg.push(this["updateReportImage" + cont]);
+                        cont++;
+                    }
+                    if (updateReportImg.length > 0) {
+                        Promise.all(updateReportImg).then(function () {
+                            indexDb.deleteReportsImage().then(function(){
+                                resolve();
+                            }).catch(function(err){
+                                reject(err);
+                            });
+                        });
+                    }
+                    else {
+                        resolve();
+                    }
+                });
+        });
+    },
 }

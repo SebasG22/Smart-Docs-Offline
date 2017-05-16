@@ -385,6 +385,23 @@ module.exports = {
             }
         });
     },
+    "deleteReports": function(){
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports"], "readwrite");
+            let object = data.objectStore("reports");
+            var objectStoreRequest = object.clear();
+
+           objectStoreRequest.onsuccess = function(e){
+               resolve();
+                console.log("Reports DB was cleared");
+           }
+           objectStoreRequest.onerror = function(e){
+               reject(e.error.name);
+           }
+        });
+    },
     "addReportImages": function (reportImgId, reportId, images, author,image_1 = [], cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -495,6 +512,23 @@ module.exports = {
                 console.log("elements", elements);
                 resolve(elements);
             }
+        });
+    },
+    "deleteReportsImage": function(){
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsImage"], "readwrite");
+            let object = data.objectStore("reportsImage");
+            var objectStoreRequest = object.clear();
+
+           objectStoreRequest.onsuccess = function(e){
+               resolve();
+                console.log("Reports Img DB was cleared");
+           }
+           objectStoreRequest.onerror = function(e){
+               reject(e.error.name);
+           }
         });
     },
     "addReportLog": function (reportId, operation, status) {

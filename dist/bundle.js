@@ -10717,6 +10717,23 @@ module.exports = {
             }
         });
     },
+    "deleteReports": function(){
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports"], "readwrite");
+            let object = data.objectStore("reports");
+            var objectStoreRequest = object.clear();
+
+           objectStoreRequest.onsuccess = function(e){
+               resolve();
+                console.log("Reports DB was cleared");
+           }
+           objectStoreRequest.onerror = function(e){
+               reject(e.error.name);
+           }
+        });
+    },
     "addReportImages": function (reportImgId, reportId, images, author,image_1 = [], cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -10827,6 +10844,23 @@ module.exports = {
                 console.log("elements", elements);
                 resolve(elements);
             }
+        });
+    },
+    "deleteReportsImage": function(){
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsImage"], "readwrite");
+            let object = data.objectStore("reportsImage");
+            var objectStoreRequest = object.clear();
+
+           objectStoreRequest.onsuccess = function(e){
+               resolve();
+                console.log("Reports Img DB was cleared");
+           }
+           objectStoreRequest.onerror = function(e){
+               reject(e.error.name);
+           }
         });
     },
     "addReportLog": function (reportId, operation, status) {
@@ -11525,7 +11559,38 @@ module.exports = {
                 }
             });
         });
-    }
+    },
+    getReportsImgSaveonCloud: function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                method: "GET",
+                url: "https://smart-docs.herokuapp.com/reportImg/",
+            })
+                .done(function (reportImgResponse) {
+                    let cont = 0;
+                    let updateReportImg = [];
+                    for (let reportImgRes of reportImgResponse) {
+                        reportImgId, reportId, images, author,image_1
+                        this["updateReportImage" + cont] = indexDb.addReportImages(reportImgRes.reportImgId,reportImgRes.reportId,reportImgRes.images,reportImgRes.author,reportImgRes.image_1);
+                        updateReportImg.push(this["updateReportImage" + cont]);
+                        cont++;
+                    }
+                    if (updateReportImg.length > 0) {
+                        Promise.all(updateReportImg).then(function () {
+                            indexDb.deleteReportsImage().then(function(){
+                                resolve();
+                            }).catch(function(err){
+                                reject(err);
+                            });
+                        });
+                    }
+                    else {
+                        resolve();
+                    }
+                });
+        });
+    },
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -11732,7 +11797,12 @@ module.exports = {
                                 updateReportsPro.push(this["updateReportProTable" + cont]);
                             }
                             Promise.all(updateReportsPro).then(function () {
-                                resolve();
+                                indexDb.deleteReports().then(function(){
+                                resolve();    
+                                }).catch(function(err){
+                                    reject(err);
+                                });
+                                
                             }).catch(function (err) {
                                 reject(err);
                             })

@@ -197,7 +197,12 @@ module.exports = {
                                 updateReportsPro.push(this["updateReportProTable" + cont]);
                             }
                             Promise.all(updateReportsPro).then(function () {
-                                resolve();
+                                indexDb.deleteReports().then(function(){
+                                resolve();    
+                                }).catch(function(err){
+                                    reject(err);
+                                });
+                                
                             }).catch(function (err) {
                                 reject(err);
                             })
