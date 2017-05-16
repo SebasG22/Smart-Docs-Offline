@@ -526,11 +526,52 @@ let reportsImg = require("./reportImages");
                         .catch(function (err) {
                             console.log(err);
                         });
-                } else {
-                    indexDb.updateReport(reports.reportSelected.reportId, status, answerObj).then(function () {
+                }
+                else {
+                    indexDb.addReport(reports.reportSelected.reportId, reports.reportSelected.templateId, reports.reportSelected.visitId,
+                        status, localStorage.getItem("username")).then(function () {
+
+                            let saveAnswerDate = indexDb.updateReport(reports.reportSelected.reportId, "date_answer", JSON.parse(answerDate));
+                            let saveAnswerDateTime = indexDb.updateReport(reports.reportSelected.reportId, "datetime_answer", JSON.parse(answerDateTime));
+                            let saveAnswerTime = indexDb.updateReport(reports.reportSelected.reportId, "time_answer", JSON.parse(answerTime));
+                            let saveAnswerWeek = indexDb.updateReport(reports.reportSelected.reportId, "week_answer", JSON.parse(answerWeek));
+                            let saveAnswerMonth = indexDb.updateReport(reports.reportSelected.reportId, "month_answer", JSON.parse(answerMonth));
+                            let saveAnswerText = indexDb.updateReport(reports.reportSelected.reportId, "text_answer", JSON.parse(answerText));
+                            let saveAnswerTextArea = indexDb.updateReport(reports.reportSelected.reportId, "textarea_answer", JSON.parse(answerTextArea));
+                            let saveAnswerNumber = indexDb.updateReport(reports.reportSelected.reportId, "number_answer", JSON.parse(answerNumber));
+                            let saveAnswerRadio = indexDb.updateReport(reports.reportSelected.reportId, "radio_answer", JSON.parse(answerRadio));
+                            let saveAnswerCheckBox = indexDb.updateReport(reports.reportSelected.reportId, "checkbox_answer", JSON.parse(answerCheckbox));
+                            let saveAnswerSelect = indexDb.updateReport(reports.reportSelected.reportId, "select_answer", JSON.parse(answerSelect));
+                            let saveAnswerMultiSelect = indexDb.updateReport(reports.reportSelected.reportId, "multiselect_answer", JSON.parse(answerMultiSelect));
+                            let saveAnswerList = indexDb.updateReport(reports.reportSelected.reportId, "list_answer", JSON.parse(answerList));
+                            let saveAnswerTable = indexDb.updateReport(reports.reportSelected.reportId, "table_answer", JSON.parse(answerTable));
+
+                            Promise.all([saveAnswerDate, saveAnswerDateTime, saveAnswerTime, saveAnswerWeek, saveAnswerMonth, saveAnswerText, saveAnswerTextArea, saveAnswerNumber, saveAnswerRadio, answerCheckbox, saveAnswerSelect, saveAnswerMultiSelect, saveAnswerList, saveAnswerTable]).then(values => {
+                                message.addMessageLoder("loaderMessage", "#mainContent2");
+                                message.changeMessageLoader("loaderMessage", "Guardando Reporte");
+
+                                reference.saveImageLocally().then(function () {
+                                    reference.updateImageLocally().then(function () {
+                                        if (answer.completed) {
+                                            reference.launchAnswerCompletedModal();
+                                        } else {
+                                            reference.launchAnswerInCompleteModal(answer.fieldsEmpty);
+                                        }
+                                        //notification.sendNotification("Smart Docs", "Se ha creado un nuevo reporte para la visita " + visits.visitSelected.visitId + " /n Estado: " + status);
+                                        reference.changePage("allVisits");
+                                    });
+                                });
+                            });
+                        })
+                        .catch(function (err) {
+                            console.log(err);
+                        });
+
+                    /*indexDb.addReport(reports.reportSelected.reportId, status, answerObj).then(function () {
                         reports.reportSelected = {};
                         reference.changePage("allVisits");
                     });
+                    */
                 }
             });
         },
