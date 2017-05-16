@@ -11419,7 +11419,7 @@ module.exports = {
                 this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
                     reportImgId: reportImgToCreate.reportImgId,
                     reportId: reportImgToCreate.reportId,
-                    images: reportImgToCreate.images,
+                    images: JSON.stringify(reportImgToCreate.images),
                     author: reportImgToCreate.author,
                     lastModification: reportImgToCreate.lastModification
                 });
@@ -11472,7 +11472,7 @@ module.exports = {
             $.ajax({
                 url: 'https://smart-docs.herokuapp.com/reportsImg/update/',
                 type: 'PATCH',
-                data: { reportImgId: dataToUpdate.reportImgId, reportId: dataToUpdate.reportId, image_1: dataToUpdate.image_1 },
+                data: { reportImgId: dataToUpdate.reportImgId, reportId: dataToUpdate.reportId, image_1: JSON.stringify(dataToUpdate.image_1) },
                 dataType:'json',
                 error: function (jqXHR, textStatus, errorThrown) {
                     // log the error to the console
