@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/:visitId', function (req, res, next) {
     Report.find().then(function (reports) {
-        let reportFiltered = reports.filter(function(report){
+        let reportFiltered = reports.filter(function (report) {
             return report.visitId == req.params.visitId;
         });
         res.send(reportFiltered);
@@ -403,31 +403,56 @@ router.get('/basicInf/:id', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    var report = new Report({
-        reportId: req.body.reportId,
-        templateId: req.body.templateId,
-        visitId: req.body.visitId,
-        status: req.body.status,
-        lastModification: req.body.lastModification,
-        author: req.body.author,
-        completedDate: req.body.completedDate,
-        creationDate: req.body.creationDate
-    });
-
-    report.save(function (err, result) {
+    Report.findOne({ reportId: req.body.reportId }, function (err, reportResponse) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
-            })
+            });
         }
+        if (!reportResponse) {
+            //Not founded
+            var report = new Report({
+                reportId: req.body.reportId,
+                templateId: req.body.templateId,
+                visitId: req.body.visitId,
+                status: req.body.status,
+                lastModification: req.body.lastModification,
+                author: req.body.author,
+                completedDate: req.body.completedDate,
+                creationDate: req.body.creationDate
+            });
 
-        res.status(201).json({
-            message: 'Report was saved',
-            obj: result
-        })
+            report.save(function (err, result) {
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error ocurred',
+                        error: err
+                    })
+                }
+
+                res.status(201).json({
+                    message: 'Report was saved',
+                    obj: result
+                })
+            });
+
+        }
+        else {
+            //Founded
+            reportResponse.status = req.body.status;
+            reportResponse.lastModification = req.body.lastModification;
+            reportResponse.author = req.body.author;
+            reportResponse.completedDate = req.body.completedDate;
+
+            reportResponse.save(function (err, result) {
+                res.status(201).json({
+                    message: 'Report was update',
+                    obj: result
+                });
+            });
+        }
     });
-
 });
 
 router.patch('/update/checkbox_answer', function (req, res, next) {
@@ -457,8 +482,7 @@ router.patch('/update/checkbox_answer', function (req, res, next) {
                 });
             });
         }
-    })
-
+    });
 });
 
 router.patch('/update/date_answer', function (req, res, next) {
