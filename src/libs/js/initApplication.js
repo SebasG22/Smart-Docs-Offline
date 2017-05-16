@@ -538,7 +538,7 @@ let reportsImg = require("./reportImages");
             let promisesSaveImg = []
             do {
                 if (contProImg % 2 == 0) {
-                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(reference.keyGenerated + subId + subIdNumber, reference.keyGenerated, JSON.stringify(this["answerImages_" + contProImg]) + "]", localStorage.getItem("username"));
+                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(reference.keyGenerated + subId + subIdNumber, reference.keyGenerated, this["answerImages_" + contProImg] + "]", localStorage.getItem("username"));
                     promisesSaveImg.push(this["saveAnswerImage_" + contProImg]);
                     subIdNumber++;
                 }
@@ -572,7 +572,7 @@ let reportsImg = require("./reportImages");
             do {
                 console.log(this["answerImages_" + contProImg]);
                 if (contProImg % 2 != 0) {
-                    this["saveAnswerImage_" + contProImg] = indexDb.updateReportImages(reference.keyGenerated + subId + subIdNumber, "image_1", "[" + JSON.stringify(this["answerImages_" + contProImg]) + "]");
+                    this["saveAnswerImage_" + contProImg] = indexDb.updateReportImages(reference.keyGenerated + subId + subIdNumber, "image_1", this["answerImages_" + contProImg]);
                     promisesUpdateImg.push(this["saveAnswerImage_" + contProImg]);
                     subIdNumber++;
                 }
