@@ -461,7 +461,7 @@ let reportsImg = require("./reportImages");
                         status = "SM-Status002";
                         break;
                 }
-                
+
                 reference.userAnswer = JSON.parse(answer.userAnswer);
 
                 let answerDate; let answerDateTime; let answerTime; let answerWeek; let answerMonth;
@@ -531,7 +531,7 @@ let reportsImg = require("./reportImages");
                 else {
                     indexDb.addReport(reports.reportSelected.reportId, reports.reportSelected.templateId, reports.reportSelected.visitId,
                         status, localStorage.getItem("username")).then(function () {
-
+                            reference.keyGenerated = reports.reportSelected.reportId;
                             let saveAnswerDate = indexDb.updateReport(reports.reportSelected.reportId, "date_answer", JSON.parse(answerDate));
                             let saveAnswerDateTime = indexDb.updateReport(reports.reportSelected.reportId, "datetime_answer", JSON.parse(answerDateTime));
                             let saveAnswerTime = indexDb.updateReport(reports.reportSelected.reportId, "time_answer", JSON.parse(answerTime));
