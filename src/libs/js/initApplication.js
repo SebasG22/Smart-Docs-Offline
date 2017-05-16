@@ -545,7 +545,7 @@ let reportsImg = require("./reportImages");
                 console.log(contProImg);
                 contProImg++;
             }
-            while (contProImg <= contImages);
+            while (contProImg <= contImages -1);
 
             return new Promise(function (resolve, reject) {
                 Promise.all(promisesSaveImg).then(function () {
@@ -579,7 +579,7 @@ let reportsImg = require("./reportImages");
                 console.log(contProImg);
                 contProImg++;
             }
-            while (contProImg <= contImages);
+            while (contProImg <= contImages-1);
 
             return new Promise(function (resolve, reject) {
                 Promise.all(promisesUpdateImg).then(function () {
