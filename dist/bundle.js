@@ -11580,7 +11580,6 @@ module.exports = {
                     let cont = 0;
                     let updateReportImg = [];
                     for (let reportImgRes of reportImgResponse) {
-                        reportImgId, reportId, images, author, image_1
                         this["updateReportImage" + cont] = indexDb.addReportImages(reportImgRes.reportImgId, reportImgRes.reportId, reportImgRes.images, reportImgRes.author, reportImgRes.image_1);
                         updateReportImg.push(this["updateReportImage" + cont]);
                         cont++;
