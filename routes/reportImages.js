@@ -63,4 +63,35 @@ router.patch('/update', function (req, res, next) {
 
 });
 
+router.delete('/:id', function (req, res, next) {
+    ReportImages.findById(req.params.id, function (err, template) {
+        if (err) {
+            return res.status(500).json({
+                title: 'An error ocurred',
+                error: err
+            });
+        }
+
+        if (!template) {
+            return res.status(500).json({
+                title: 'No Report Founded',
+                error: { message: "Report not found" }
+            });
+        }
+
+        template.remove(function (err, result) {
+            if (err) {
+                return res.status(500).json({
+                    title: 'An error ocurred',
+                    error: err
+                });
+            }
+            res.status(201).json({
+                message: 'The reportImg was deleted',
+                obj: result
+            });
+        })
+    });
+});
+
 module.exports = router;
