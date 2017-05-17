@@ -151,7 +151,7 @@ module.exports = {
             });
         });
     },
-    getReportsSaveonCloud: function () {
+    getReportsSaveonCloud: function(){
         let reference = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
@@ -162,9 +162,15 @@ module.exports = {
                 }
             })
                 .done(function (reportsSaveonCloud) {
+                    resolve(reportsSaveonCloud);
+                });
+        });
+    },
+    saveReportsSaveonCloud: function (reportsSaveOnCloud) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
                     let cont = 0;
                     let updateReports = [];
-
                     for (let reportRes of reportsSaveonCloud) {
                         this["updateReport" + cont] = indexDb.addReport(reportRes.reportId, reportRes.templateId,
                             reportRes.visitId, reportRes.status, reportRes.author, true);
@@ -215,7 +221,7 @@ module.exports = {
                     else {
                         resolve();
                     }
-                });
+                
 
         });
     },

@@ -11753,7 +11753,7 @@ module.exports = {
             });
         });
     },
-    getReportsSaveonCloud: function () {
+    getReportsSaveonCloud: function(){
         let reference = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
@@ -11764,9 +11764,15 @@ module.exports = {
                 }
             })
                 .done(function (reportsSaveonCloud) {
+                    resolve(reportsSaveonCloud);
+                });
+        });
+    },
+    saveReportsSaveonCloud: function (reportsSaveOnCloud) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
                     let cont = 0;
                     let updateReports = [];
-
                     for (let reportRes of reportsSaveonCloud) {
                         this["updateReport" + cont] = indexDb.addReport(reportRes.reportId, reportRes.templateId,
                             reportRes.visitId, reportRes.status, reportRes.author, true);
@@ -11817,7 +11823,7 @@ module.exports = {
                     else {
                         resolve();
                     }
-                });
+                
 
         });
     },
@@ -15821,6 +15827,9 @@ let reportsImg = __webpack_require__(11);
                         })
                         .then(function () {
                             return reports.getReportsSaveonCloud();
+                        })
+                        .then(function (reportsOnCloud) {
+                            return reports.saveReportsSaveonCloud(reportsOnCloud);
                         })
                         .then(function () {
                             return reportsImg.uploadReportsImages();
