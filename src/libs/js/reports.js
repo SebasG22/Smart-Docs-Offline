@@ -19,13 +19,12 @@ module.exports = {
             })
         });
     },
-    "uploadReportToCloud": function () {
+    "uploadReportToCloud": function (reportsResponse) {
         console.log("Upload reports to Cloud on Action");
         let reference = this;
-        reference.getReports().then(function (reportsResponse) {
             let cont = 0;
             let reportsToUpdate = [];
-            for (let reportToUpd of reference.reports) {
+            for (let reportToUpd of reportsResponse) {
                 if (!reportToUpd.cloud) {
                     this["reportToUpdate" + cont] = reference.uploadReport({
                         reportId: reportToUpd.reportId,
@@ -63,7 +62,6 @@ module.exports = {
                     reject(err);
                 })
             });
-        });
     },
     "uploadReport": function (dataToUpdate) {
         console.log("Upload Reports to Cloud");

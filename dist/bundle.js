@@ -11621,13 +11621,12 @@ module.exports = {
             })
         });
     },
-    "uploadReportToCloud": function () {
+    "uploadReportToCloud": function (reportsResponse) {
         console.log("Upload reports to Cloud on Action");
         let reference = this;
-        reference.getReports().then(function (reportsResponse) {
             let cont = 0;
             let reportsToUpdate = [];
-            for (let reportToUpd of reference.reports) {
+            for (let reportToUpd of reportsResponse) {
                 if (!reportToUpd.cloud) {
                     this["reportToUpdate" + cont] = reference.uploadReport({
                         reportId: reportToUpd.reportId,
@@ -11665,7 +11664,6 @@ module.exports = {
                     reject(err);
                 })
             });
-        });
     },
     "uploadReport": function (dataToUpdate) {
         console.log("Upload Reports to Cloud");
@@ -15821,9 +15819,12 @@ let reportsImg = __webpack_require__(11);
                         return visits.updateLocalVisits();
                     })*/
                         .then(function () {
-                            return reports.uploadReportToCloud();
+                            return reports.getReports();
                         })
-                        .then(function(){
+                        .then(function (reportsResponse) {
+                            return reports.uploadReportToCloud(reportsResponse);
+                        })
+                        .then(function () {
                             return reports.deleteReports();
                         })
                         .then(function () {
@@ -15838,10 +15839,10 @@ let reportsImg = __webpack_require__(11);
                         .then(function () {
                             return reportsImg.uploadReportsImages1();
                         })
-                        .then(function(){
+                        .then(function () {
                             return reportsImg.deleteReportsImg();
                         })
-                        .then(function(){
+                        .then(function () {
                             return reportsImg.getReportsImgSaveonCloud();
                         })
                         .then(function () {
@@ -16093,7 +16094,7 @@ let reportsImg = __webpack_require__(11);
                     $("#new_visit_modal").modal('hide');
                     let keyGenerateVisit = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
                     indexDb.addVisit(keyGenerateVisit, siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
-                        indexDb.getVisitByVisitId(keyGenerateVisit).then(function(visitResponse){
+                        indexDb.getVisitByVisitId(keyGenerateVisit).then(function (visitResponse) {
                             visits.visitSelected = visitResponse;
                             reference.changePage("allTemplatesBoxes");
                         });
@@ -16200,24 +16201,24 @@ let reportsImg = __webpack_require__(11);
         },
         fillAnswer: function () {
             let reference = this;
-            let checkAnswers = ["checkbox_answer","date_answer","datetime_answer","list_answer","month_answer","multiselect_answer",
-                                "number_answer","radio_answer","select_answer","table_answer","text_answer","textarea_answer",
-                                "time_answer"];
+            let checkAnswers = ["checkbox_answer", "date_answer", "datetime_answer", "list_answer", "month_answer", "multiselect_answer",
+                "number_answer", "radio_answer", "select_answer", "table_answer", "text_answer", "textarea_answer",
+                "time_answer"];
             for (let check of checkAnswers) {
                 if (Array.isArray(reports.reportSelected[check][0])) {
-                    smartEngine.matchAnswers(reports.reportSelected[check][0]);        
+                    smartEngine.matchAnswers(reports.reportSelected[check][0]);
                 }
-             }
-             indexDb.getReportImagesByReportId(reports.reportSelected.reportId).then(function(reportImagesResponse){
-                    for(let reportImgRes of reportImagesResponse){
-                        if(Array.isArray(reportImgRes.images)){
-                            smartEngine.matchAnswers(reportImgRes.images);
-                        }
-                        if(Array.isArray(reportImgRes.image_1)){
-                            smartEngine.matchAnswers(reportImgRes.image_1);
-                        }
+            }
+            indexDb.getReportImagesByReportId(reports.reportSelected.reportId).then(function (reportImagesResponse) {
+                for (let reportImgRes of reportImagesResponse) {
+                    if (Array.isArray(reportImgRes.images)) {
+                        smartEngine.matchAnswers(reportImgRes.images);
                     }
-             });
+                    if (Array.isArray(reportImgRes.image_1)) {
+                        smartEngine.matchAnswers(reportImgRes.image_1);
+                    }
+                }
+            });
         },
         launchAnswerCompletedModal: function () {
             $("#completedReport").remove();
@@ -16250,24 +16251,24 @@ let reportsImg = __webpack_require__(11);
                 reference.userAnswer = JSON.parse(answer.userAnswer);
 
                 let answerDate; let answerDateTime; let answerTime; let answerWeek; let answerMonth;
-                    let answerText; let answerTextArea; let answerNumber; let answerRadio; let answerCheckbox;
-                    let answerSelect; let answerMultiSelect; let answerList; let answerTable; let answerImages;
-                    let contImages; let total_images_saved;
+                let answerText; let answerTextArea; let answerNumber; let answerRadio; let answerCheckbox;
+                let answerSelect; let answerMultiSelect; let answerList; let answerTable; let answerImages;
+                let contImages; let total_images_saved;
 
-                    answerDate = reference.filterByAnswerType('date');
-                    answerDateTime = reference.filterByAnswerType('datetime');
-                    answerTime = reference.filterByAnswerType('time');
-                    answerWeek = reference.filterByAnswerType('week');
-                    answerMonth = reference.filterByAnswerType('month');
-                    answerText = reference.filterByAnswerType('text');
-                    answerTextArea = reference.filterByAnswerType('textArea');
-                    answerNumber = reference.filterByAnswerType('number');
-                    answerRadio = reference.filterByAnswerType('radio');
-                    answerCheckbox = reference.filterByAnswerType('checkbox');
-                    answerSelect = reference.filterByAnswerType('select');
-                    answerMultiSelect = reference.filterByAnswerType('multiSelect');
-                    answerList = reference.filterByAnswerType('list');
-                    answerTable = reference.filterByAnswerType('table');
+                answerDate = reference.filterByAnswerType('date');
+                answerDateTime = reference.filterByAnswerType('datetime');
+                answerTime = reference.filterByAnswerType('time');
+                answerWeek = reference.filterByAnswerType('week');
+                answerMonth = reference.filterByAnswerType('month');
+                answerText = reference.filterByAnswerType('text');
+                answerTextArea = reference.filterByAnswerType('textArea');
+                answerNumber = reference.filterByAnswerType('number');
+                answerRadio = reference.filterByAnswerType('radio');
+                answerCheckbox = reference.filterByAnswerType('checkbox');
+                answerSelect = reference.filterByAnswerType('select');
+                answerMultiSelect = reference.filterByAnswerType('multiSelect');
+                answerList = reference.filterByAnswerType('list');
+                answerTable = reference.filterByAnswerType('table');
 
                 if (Object.keys(reports.reportSelected).length == 0) {
 
@@ -16385,7 +16386,7 @@ let reportsImg = __webpack_require__(11);
                 console.log(contProImg);
                 contProImg++;
             }
-            while (contProImg <= contImages -1);
+            while (contProImg <= contImages - 1);
 
             return new Promise(function (resolve, reject) {
                 Promise.all(promisesSaveImg).then(function () {
@@ -16419,7 +16420,7 @@ let reportsImg = __webpack_require__(11);
                 console.log(contProImg);
                 contProImg++;
             }
-            while (contProImg <= contImages-1);
+            while (contProImg <= contImages - 1);
 
             return new Promise(function (resolve, reject) {
                 Promise.all(promisesUpdateImg).then(function () {
