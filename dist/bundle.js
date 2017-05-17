@@ -11773,7 +11773,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
                     let cont = 0;
                     let updateReports = [];
-                    for (let reportRes of reportsSaveonCloud) {
+                    for (let reportRes of reportsSaveOnCloud) {
                         this["updateReport" + cont] = indexDb.addReport(reportRes.reportId, reportRes.templateId,
                             reportRes.visitId, reportRes.status, reportRes.author, true);
                         updateReports.push(this["updateReport" + cont]);
