@@ -65,7 +65,7 @@ let reportsImg = require("./reportImages");
                         .then(function (reportsOnCloud) {
                             return reports.saveReportsSaveonCloud(reportsOnCloud);
                         })
-                        .then(function(){
+                        .then(function () {
                             return reportsImg.getReportsImages();
                         })
                         .then(function (reportImagesResponse) {
@@ -228,6 +228,13 @@ let reportsImg = require("./reportImages");
         loadResources: function (page_route) {
             let reference = this;
             switch (page_route) {
+                case "dashboard":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Sitios Almacenados");
+                    reports.changeStatistic().then(function(){
+                    message.removeMessageLoader("#mainContent2");    
+                    });
+                    break;
                 case "allVisits":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Sitios Almacenados");

@@ -11621,46 +11621,46 @@ module.exports = {
     "uploadReportToCloud": function (reportsResponse) {
         console.log("Upload reports to Cloud on Action");
         let reference = this;
-            let cont = 0;
-            let reportsToUpdate = [];
-            for (let reportToUpd of reportsResponse) {
-                if (!reportToUpd.cloud) {
-                    this["reportToUpdate" + cont] = reference.uploadReport({
-                        reportId: reportToUpd.reportId,
-                        templateId: reportToUpd.templateId,
-                        visitId: reportToUpd.visitId,
-                        status: reportToUpd.status,
-                        lastModification: reportToUpd.lastModification,
-                        author: reportToUpd.author,
-                        completedDate: reportToUpd.completedDate,
-                        creationDate: reportToUpd.creationDate,
-                        checkbox_answer: reportToUpd.checkbox_answer,
-                        date_answer: reportToUpd.date_answer,
-                        datetime_answer: reportToUpd.datetime_answer,
-                        list_answer: reportToUpd.list_answer,
-                        month_answer: reportToUpd.month_answer,
-                        multiselect_answer: reportToUpd.multiselect_answer,
-                        number_answer: reportToUpd.number_answer,
-                        radio_answer: reportToUpd.radio_answer,
-                        select_answer: reportToUpd.select_answer,
-                        table_answer: reportToUpd.table_answer,
-                        text_answer: reportToUpd.text_answer,
-                        textarea_answer: reportToUpd.textarea_answer,
-                        time_answer: reportToUpd.time_answer,
-                        week_answer: reportToUpd.week_answer
-                    });
-                    reportsToUpdate.push(this["reportToUpdate" + cont]);
-                    cont += 1;
-                }
+        let cont = 0;
+        let reportsToUpdate = [];
+        for (let reportToUpd of reportsResponse) {
+            if (!reportToUpd.cloud) {
+                this["reportToUpdate" + cont] = reference.uploadReport({
+                    reportId: reportToUpd.reportId,
+                    templateId: reportToUpd.templateId,
+                    visitId: reportToUpd.visitId,
+                    status: reportToUpd.status,
+                    lastModification: reportToUpd.lastModification,
+                    author: reportToUpd.author,
+                    completedDate: reportToUpd.completedDate,
+                    creationDate: reportToUpd.creationDate,
+                    checkbox_answer: reportToUpd.checkbox_answer,
+                    date_answer: reportToUpd.date_answer,
+                    datetime_answer: reportToUpd.datetime_answer,
+                    list_answer: reportToUpd.list_answer,
+                    month_answer: reportToUpd.month_answer,
+                    multiselect_answer: reportToUpd.multiselect_answer,
+                    number_answer: reportToUpd.number_answer,
+                    radio_answer: reportToUpd.radio_answer,
+                    select_answer: reportToUpd.select_answer,
+                    table_answer: reportToUpd.table_answer,
+                    text_answer: reportToUpd.text_answer,
+                    textarea_answer: reportToUpd.textarea_answer,
+                    time_answer: reportToUpd.time_answer,
+                    week_answer: reportToUpd.week_answer
+                });
+                reportsToUpdate.push(this["reportToUpdate" + cont]);
+                cont += 1;
             }
-            return new Promise(function (resolve, reject) {
-                Promise.all(reportsToUpdate).then(function (values) {
-                    console.log("Reports Update ", values);
-                    resolve();
-                }).catch(function (err) {
-                    reject(err);
-                })
-            });
+        }
+        return new Promise(function (resolve, reject) {
+            Promise.all(reportsToUpdate).then(function (values) {
+                console.log("Reports Update ", values);
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            })
+        });
     },
     "uploadReport": function (dataToUpdate) {
         console.log("Upload Reports to Cloud");
@@ -11743,12 +11743,12 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             indexDb.deleteReports().then(function () {
                 resolve();
-            }).catch(function(err){
+            }).catch(function (err) {
                 reject(err);
             });
         });
     },
-    getReportsSaveonCloud: function(){
+    getReportsSaveonCloud: function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
@@ -11767,62 +11767,82 @@ module.exports = {
         console.log("Save reports on the cloud");
         let reference = this;
         return new Promise(function (resolve, reject) {
+            let cont = 0;
+            let updateReports = [];
+            for (let reportRes of reportsSaveOnCloud) {
+                this["updateReport" + cont] = indexDb.addReport(reportRes.reportId, reportRes.templateId,
+                    reportRes.visitId, reportRes.status, reportRes.author, true);
+                updateReports.push(this["updateReport" + cont]);
+                cont++;
+            }
+            if (updateReports.length > 0) {
+                Promise.all(updateReports).then(function () {
                     let cont = 0;
-                    let updateReports = [];
+                    let updateReportsPro = [];
                     for (let reportRes of reportsSaveOnCloud) {
-                        this["updateReport" + cont] = indexDb.addReport(reportRes.reportId, reportRes.templateId,
-                            reportRes.visitId, reportRes.status, reportRes.author, true);
-                        updateReports.push(this["updateReport" + cont]);
-                        cont++;
+                        this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", reportRes.checkbox_answer);
+                        updateReportsPro.push(this["updateReportProCheck" + cont]);
+                        this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", reportRes.date_answer);
+                        updateReportsPro.push(this["updateReportProDate" + cont]);
+                        this["updateReportProDatetime" + cont] = indexDb.updateReport(reportRes.reportId, "datetime_answer", reportRes.datetime_answer);
+                        updateReportsPro.push(this["updateReportProDatetime" + cont]);
+                        this["updateReportProTime" + cont] = indexDb.updateReport(reportRes.reportId, "time_answer", reportRes.time_answer);
+                        updateReportsPro.push(this["updateReportProTime" + cont]);
+                        this["updateReportProWeek" + cont] = indexDb.updateReport(reportRes.reportId, "week_answer", reportRes.week_answer);
+                        updateReportsPro.push(this["updateReportProWeek" + cont]);
+                        this["updateReportProMonth" + cont] = indexDb.updateReport(reportRes.reportId, "month_answer", reportRes.month_answer);
+                        updateReportsPro.push(this["updateReportProMonth" + cont]);
+                        this["updateReportProText" + cont] = indexDb.updateReport(reportRes.reportId, "text_answer", reportRes.text_answer);
+                        updateReportsPro.push(this["updateReportProText" + cont]);
+                        this["updateReportProTextarea" + cont] = indexDb.updateReport(reportRes.reportId, "textarea_answer", reportRes.textarea_answer);
+                        updateReportsPro.push(this["updateReportTextarea" + cont]);
+                        this["updateReportProNumber" + cont] = indexDb.updateReport(reportRes.reportId, "number_answer", reportRes.number_answer);
+                        updateReportsPro.push(this["updateReportProNumber" + cont]);
+                        this["updateReportProRadio" + cont] = indexDb.updateReport(reportRes.reportId, "radio_answer", reportRes.radio_answer);
+                        updateReportsPro.push(this["updateReportProRadio" + cont]);
+                        this["updateReportProSelect" + cont] = indexDb.updateReport(reportRes.reportId, "select_answer", reportRes.select_answer);
+                        updateReportsPro.push(this["updateReportProSelect" + cont]);
+                        this["updateReportProMultiselect" + cont] = indexDb.updateReport(reportRes.reportId, "multiselect_answer", reportRes.multiselect_answer);
+                        updateReportsPro.push(this["updateReportProMultiselect" + cont]);
+                        this["updateReportProList" + cont] = indexDb.updateReport(reportRes.reportId, "list_answer", reportRes.list_answer);
+                        updateReportsPro.push(this["updateReportProList" + cont]);
+                        this["updateReportProTable" + cont] = indexDb.updateReport(reportRes.reportId, "table_answer", reportRes.table_answer);
+                        updateReportsPro.push(this["updateReportProTable" + cont]);
                     }
-                    if (updateReports.length > 0) {
-                        Promise.all(updateReports).then(function () {
-                            let cont = 0;
-                            let updateReportsPro = [];
-                            for (let reportRes of reportsSaveOnCloud) {
-                                this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", reportRes.checkbox_answer);
-                                updateReportsPro.push(this["updateReportProCheck" + cont]);
-                                this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", reportRes.date_answer);
-                                updateReportsPro.push(this["updateReportProDate" + cont]);
-                                this["updateReportProDatetime" + cont] = indexDb.updateReport(reportRes.reportId, "datetime_answer", reportRes.datetime_answer);
-                                updateReportsPro.push(this["updateReportProDatetime" + cont]);
-                                this["updateReportProTime" + cont] = indexDb.updateReport(reportRes.reportId, "time_answer", reportRes.time_answer);
-                                updateReportsPro.push(this["updateReportProTime" + cont]);
-                                this["updateReportProWeek" + cont] = indexDb.updateReport(reportRes.reportId, "week_answer", reportRes.week_answer);
-                                updateReportsPro.push(this["updateReportProWeek" + cont]);
-                                this["updateReportProMonth" + cont] = indexDb.updateReport(reportRes.reportId, "month_answer", reportRes.month_answer);
-                                updateReportsPro.push(this["updateReportProMonth" + cont]);
-                                this["updateReportProText" + cont] = indexDb.updateReport(reportRes.reportId, "text_answer", reportRes.text_answer);
-                                updateReportsPro.push(this["updateReportProText" + cont]);
-                                this["updateReportProTextarea" + cont] = indexDb.updateReport(reportRes.reportId, "textarea_answer", reportRes.textarea_answer);
-                                updateReportsPro.push(this["updateReportTextarea" + cont]);
-                                this["updateReportProNumber" + cont] = indexDb.updateReport(reportRes.reportId, "number_answer", reportRes.number_answer);
-                                updateReportsPro.push(this["updateReportProNumber" + cont]);
-                                this["updateReportProRadio" + cont] = indexDb.updateReport(reportRes.reportId, "radio_answer", reportRes.radio_answer);
-                                updateReportsPro.push(this["updateReportProRadio" + cont]);
-                                this["updateReportProSelect" + cont] = indexDb.updateReport(reportRes.reportId, "select_answer", reportRes.select_answer);
-                                updateReportsPro.push(this["updateReportProSelect" + cont]);
-                                this["updateReportProMultiselect" + cont] = indexDb.updateReport(reportRes.reportId, "multiselect_answer", reportRes.multiselect_answer);
-                                updateReportsPro.push(this["updateReportProMultiselect" + cont]);
-                                this["updateReportProList" + cont] = indexDb.updateReport(reportRes.reportId, "list_answer", reportRes.list_answer);
-                                updateReportsPro.push(this["updateReportProList" + cont]);
-                                this["updateReportProTable" + cont] = indexDb.updateReport(reportRes.reportId, "table_answer", reportRes.table_answer);
-                                updateReportsPro.push(this["updateReportProTable" + cont]);
-                            }
-                            Promise.all(updateReportsPro).then(function () {
-                                resolve();
-                            }).catch(function (err) {
-                                reject(err);
-                            })
-                        });
-                    }
-                    else {
+                    Promise.all(updateReportsPro).then(function () {
                         resolve();
-                    }
-                
+                    }).catch(function (err) {
+                        reject(err);
+                    })
+                });
+            }
+            else {
+                resolve();
+            }
+
 
         });
     },
+    changeStatistic: function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            indexDb.getReports().then(function (reportsResponse) {
+                let totalReports = reportsResponse.length;
+                $("#statisticTotal").text(totalReports);
+                let draft_reports = reportsResponse.filter(function (report) {
+                    return report.status == "SM-Status001"
+                });
+                $("#statisticDraft").text(draft_reports.length);
+                let completed_reports = reportsResponse.filter(function (report) {
+                    return report.status == "SM-Status001"
+                });
+                $("#statisticCompleted").text(completed_reports.length);
+                resolve();
+            }).catch(function(err){
+                reject(err);
+            });
+        })
+    }
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -15830,7 +15850,7 @@ let reportsImg = __webpack_require__(11);
                         .then(function (reportsOnCloud) {
                             return reports.saveReportsSaveonCloud(reportsOnCloud);
                         })
-                        .then(function(){
+                        .then(function () {
                             return reportsImg.getReportsImages();
                         })
                         .then(function (reportImagesResponse) {
@@ -15993,6 +16013,13 @@ let reportsImg = __webpack_require__(11);
         loadResources: function (page_route) {
             let reference = this;
             switch (page_route) {
+                case "dashboard":
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Consultando Sitios Almacenados");
+                    reports.changeStatistic().then(function(){
+                    message.removeMessageLoader("#mainContent2");    
+                    });
+                    break;
                 case "allVisits":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Sitios Almacenados");
