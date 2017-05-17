@@ -167,6 +167,7 @@ module.exports = {
         });
     },
     saveReportsSaveonCloud: function (reportsSaveOnCloud) {
+        console.log("Save reports on the cloud");
         let reference = this;
         return new Promise(function (resolve, reject) {
                     let cont = 0;
