@@ -12967,12 +12967,13 @@ allInputsFilled : [],
 
             break;
         case "radio":
-            if(!$("input[name="+ selector +"']:checked")){
+            if($("input[name="+ selector +"']:checked") != null){
                 reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': $("input[name="+ selector +"']:checked").value });
                 return true;
             }
             else{
                 reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': '' });
+                return false;
             }
         break;    
         default:
