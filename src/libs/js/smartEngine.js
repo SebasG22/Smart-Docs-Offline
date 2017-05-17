@@ -1113,6 +1113,15 @@ allInputsFilled : [],
             return true;
 
             break;
+        case "radio":
+            if(!$("input[name="+ selector +"']:checked")){
+                reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': $("input[name="+ selector +"']:checked").value });
+                return true;
+            }
+            else{
+                reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': '' });
+            }
+        break;    
         default:
             if ($("#" + selector).val()) {
                 reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': $("#" + selector).val() });
