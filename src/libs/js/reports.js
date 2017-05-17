@@ -181,7 +181,7 @@ module.exports = {
                         Promise.all(updateReports).then(function () {
                             let cont = 0;
                             let updateReportsPro = [];
-                            for (let reportRes of reportsSaveonCloud) {
+                            for (let reportRes of reportsSaveOnCloud) {
                                 this["updateReportProCheck" + cont] = indexDb.updateReport(reportRes.reportId, "checkbox_answer", reportRes.checkbox_answer);
                                 updateReportsPro.push(this["updateReportProCheck" + cont]);
                                 this["updateReportProDate" + cont] = indexDb.updateReport(reportRes.reportId, "date_answer", reportRes.date_answer);
