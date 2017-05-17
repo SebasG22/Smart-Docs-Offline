@@ -12968,7 +12968,7 @@ allInputsFilled : [],
             break;
         case "radio":
             if($("input[name='"+ selector +"']:checked") != null){
-                reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': $("input[name='"+ selector +"']:checked").value });
+                reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': $("input[name='"+ selector +"']:checked").val() });
                 return true;
             }
             else{
