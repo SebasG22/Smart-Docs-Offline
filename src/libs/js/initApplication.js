@@ -30,6 +30,7 @@ let reportsImg = require("./reportImages");
                         $("#userStatus").css("color", "red");
                         break;
                 }
+                
                 reference.addEventsToMenu();
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
@@ -64,6 +65,9 @@ let reportsImg = require("./reportImages");
                         })
                         .then(function (reportsOnCloud) {
                             return reports.saveReportsSaveonCloud(reportsOnCloud);
+                        })
+                        .then(function(){
+                            return reports.changeStatistic();
                         })
                         .then(function () {
                             return reportsImg.getReportsImages();
@@ -103,7 +107,11 @@ let reportsImg = require("./reportImages");
                     indexDb.getSites().then(function (resolve, reject) {
                         message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
                         return indexDb.getTemplates();
-                    }).then(function () {
+                    })
+                    .then(function(){
+                        return reports.changeStatistic();
+                    })
+                    .then(function () {
                         message.removeMessageLoader("#mainContent2");
                     });
 

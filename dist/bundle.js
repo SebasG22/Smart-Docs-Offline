@@ -15816,6 +15816,7 @@ let reportsImg = __webpack_require__(11);
                         $("#userStatus").css("color", "red");
                         break;
                 }
+                
                 reference.addEventsToMenu();
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
@@ -15850,6 +15851,9 @@ let reportsImg = __webpack_require__(11);
                         })
                         .then(function (reportsOnCloud) {
                             return reports.saveReportsSaveonCloud(reportsOnCloud);
+                        })
+                        .then(function(){
+                            return reports.changeStatistic();
                         })
                         .then(function () {
                             return reportsImg.getReportsImages();
@@ -15889,7 +15893,11 @@ let reportsImg = __webpack_require__(11);
                     indexDb.getSites().then(function (resolve, reject) {
                         message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
                         return indexDb.getTemplates();
-                    }).then(function () {
+                    })
+                    .then(function(){
+                        return reports.changeStatistic();
+                    })
+                    .then(function () {
                         message.removeMessageLoader("#mainContent2");
                     });
 
