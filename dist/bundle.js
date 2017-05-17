@@ -11825,6 +11825,7 @@ module.exports = {
     },
     changeStatistic: function () {
         let reference = this;
+        console.log("Change Statistic");
         return new Promise(function (resolve, reject) {
             indexDb.getReports().then(function (reportsResponse) {
                 let totalReports = reportsResponse.length;
