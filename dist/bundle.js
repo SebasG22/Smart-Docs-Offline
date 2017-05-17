@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "/dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 31);
+/******/ 	return __webpack_require__(__webpack_require__.s = 33);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -10332,8 +10332,8 @@ return jQuery;
 
 let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 let dataBase;
-let templatesConnection = __webpack_require__(4);
-let siteConnection = __webpack_require__(3);
+let templatesConnection = __webpack_require__(6);
+let siteConnection = __webpack_require__(5);
 
 module.exports = {
     "dataBase": "",
@@ -10917,60 +10917,6 @@ module.exports = {
 
 /***/ }),
 /* 2 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function($) {module.exports = {
-    addMessageLoder: function (selector,location) {
-        $(location).addClass("loader");
-        $(location).append("<div id='loader' class='loader-container text-center color-white'><div><i style='color:white' class='fa fa-spinner fa-pulse fa-3x'></i></div><div style='color:white'><h4>Smart Docs <br> <small> Cargando Recursos <div id='"+selector+"'> </div> </small> <br><small>... Se esta preparando para ti ...</small></h4><h5>Desarollado por: Huawei Colombia  <br> OSS IT Team </h5></div></div>");
-    },
-    changeMessageLoader: function (selector, msg) {
-        console.log("Selector: "+ selector);
-        console.log("Message: " + msg);
-        $("#" + selector).text(msg);
-    },
-    removeMessageLoader: function (location){
-        $("#loader").remove();
-        $(location).removeClass("loader");
-    },
-    launchProcessImageModal: function(){
-        $("#process_image_modal").remove();
-        $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=process_image_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>La imagen esta siendo procesada </h4></div><div class=modal-body> <img src='/img/mapIcon.svg' style='margin-left:auto;margin-right:auto;display:block' width='150px'><h4 style='text-align:center'> Espera un momento, este proceso puede tomar algunos segundos dependiendo de tu conexion</h4></div></div></div></div>");
-        $("#process_image_modal").modal({ backdrop: 'static', keyboard: false });
-    },
-    removeProcessImageModal:function(){
-        $("#process_image_modal").modal('hide');
-    }
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    "sites" : [],
-    "getAllSites": function(){
-        let reference = this;
-        return reference.sites;
-    }
-}
-
-/***/ }),
-/* 4 */
-/***/ (function(module, exports) {
-
-module.exports = {
-    "templateSelected": "",
-    "templates":[],
-    "getTemplates": function(){
-        let reference = this;
-        return reference.templates;
-    }
-}
-
-/***/ }),
-/* 5 */
 /***/ (function(module, exports) {
 
 /*
@@ -11052,7 +10998,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 6 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11089,7 +11035,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(30);
+	fixUrls = __webpack_require__(32);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -11365,22 +11311,76 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function($) {module.exports = {
+    addMessageLoder: function (selector,location) {
+        $(location).addClass("loader");
+        $(location).append("<div id='loader' class='loader-container text-center color-white'><div><i style='color:white' class='fa fa-spinner fa-pulse fa-3x'></i></div><div style='color:white'><h4>Smart Docs <br> <small> Cargando Recursos <div id='"+selector+"'> </div> </small> <br><small>... Se esta preparando para ti ...</small></h4><h5>Desarollado por: Huawei Colombia  <br> OSS IT Team </h5></div></div>");
+    },
+    changeMessageLoader: function (selector, msg) {
+        console.log("Selector: "+ selector);
+        console.log("Message: " + msg);
+        $("#" + selector).text(msg);
+    },
+    removeMessageLoader: function (location){
+        $("#loader").remove();
+        $(location).removeClass("loader");
+    },
+    launchProcessImageModal: function(){
+        $("#process_image_modal").remove();
+        $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=process_image_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>La imagen esta siendo procesada </h4></div><div class=modal-body> <img src='/img/mapIcon.svg' style='margin-left:auto;margin-right:auto;display:block' width='150px'><h4 style='text-align:center'> Espera un momento, este proceso puede tomar algunos segundos dependiendo de tu conexion</h4></div></div></div></div>");
+        $("#process_image_modal").modal({ backdrop: 'static', keyboard: false });
+    },
+    removeProcessImageModal:function(){
+        $("#process_image_modal").modal('hide');
+    }
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 5 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    "sites" : [],
+    "getAllSites": function(){
+        let reference = this;
+        return reference.sites;
+    }
+}
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
+
+module.exports = {
+    "templateSelected": "",
+    "templates":[],
+    "getTemplates": function(){
+        let reference = this;
+        return reference.templates;
+    }
+}
+
+/***/ }),
 /* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-__webpack_require__(27)
-__webpack_require__(17)
+__webpack_require__(28)
 __webpack_require__(18)
 __webpack_require__(19)
 __webpack_require__(20)
 __webpack_require__(21)
 __webpack_require__(22)
-__webpack_require__(26)
 __webpack_require__(23)
+__webpack_require__(27)
 __webpack_require__(24)
 __webpack_require__(25)
-__webpack_require__(16)
+__webpack_require__(26)
+__webpack_require__(17)
 
 /***/ }),
 /* 8 */
@@ -11389,7 +11389,7 @@ __webpack_require__(16)
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(28);
+var content = __webpack_require__(29);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11397,7 +11397,38 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, options);
+var update = __webpack_require__(3)(content, options);
+if(content.locals) module.exports = content.locals;
+// Hot Module Replacement
+if(false) {
+	// When the styles change, update the <style> tags
+	if(!content.locals) {
+		module.hot.accept("!!../../../node_modules/css-loader/index.js!./checkbox-radioStyles.css", function() {
+			var newContent = require("!!../../../node_modules/css-loader/index.js!./checkbox-radioStyles.css");
+			if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+			update(newContent);
+		});
+	}
+	// When the module is disposed, remove the <style> tags
+	module.hot.dispose(function() { update(); });
+}
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+// style-loader: Adds some css to the DOM by adding a <style> tag
+
+// load the styles
+var content = __webpack_require__(30);
+if(typeof content === 'string') content = [[module.i, content, '']];
+// Prepare cssTransformation
+var transform;
+
+var options = {}
+options.transform = transform
+// add the styles to the DOM
+var update = __webpack_require__(3)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11414,13 +11445,13 @@ if(false) {
 }
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(29);
+var content = __webpack_require__(31);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11428,7 +11459,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(6)(content, options);
+var update = __webpack_require__(3)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11445,7 +11476,7 @@ if(false) {
 }
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -11466,7 +11497,7 @@ module.exports = {
 }
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
@@ -11594,7 +11625,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
@@ -11848,10 +11879,10 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {let message = __webpack_require__(2);
+/* WEBPACK VAR INJECTION */(function($) {let message = __webpack_require__(4);
 
 module.exports = {
     "imgTo64": function (input) {
@@ -13087,7 +13118,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -13103,7 +13134,7 @@ module.exports = {
 }
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
@@ -13229,7 +13260,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -13398,7 +13429,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -13499,7 +13530,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -13631,7 +13662,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -13875,7 +13906,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14094,7 +14125,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14266,7 +14297,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14612,7 +14643,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14727,7 +14758,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14906,7 +14937,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -15068,7 +15099,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -15595,7 +15626,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -15661,10 +15692,24 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(undefined);
+exports = module.exports = __webpack_require__(2)(undefined);
+// imports
+
+
+// module
+exports.push([module.i, ".checkbox3 label::before,.radio3 label::before{overflow:hidden;vertical-align:middle;text-align:center}.checkbox3 label,.radio3 label{white-space:nowrap;cursor:pointer}.checkbox3{position:relative}.checkbox3 input{position:absolute;left:-9999px}.checkbox3 label::after,.checkbox3 label::before{content:'';top:10px;bottom:10px;left:0;display:block}.checkbox3 label{display:block;position:relative;padding:11px 0 11px 30px;font-size:12px;margin-bottom:0;margin-top:-4px}.checkbox3 label::before{position:absolute;width:21px;height:21px;border:1px solid #CCC;-moz-border-radius:1px;border-radius:1px;-webkit-transition:background-color .2s;-moz-transition:background-color .2s;transition:background-color .2s}.checkbox3 label::after{position:absolute;width:19px;height:19px;border:12px solid #FFF;margin:1px;-webkit-transition:all 50ms;-moz-transition:all 50ms;transition:all 50ms;opacity:0}.checkbox3 input:checked+label::before{border-width:1px;border-style:solid;background-color:#444;border-color:#444;color:#fff}.checkbox3 input:checked+label::after{border:3px solid #FFF;opacity:1}.checkbox3.checkbox-sm label{padding:8px 0 8px 22px}.checkbox3.checkbox-sm label::before{width:14px;height:14px;line-height:14px}.checkbox3.checkbox-sm label::after{width:12px;height:12px}.checkbox3.checkbox-lg label{padding:15px 0 15px 40px}.checkbox3.checkbox-lg label::before{width:28px;height:27px;line-height:24px}.checkbox3.checkbox-lg label::after{width:26px;height:25px}.checkbox3.checkbox-inline,.radio3.radio-inline{padding-top:0;padding-left:0;padding-right:0;margin-left:0;margin-right:20px}.checkbox3.checkbox-inline input[type=checkbox],.checkbox3.checkbox-inline input[type=radio],.radio3.radio-inline input[type=checkbox],.radio3.radio-inline input[type=radio]{position:absolute}.checkbox3.checkbox-check input:checked+label::after,.checkbox3.checkbox-check label::after{border:0}.checkbox3.checkbox-check label::after{content:\"\\F00C\";font-family:FontAwesome;font-size:12px;color:#FFF;width:19px;height:20px;line-height:20px;vertical-align:middle;text-align:center;border-width:0}.checkbox3.checkbox-check.checkbox-sm label::after{font-size:9px;line-height:12px;width:12px}.checkbox3.checkbox-check.checkbox-lg label::after{font-size:16px;line-height:26px;width:26px}.checkbox3.checkbox-check.checkbox-light label::after{color:#444}.checkbox3.checkbox-circle label::after,.checkbox3.checkbox-circle label::before{-moz-border-radius:20px;border-radius:20px}.checkbox3.checkbox-round label::after,.checkbox3.checkbox-round label::before,.checkbox3.checkbox-s1 label::after,.checkbox3.checkbox-s1 label::before{-moz-border-radius:4px;border-radius:4px}.checkbox3.checkbox-light label::before{background-color:transparent}.checkbox3.checkbox-light input:checked+label::before{background-color:transparent;border-color:#444}.checkbox3.checkbox-info input:checked+label::before{background-color:#2caef5;border-color:#2caef5}.checkbox3.checkbox-primary input:checked+label::before{background-color:#4183d7;border-color:#4183d7}.checkbox3.checkbox-success input:checked+label::before{background-color:#36b846;border-color:#36b846}.checkbox3.checkbox-warning input:checked+label::before{background-color:#ff9c00;border-color:#ff9c00}.checkbox3.checkbox-danger input:checked+label::before{background-color:#e50011;border-color:#e50011}.checkbox3.checkbox-primary.checkbox-light input:checked+label::before{background-color:transparent;border-color:#4183d7}.checkbox3.checkbox-primary.checkbox-light input:checked+label::after{color:#4183d7}.checkbox3.checkbox-info.checkbox-light input:checked+label::before{background-color:transparent;border-color:#2caef5}.checkbox3.checkbox-info.checkbox-light input:checked+label::after{color:#2caef5}.checkbox3.checkbox-success.checkbox-light input:checked+label::before{background-color:transparent;border-color:#36b846}.checkbox3.checkbox-success.checkbox-light input:checked+label::after{color:#36b846}.checkbox3.checkbox-warning.checkbox-light input:checked+label::before{background-color:transparent;border-color:#ff9c00}.checkbox3.checkbox-warning.checkbox-light input:checked+label::after{color:#ff9c00}.checkbox3.checkbox-danger.checkbox-light input:checked+label::before{background-color:transparent;border-color:#e50011}.checkbox3.checkbox-danger.checkbox-light input:checked+label::after{color:#e50011}.radio3{position:relative}.radio3 input{position:absolute;left:-9999px}.radio3 label{display:block;position:relative;padding:11px 0 11px 30px;font-size:12px;margin-bottom:0;margin-top:-4px}.radio3 label::after,.radio3 label::before{content:'';display:block;position:absolute;top:10px;bottom:10px;left:0}.radio3 label::before{width:21px;height:21px;border:1px solid #CCC;-webkit-transition:background-color .2s;-moz-transition:background-color .2s;transition:background-color .2s}.radio3 label::after{width:19px;height:19px;border:12px solid #FFF;margin:1px;-webkit-transition:all 50ms;-moz-transition:all 50ms;transition:all 50ms;opacity:0}.radio3 input:checked+label::before{font-family:FontAwesome;border-width:1px;border-style:solid;background-color:#444;border-color:#444;color:#fff}.radio3 input:checked+label::after{border:3px solid #FFF;opacity:1}.radio3.radio-check label::after,.radio3.radio-check.radio-light label::after{content:\"\\F00C\";font-family:FontAwesome;color:#FFF;width:19px;height:20px;line-height:20px;vertical-align:middle;text-align:center;border-width:0}.radio3 label::after,.radio3 label::before{-moz-border-radius:20px;border-radius:20px}.radio3.radio-check input:checked+label::after{border-width:0}.radio3.radio-check.radio-light input:checked+label::before{background-color:transparent}.radio3.radio-check.radio-light input:checked+label::after{border-width:0;color:#444}.radio3.radio-sm label{padding:8px 0 8px 22px}.radio3.radio-sm label::before{width:14px;height:14px;line-height:14px}.radio3.radio-sm label::after{width:12px;height:12px}.radio3.radio-lg label{padding:15px 0 15px 40px}.radio3.radio-lg label::before{width:28px;height:27px;line-height:24px}.radio3.radio-lg label::after{width:26px;height:25px}.radio3.radio-check.radio-sm label::after{font-size:9px;line-height:12px;width:12px}.radio3.radio-check.radio-lg label::after{font-size:16px;line-height:26px;width:26px}.radio3.radio-primary input:checked+label::before{background-color:#4183d7;border-color:#4183d7}.radio3.radio-info input:checked+label::before{background-color:#2caef5;border-color:#2caef5}.radio3.radio-success input:checked+label::before{background-color:#36b846;border-color:#36b846}.radio3.radio-warning input:checked+label::before{background-color:#ff9c00;border-color:#ff9c00}.radio3.radio-danger input:checked+label::before{background-color:#e50011;border-color:#e50011}.radio3.radio-primary.radio-light input:checked+label::before{background-color:transparent}.radio3.radio-primary.radio-light input:checked+label::after{color:#4183d7}.radio3.radio-info.radio-light input:checked+label::before{background-color:transparent}.radio3.radio-info.radio-light input:checked+label::after{color:#2caef5}.radio3.radio-success.radio-light input:checked+label::before{background-color:transparent}.radio3.radio-success.radio-light input:checked+label::after{color:#36b846}.radio3.radio-warning.radio-light input:checked+label::before{background-color:transparent}.radio3.radio-warning.radio-light input:checked+label::after{color:#ff9c00}.radio3.radio-danger.radio-light input:checked+label::before{background-color:transparent}.radio3.radio-danger.radio-light input:checked+label::after{color:#e50011}", ""]);
+
+// exports
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(2)(undefined);
 // imports
 
 
@@ -15675,10 +15720,10 @@ exports.push([module.i, ".flat-blue {\n  background-color: #F9F9F9;\n  /* small 
 
 
 /***/ }),
-/* 29 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)(undefined);
+exports = module.exports = __webpack_require__(2)(undefined);
 // imports
 
 
@@ -15689,7 +15734,7 @@ exports.push([module.i, "html {\n  height: 100%; }\n\nbody {\n  padding-top: 0px
 
 
 /***/ }),
-/* 30 */
+/* 32 */
 /***/ (function(module, exports) {
 
 
@@ -15784,7 +15829,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 31 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -15793,24 +15838,27 @@ module.exports = function (css) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_jquery___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_jquery__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_bootstrap___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1_bootstrap__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__css_flat_blue_css__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__css_flat_blue_css__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__css_flat_blue_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_2__css_flat_blue_css__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_style_css__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_style_css__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__css_style_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_3__css_style_css__);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__css_checkbox_radioStyles_css__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__css_checkbox_radioStyles_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_4__css_checkbox_radioStyles_css__);
 
 
 
 
-let visits = __webpack_require__(15);
-let reports = __webpack_require__(12);
-let smartEngine = __webpack_require__(13);
-let templates = __webpack_require__(4);
+
+let visits = __webpack_require__(16);
+let reports = __webpack_require__(13);
+let smartEngine = __webpack_require__(14);
+let templates = __webpack_require__(6);
 let indexDb = __webpack_require__(1);
-let message = __webpack_require__(2);
-let notification = __webpack_require__(10);
-let sites = __webpack_require__(3);
-let uidGenerator = __webpack_require__(14);
-let reportsImg = __webpack_require__(11);
+let message = __webpack_require__(4);
+let notification = __webpack_require__(11);
+let sites = __webpack_require__(5);
+let uidGenerator = __webpack_require__(15);
+let reportsImg = __webpack_require__(12);
 
 (function () {
     let smartDocsOffline = {
