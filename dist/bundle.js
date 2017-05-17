@@ -15833,8 +15833,8 @@ let reportsImg = __webpack_require__(11);
                         .then(function(){
                             return reportsImg.getReportsImages();
                         })
-                        .then(function () {
-                            return reportsImg.uploadReportsImages();
+                        .then(function (reportImagesResponse) {
+                            return reportsImg.uploadReportsImages(reportImagesResponse);
                         })
                         .then(function () {
                             return reportsImg.uploadReportsImages1();
