@@ -11483,46 +11483,43 @@ module.exports = {
             });
         });
     },
-    uploadReportsImages: function () {
+    uploadReportsImages: function (reportImagesResponse) {
         console.log("Upload Reports Images on Action");
         let reference = this;
         let reportsToImgCreate = [];
         let cont = 0;
-        reference.getReportsImages().then(function (reportImagesResponse) {
-            for (let reportImgToCreate of reportImagesResponse) {
-                this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
-                    reportImgId: reportImgToCreate.reportImgId,
-                    reportId: reportImgToCreate.reportId,
-                    images: JSON.stringify(reportImgToCreate.images),
-                    author: reportImgToCreate.author,
-                    lastModification: reportImgToCreate.lastModification
-                });
-                reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
-            }
-            return new Promise(function (resolve, reject) {
-                Promise.all(reportsToImgCreate).then(function () {
-                        resolve();
-                }).catch(function (err) {
-                    reject(err);
-                });
+        for (let reportImgToCreate of reportImagesResponse) {
+            this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
+                reportImgId: reportImgToCreate.reportImgId,
+                reportId: reportImgToCreate.reportId,
+                images: JSON.stringify(reportImgToCreate.images),
+                author: reportImgToCreate.author,
+                lastModification: reportImgToCreate.lastModification
+            });
+            reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+        }
+        return new Promise(function (resolve, reject) {
+            Promise.all(reportsToImgCreate).then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
             });
         });
+
 
     },
     uploadReportsImages1: function () {
         let reference = this;
         let reportsToImgCreate = [];
         let cont = 0;
-        reference.getReportsImages().then(function (reportImagesResponse) {
-            for (let reportImgToCreate of reportImagesResponse) {
-                this["reportImgToCreateUpd" + cont] = reference.uploadReportUpdate({
-                    reportImgId: reportImgToCreate.reportImgId,
-                    reportId: reportImgToCreate.reportId,
-                    image_1: reportImgToCreate.image_1,
-                });
-                reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
-            }
-        });
+        for (let reportImgToCreate of reference.reportsImages) {
+            this["reportImgToCreateUpd" + cont] = reference.uploadReportUpdate({
+                reportImgId: reportImgToCreate.reportImgId,
+                reportId: reportImgToCreate.reportId,
+                image_1: reportImgToCreate.image_1,
+            });
+            reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+        }
         return new Promise(function (resolve, reject) {
             Promise.all(reportsToImgCreate).then(function () {
                 resolve();
@@ -15832,6 +15829,9 @@ let reportsImg = __webpack_require__(11);
                         })
                         .then(function (reportsOnCloud) {
                             return reports.saveReportsSaveonCloud(reportsOnCloud);
+                        })
+                        .then(function(){
+                            return reportsImg.getReportsImages();
                         })
                         .then(function () {
                             return reportsImg.uploadReportsImages();

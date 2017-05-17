@@ -65,6 +65,9 @@ let reportsImg = require("./reportImages");
                         .then(function (reportsOnCloud) {
                             return reports.saveReportsSaveonCloud(reportsOnCloud);
                         })
+                        .then(function(){
+                            return reportsImg.getReportsImages();
+                        })
                         .then(function () {
                             return reportsImg.uploadReportsImages();
                         })
