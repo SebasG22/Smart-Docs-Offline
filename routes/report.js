@@ -52,8 +52,8 @@ router.get('/:visitId', function (req, res, next) {
     Report.find().then(function (reports) {
         let reportFiltered = reports.filter(function (report) {
             return report.visitId == req.params.visitId;
-            res.send(reportFiltered);
         });
+        res.send(reportFiltered);
     });
 });
 
