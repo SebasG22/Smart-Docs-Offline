@@ -8,14 +8,14 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/getFullReport/:reportId', function (req, res, next) {
+router.get('/getAllReport/:reportId', function (req, res, next) {
     Report.find().then(function (reports) {
         ReportImages.find().then(function (reportImages) {
             let reportsImgFiltered = reports.filter(function (reportImg) {
                 return reportImg.reportId == req.params.reportId;
             });
             let reportFiltered = reports.filter(function (report) {
-                if (report.visitId == req.params.visitId) {
+                if (report.reportId == req.params.reportId) {
                     report.reportImages = reportsImgFiltered;
                 }
             });
