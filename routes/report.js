@@ -14,13 +14,15 @@ router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
             let reportsImgFiltered = reportsImages.filter(function (reportImg) {
                 return reportImg.reportId == req.params.reportId;
             });
+            let reportToSend = [];
             let reportFiltered = reports.filter(function (report) {
                 if (report.reportId == req.params.reportId) {
-                    report["reportImages"] = reportsImgFiltered;
                     return report;
                 }
             });
-            res.send(reportFiltered);
+            reportFiltered[0].reportImages = reportsImgFiltered;
+            reportToSend.push(reportFiltered[0]);
+            res.send(reportToSend);
         });
     });
 });
