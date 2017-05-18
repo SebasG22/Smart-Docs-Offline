@@ -8,6 +8,15 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.get('/:reportId', function (req, res, next) {
+    ReportImages.find().then(function (reportImages) {
+        let reportsImgFiltered = reports.filter(function (reportImg) {
+            return reportImg.reportId == req.params.reportId;
+        });
+        res.send(reportsImgFiltered);
+    });
+});
+
 router.post('/', function (req, res, next) {
 
     ReportImages.findOne({ reportImgId: req.body.reportImgId, reportId: req.body.reportId }, function (err, reportResponse) {

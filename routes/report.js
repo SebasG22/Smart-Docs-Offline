@@ -1,19 +1,37 @@
 const express = require("express");
 var router = express.Router();
 const Report = require("./../models/Report");
-
+const ReportImages = require("./../models/ReportImages");
 router.get('/', function (req, res, next) {
     Report.find().then(function (reports) {
         res.send(reports);
     });
 });
 
+router.get('/getFullReport/:reportId', function (req, res, next) {
+    Report.find().then(function (reports) {
+        ReportImages.find().then(function (reportImages) {
+            let reportsImgFiltered = reports.filter(function (reportImg) {
+                return reportImg.reportId == req.params.reportId;
+            });
+            let reportFiltered = reports.filter(function (report) {
+                if (report.visitId == req.params.visitId) {
+                    report.reportImages = reportsImgFiltered;
+                }
+            });
+            res.send(reportFiltered);
+        });
+    });
+});
+
 router.get('/:visitId', function (req, res, next) {
     Report.find().then(function (reports) {
         let reportFiltered = reports.filter(function (report) {
-            return report.visitId == req.params.visitId;
+            if (report.visitId == req.params.visitId) {
+                report.reportImages = reportsImgFiltered;
+            }
+            res.send(reportFiltered);
         });
-        res.send(reportFiltered);
     });
 });
 
