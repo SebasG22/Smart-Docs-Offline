@@ -21,14 +21,31 @@ router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
                     return report;
                 }
             });
+            objToSend._id = reportFiltered[0]._id;
             objToSend.reportId = reportFiltered[0].reportId;
-            objToSend.reportImages = reportsImgFiltered  
-            //reportFiltered[0].reportImages = reportsImgFiltered;
-            //reportToSend.push(reportFiltered[0]);
+            objToSend.templateId = reportFiltered[0].templateId,
+            objToSend.status = reportFiltered[0].status,
+            objToSend.lastModification = reportFiltered[0].lastModification,
+            objToSend.author = reportFiltered[0].author,
+            objToSend.checkbox_answer = reportFiltered[0].checkbox_answer,
+            objToSend.date_answer = reportFiltered[0].date_answer,
+            objToSend.datetime_answer = reportFiltered[0].datetime_answer,
+            objToSend.list_answer = reportFiltered[0].list_answer,
+            objToSend.month_answer = reportFiltered[0].month_answer,
+            objToSend.multiselect_answer = reportFiltered[0].multiselect_answer,
+            objToSend.number_answer = reportFiltered[0].number_answer,
+            objToSend.radio_answer = reportFiltered[0].radio_answer,
+            objToSend.select_answer = reportFiltered[0].select_answer,
+            objToSend.table_answer = reportFiltered[0].table_answer,
+            objToSend.text_answer = reportFiltered[0].text_answer,
+            objToSend.textarea_answer = reportFiltered[0].textarea_answer,
+            objToSend.time_answer = reportFiltered[0].time_answer,
+            objToSend.week_answer = reportFiltered[0].week_answer,
+            objToSend.reportImages = reportsImgFiltered
             reportToSend.push(objToSend);
-            res.send(reportToSend);
-        });
+        res.send(reportToSend);
     });
+});
 });
 
 router.get('/:visitId', function (req, res, next) {
