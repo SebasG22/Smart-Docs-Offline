@@ -15,13 +15,17 @@ router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
                 return reportImg.reportId == req.params.reportId;
             });
             let reportToSend = [];
+            let objToSend = {};
             let reportFiltered = reports.filter(function (report) {
                 if (report.reportId == req.params.reportId) {
                     return report;
                 }
             });
-            reportFiltered[0].reportImages = reportsImgFiltered;
-            reportToSend.push(reportFiltered[0]);
+            objToSend.reportId = reportFiltered[0].reportId;
+            objToSend.reportImages = reportsImgFiltered  
+            //reportFiltered[0].reportImages = reportsImgFiltered;
+            //reportToSend.push(reportFiltered[0]);
+            reportToSend.push(objToSend);
             res.send(reportToSend);
         });
     });
