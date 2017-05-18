@@ -51,9 +51,7 @@ router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
 router.get('/:visitId', function (req, res, next) {
     Report.find().then(function (reports) {
         let reportFiltered = reports.filter(function (report) {
-            if (report.visitId == req.params.visitId) {
-                report.reportImages = reportsImgFiltered;
-            }
+            return report.visitId == req.params.visitId;
             res.send(reportFiltered);
         });
     });
