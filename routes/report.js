@@ -10,13 +10,13 @@ router.get('/', function (req, res, next) {
 
 router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
     Report.find().then(function (reports) {
-        ReportImages.find().then(function (reportImages) {
+        ReportImages.find().then(function (reportsImages) {
             let reportsImgFiltered = reportsImages.filter(function (reportImg) {
                 return reportImg.reportId == req.params.reportId;
             });
             let reportFiltered = reports.filter(function (report) {
                 if (report.reportId == req.params.reportId) {
-                    //report.reportImages = reportsImgFiltered;
+                    report.reportImages = reportsImgFiltered;
                     return report;
                 }
             });
