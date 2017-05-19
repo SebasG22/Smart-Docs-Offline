@@ -10,9 +10,15 @@ router.get('/', function (req, res, next) {
 
 router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
     Report.find().then(function (reports) {
+            let reportImagesToSend = [];
         ReportImages.find().then(function (reportsImages) {
-            let reportsImgFiltered = reportsImages.filter(function (reportImg) {
-                return reportImg.reportId == req.params.reportId;
+            reportsImages.filter(function (reportImg) {
+                if(reportImg.reportId == req.params.reportId){
+                    reportImagesToSend.push({
+                        images: reportImg.images,
+                        image_1: reportImg.image_1
+                    });
+                }
             });
             let reportToSend = [];
             let objToSend = {};
@@ -41,7 +47,7 @@ router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
             objToSend.textarea_answer = reportFiltered[0].textarea_answer,
             objToSend.time_answer = reportFiltered[0].time_answer,
             objToSend.week_answer = reportFiltered[0].week_answer,
-            objToSend.reportImages = reportsImgFiltered
+            objToSend.reportImages = reportImagesToSend
             reportToSend.push(objToSend);
         res.send(reportToSend);
     });
