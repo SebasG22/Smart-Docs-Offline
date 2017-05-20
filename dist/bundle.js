@@ -11547,7 +11547,7 @@ module.exports = {
             this["reportImgToCreateUpd" + cont] = reference.uploadReportUpdate({
                 reportImgId: reportImgToCreate.reportImgId,
                 reportId: reportImgToCreate.reportId,
-                image_1: reportImgToCreate.image_1,
+                image_1: JSON.stringify(reportImgToCreate.image_1),
             });
             reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
         }
@@ -12799,9 +12799,9 @@ module.exports = {
 
                                         img.onload = function () {
 
-                                            myCanvas.width = 450;
+                                            myCanvas.width = 500;
                                             myCanvas.height = 600;
-                                            ctx.drawImage(img, 0, 0, 450, 600);
+                                            ctx.drawImage(img, 0, 0, 500, 600);
 
                                             ctx.font = "bold 8pt sans-serif";
                                             ctx.shadowColor = 'black';
@@ -12882,9 +12882,9 @@ module.exports = {
 
                                         img.onload = function () {
 
-                                            myCanvas.width = 600;
-                                            myCanvas.height = 800;
-                                            ctx.drawImage(img, 0, 0, 600, 800);
+                                            myCanvas.width = 500;
+                                            myCanvas.height = 500;
+                                            ctx.drawImage(img, 0, 0, 500, 600);
 
                                             ctx.font = "bold 8pt sans-serif";
                                             ctx.shadowColor = 'black';
