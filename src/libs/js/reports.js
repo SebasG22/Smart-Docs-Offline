@@ -177,7 +177,7 @@ module.exports = {
             }
         }
 
-        return new Promise(function () {
+        return new Promise(function (resolve,reject) {
             Promise.all(reportsToDelete).then(function () {
                 resolve();
             }).catch(function (err) {
