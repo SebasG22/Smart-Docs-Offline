@@ -63,17 +63,24 @@ router.post('/', function (req, res, next) {
 
 router.delete('/:visitId', function (req, res, next) {
 
-    Visit.findOneAndRemove({visitId: req.params.visitId}, function(err){
-        if(err){
+    Visit.findOneAndRemove({ visitId: req.params.visitId }, function (err) {
+        if (err) {
             res.status(500).json({
-            title: 'An error ocurred',
-            error: err
+                title: 'An error ocurred',
+                error: err
             });
         }
-        res.status(201).json({
-            message: 'The visit was deleted',
+        Report.remove({ visitId: { $in: [req.params.visitId] } }, function (err) {
+            if (err) {
+                res.status(500).json({
+                    title: 'An error ocurred',
+                    error: err
+                });
+            }
+            res.status(201).json({
+                message: 'The visit was deleted',
+            });
         });
-
     });
 
     /*deleteVisits(req.params.visitId).then(function () {
@@ -160,7 +167,7 @@ function deleteVisits(visitId) {
         findVisitsRelated(visitId)
             .then(function (visits) {
                 resolve();
-            }).catch(function(err){
+            }).catch(function (err) {
                 reject(err);
             })
 
@@ -177,12 +184,12 @@ function findVisitsRelated(visitId) {
                 resolve();
             }
             else {
-                removeVisitRelated(visits[0]).then(function(){
-                   resolve(); 
+                removeVisitRelated(visits[0]).then(function () {
+                    resolve();
                 })
-                .catch(function(err){
-                    reject(err);
-                });
+                    .catch(function (err) {
+                        reject(err);
+                    });
             }
         });
     });
@@ -192,7 +199,7 @@ function removeVisitRelated(visit) {
     return new Promise(function (resolve, reject) {
         visit.remove(function (err, res) {
             if (err) {
-                reject( "Error en RemoveVisitRelated" +err);
+                reject("Error en RemoveVisitRelated" + err);
             }
             findReportsRelated(visit.visitId).then(function () {
                 resolve();
@@ -226,8 +233,8 @@ function removeReportsRelated(report) {
             if (err) {
                 reject("Error en removeReportsRelated " + err);
             }
-            else{
-                 resolve();
+            else {
+                resolve();
             }
         });
     });
@@ -243,7 +250,7 @@ function removeAllReportsRelated(reports) {
         Promise.all(promisesRemove).then(function () {
             resolve();
         }).catch(function (err) {
-            reject("Error en RemoveAllReportsRelated" +err);
+            reject("Error en RemoveAllReportsRelated" + err);
         });
     });
 }
