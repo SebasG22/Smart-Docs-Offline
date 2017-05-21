@@ -157,7 +157,7 @@ function findVisitsRelated(visitId) {
     return new Promise(function (resolve, reject) {
         Visit.find({ visitId: visitId }, function (err, visits) {
             if (err) {
-                reject(err);
+                reject("Error en findVisitsRelated" + err);
             }
             if (visits.length == 0) {
                 resolve();
@@ -178,7 +178,7 @@ function removeVisitRelated(visit) {
     return new Promise(function (resolve, reject) {
         visit.remove(function (err, res) {
             if (err) {
-                reject(err);
+                reject( "Error en RemoveVisitRelated" +err);
             }
             findReportsRelated(visit.visitId).then(function () {
                 resolve();
@@ -192,7 +192,7 @@ function findReportsRelated(visitId) {
     return new Promise(function (resolve, reject) {
         Report.find({ visitId: visitId }, function (err, reports) {
             if (err) {
-                reject(err);
+                reject("Error en findReportsRelated" + err);
             }
             if (reports.length == 0) {
                 resolve();
@@ -224,7 +224,6 @@ function removeAllReportsRelated(reports) {
     let promisesFind = [];
     for (reportToDelete of reports) {
         promisesRemove.push(removeReportsRelated(reportToDelete));
-        //promisesRemove.push(findImagesReportsRelated(reportToDelete.reportId));
     }
     return new Promise(function (resolve, reject) {
         Promise.all(promisesRemove).then(function () {
