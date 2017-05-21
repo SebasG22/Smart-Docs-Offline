@@ -6,7 +6,7 @@ router.get('/', function (req, res, next) {
     Report.find().then(function (reports) {
         let reportsToSend = [];
         for(let report of reports){
-            reportToSend.push({reportId:report.reportId});
+            reportsToSend.push({reportId:report.reportId});
         }
         res.send(reportsToSend);
     });
