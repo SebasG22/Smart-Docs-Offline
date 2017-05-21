@@ -149,6 +149,9 @@ module.exports = {
             });
         });
     },
+    "validateReportsLocally": function(){
+
+    },
     getReportsSaveonCloud: function () {
         let reference = this;
         return new Promise(function (resolve, reject) {

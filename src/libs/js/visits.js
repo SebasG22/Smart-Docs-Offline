@@ -92,29 +92,7 @@ module.exports = {
                 });
         });
     },
-    /*
-    updateLocalVisits: function () {
-        let reference = this;
-        let cont = 0;
-        let updateVisits = [];
-        reference.getVisits().then(function (visits) {
-            for (let siteRes of reference.visits) {
-                this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
-                updateVisits.push(this["updateVisit" + cont]);
-                cont++;
-            }
-            return new Promise(function (resolve, reject) {
-                if (updateVisits.length > 0) {
-                    Promise.all(updateVisits).then(function () {
-                        resolve();
-                    });
-                }
-                else {
-                    resolve();
-                }
-            });
-        })
-
+    "validateVisitLocally":function(){
+        
     }
-    */
 }

@@ -18,14 +18,16 @@ module.exports = {
         let reportsToImgCreate = [];
         let cont = 0;
         for (let reportImgToCreate of reportImagesResponse) {
-            this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
-                reportImgId: reportImgToCreate.reportImgId,
-                reportId: reportImgToCreate.reportId,
-                images: JSON.stringify(reportImgToCreate.images),
-                author: reportImgToCreate.author,
-                lastModification: reportImgToCreate.lastModification
-            });
-            reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+            if (!reportImgToCreate.cloud) {
+                this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
+                    reportImgId: reportImgToCreate.reportImgId,
+                    reportId: reportImgToCreate.reportId,
+                    images: JSON.stringify(reportImgToCreate.images),
+                    author: reportImgToCreate.author,
+                    lastModification: reportImgToCreate.lastModification
+                });
+                reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+            }
         }
         return new Promise(function (resolve, reject) {
             Promise.all(reportsToImgCreate).then(function () {
@@ -34,8 +36,6 @@ module.exports = {
                 reject(err);
             });
         });
-
-
     },
     uploadReportsImages1: function () {
         let reference = this;
@@ -58,10 +58,18 @@ module.exports = {
         });
     },
     uploadReportCreate: function (dataToUpdate) {
-        return new Promise(function (resolve, reject) {
+
+        let promiseUpdateLocally = indexDb.updateReportImages(dataToUpdate.reportImgId,"cloud",true);
+
+        let promiseUpdateCloud = new Promise(function(resolve,reject){
             $.post("https://smart-docs.herokuapp.com/reportsImg/",
                 dataToUpdate
             ).done(function () {
+                resolve();
+            });
+        });
+        return new Promise(function (resolve, reject) {
+            Promise.all([promiseUpdateLocally,promiseUpdateCloud]).then(function(){
                 resolve();
             });
         });
