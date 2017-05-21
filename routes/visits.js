@@ -70,16 +70,34 @@ router.delete('/:visitId', function (req, res, next) {
                 error: err
             });
         }
-        Report.remove({ visitId: { $in: [req.params.visitId] } }, function (err) {
-            if (err) {
-                res.status(500).json({
-                    title: 'An error ocurred',
-                    error: err
-                });
+
+        Report.find({ visitId: req.params.visitId }, function (err, reportsRes) {
+
+            let reports = [];
+            for (let reportItem of reportsRes) {
+                reports.push(reportItem.reportId);
             }
-            res.status(201).json({
-                message: 'The visit was deleted',
+
+            ReportImage.remove({ reportId: { $in: reports } }, function (err) {
+                if (err) {
+                    res.status(500).json({
+                        title: 'An error ocurred',
+                        error: err
+                    });
+                }
+                Report.remove({ visitId: { $in: [req.params.visitId] } }, function (err) {
+                    if (err) {
+                        res.status(500).json({
+                            title: 'An error ocurred',
+                            error: err
+                        });
+                    }
+                    res.status(201).json({
+                        message: 'The visit was deleted',
+                    });
+                });
             });
+
         });
     });
 
