@@ -72,7 +72,6 @@ router.delete('/:visitId', function (req, res, next) {
         }
         res.status(201).json({
             message: 'The visit was deleted',
-            obj: result
         });
 
     });
