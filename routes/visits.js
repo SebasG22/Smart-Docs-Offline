@@ -63,7 +63,21 @@ router.post('/', function (req, res, next) {
 
 router.delete('/:visitId', function (req, res, next) {
 
-    deleteVisits(req.params.visitId).then(function () {
+    visits.findOneAndRemove({visitId: req.params.visitId}, function(err){
+        if(err){
+            res.status(500).json({
+            title: 'An error ocurred',
+            error: err
+            });
+        }
+        res.status(201).json({
+            message: 'The visit was deleted',
+            obj: result
+        });
+
+    });
+
+    /*deleteVisits(req.params.visitId).then(function () {
         res.status(201).json({
             message: 'The visit was deleted',
             obj: result
@@ -74,6 +88,7 @@ router.delete('/:visitId', function (req, res, next) {
             error: err
         });
     });
+    */
 
 
     /*
