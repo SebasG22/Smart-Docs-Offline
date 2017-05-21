@@ -190,7 +190,7 @@ function removeVisitRelated(visit) {
 /* Find Reports Related */
 function findReportsRelated(visitId) {
     return new Promise(function (resolve, reject) {
-        Reports.find({ visitId: visitId }, function (err, reports) {
+        Report.find({ visitId: visitId }, function (err, reports) {
             if (err) {
                 reject(err);
             }
