@@ -210,9 +210,11 @@ function removeReportsRelated(report) {
     return new Promise(function (resolve, reject) {
         report.remove(function (err, res) {
             if (err) {
-                reject(err);
+                reject("Error en removeReportsRelated " + err);
             }
-            resolve();
+            else{
+                 resolve();
+            }
         });
     });
 };
@@ -228,7 +230,7 @@ function removeAllReportsRelated(reports) {
         Promise.all(promisesRemove).then(function () {
             resolve();
         }).catch(function (err) {
-            reject(err);
+            reject("Error en RemoveAllReportsRelated" +err);
         });
     });
 }
