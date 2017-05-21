@@ -37,9 +37,9 @@ module.exports = {
                 reports.createIndex("by_creation_date", "creationDate", { unique: false });
                 reports.createIndex("by_lastModification", "lastModification", { unique: false });
 
-                let reportsImages = active.createObjectStore("reportsImage", {keyPath: 'reportImgId'});
-                reportsImages.createIndex("by_reportId","reportId",{ unique: false });
-                reportsImages.createIndex("by_lastModification","lastModification",{ unique: false});
+                let reportsImages = active.createObjectStore("reportsImage", { keyPath: 'reportImgId' });
+                reportsImages.createIndex("by_reportId", "reportId", { unique: false });
+                reportsImages.createIndex("by_lastModification", "lastModification", { unique: false });
 
                 let reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
                 reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
@@ -283,6 +283,56 @@ module.exports = {
             }
         });
     },
+    "addReportAllProperties": function (reportId, templateId, visitId, status, author, cloud,
+        creationDate, completedDate, lastModification, checkbox_answer, date_answer, datetime_answer,
+        list_answer, month_answer, multiselect_answer, number_answer, radio_answer, select_answer, table_answer,
+        text_answer, textarea_answer, time_answer, week_answer) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports", "reportsLog"], "readwrite");
+            let object = data.objectStore("reports");
+            let request = object.put({
+                reportId: reportId,
+                visitId: visitId,
+                templateId: templateId,
+                cloud: cloud,
+                status: status,
+                author: author,
+                completedDate: completedDate,
+                creationDate: creationDate,
+                lastModification: lastModification,
+                checkbox_answer: checkbox_answer,
+                date_answer: date_answer,
+                datetime_answer: datetime_answer,
+                list_answer: list_answer,
+                month_answer: month_answer,
+                multiselect_answer: multiselect_answer,
+                number_answer: number_answer,
+                radio_answer: radio_answer,
+                select_answer: select_answer,
+                table_answer: table_answer,
+                text_answer: text_answer,
+                textarea_answer: textarea_answer,
+                time_answer: time_answer,
+                week_answer: week_answer
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(e);
+            }
+
+            request.onsuccess = function (e) {
+                reference.addReportLog(e.target.result, "Creacion", status);
+            }
+
+            data.oncomplete = function (e) {
+                console.log("The report was added to SmartDocsOffline", e);
+                resolve();
+            }
+        });
+    },
     "addReport": function (reportId, templateId, visitId, status, author, cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -385,7 +435,33 @@ module.exports = {
             }
         });
     },
-    "deleteReports": function(){
+    "deleteReports": function (reportId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports"], "readwrite");
+            let object = data.objectStore("reports");
+            let index = object.index("by_reportId");
+            var objectStoreRequest = index.openCursor(IDBKeyRange.only(reportId.toString()));
+
+            objectStoreRequest.onsuccess = function (e) {
+                let cursor = objectStoreRequest.result;
+                if (cursor) {
+                    cursor.delete();
+                    cursor.continue();
+                }
+
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+
+            data.oncomplete = function (e) {
+                resolve();
+            }
+        });
+    },
+    "deleteAllReports": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -393,16 +469,16 @@ module.exports = {
             let object = data.objectStore("reports");
             var objectStoreRequest = object.clear();
 
-           objectStoreRequest.onsuccess = function(e){
-               resolve();
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
                 console.log("Reports DB was cleared");
-           }
-           objectStoreRequest.onerror = function(e){
-               reject(e.error.name);
-           }
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
         });
     },
-    "addReportImages": function (reportImgId, reportId, images, author,image_1 = [], cloud = false) {
+    "addReportImages": function (reportImgId, reportId, images, author, image_1 = [], cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -501,7 +577,7 @@ module.exports = {
                 if (result === null) {
                     result;
                 } else {
-                    if(result.value.reportId == reportId){
+                    if (result.value.reportId == reportId) {
                         elements.push(result.value);
                         console.log(elements);
                     }
@@ -514,7 +590,33 @@ module.exports = {
             }
         });
     },
-    "deleteReportsImage": function(){
+    "deleteReportsImage": function (reportId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsImage"], "readwrite");
+            let object = data.objectStore("reportsImage");
+            let index = object.index("by_reportId");
+            var objectStoreRequest = index.openCursor(IDBKeyRange.only(reportId.toString()));
+
+            objectStoreRequest.onsuccess = function (e) {
+                let cursor = objectStoreRequest.result;
+                if (cursor) {
+                    cursor.delete();
+                    cursor.continue();
+                }
+
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+
+            data.oncomplete = function (e) {
+                resolve();
+            }
+        });
+    },
+    "deleteAllReportsImage": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -522,13 +624,13 @@ module.exports = {
             let object = data.objectStore("reportsImage");
             var objectStoreRequest = object.clear();
 
-           objectStoreRequest.onsuccess = function(e){
-               resolve();
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
                 console.log("Reports Img DB was cleared");
-           }
-           objectStoreRequest.onerror = function(e){
-               reject(e.error.name);
-           }
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
         });
     },
     "addReportLog": function (reportId, operation, status) {

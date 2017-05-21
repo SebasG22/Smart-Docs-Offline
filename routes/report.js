@@ -4,9 +4,14 @@ const Report = require("./../models/Report");
 const ReportImages = require("./../models/ReportImages");
 router.get('/', function (req, res, next) {
     Report.find().then(function (reports) {
-        res.send(reports);
+        let reportsToSend = [];
+        for(let report of reports){
+            reportToSend.push({reportId:report.reportId});
+        }
+        res.send(reportsToSend);
     });
 });
+
 
 router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
     Report.find().then(function (reports) {

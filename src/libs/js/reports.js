@@ -149,8 +149,91 @@ module.exports = {
             });
         });
     },
-    "validateReportsLocally": function(){
+    "validateReportsLocally": function (reportsOnCloud, reportsLocally) {
+        let reference = this;
+        let reportsToDelete = [];
+        //Iterate on Reports Locally
+        for (let reportLocal of reportsLocally) {
+            //Filter on reports Cloud
+            let reportFiltered = reportsOnCloud.filter(function (report) {
+                return report.idReport == reportLocal.idReport;
+            });
 
+            if (reportFiltered.length == 0) {
+                reportsToDelete.push(indexDb.deleteReports(reportLocal.idReport));
+                reportsToDelete.push(indexDb.deleteReportsImage(reportLocal.reportId));
+            }
+        }
+
+        //Iterate on Reports Cloud
+        for (let reportCloud of reportsOnCloud) {
+            //Filter on reports Locally
+            let reportFiltered = reportsLocally.filter(function (report) {
+                return report.idReport == reportCloud.idReport;
+            });
+
+            if (reportFiltered.length == 0) {
+                reportsToDelete.push(reference.getReportOnCloudToSaveLocally(reportCloud.idReport));
+            }
+        }
+
+        return new Promise(function () {
+            Promise.all(reportsToDelete).then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    },
+    "getReportOnCloudToSaveLocally": function (idReport) {
+        let reference = this;
+
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                method: "GET",
+                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + reportId,
+            })
+                .done(function (reportResponse) {
+                    reference.saveReportsLocally(reportResponse)
+                    .then(function(){
+                        resolve();
+                    })
+                    .catch(function(err){
+                        reject(err);
+                    });
+                });
+        });
+    },
+    "saveReportsLocally": function (reportResponse) {
+        return new Promise(function (resolve, reject) {
+            let saveReportLocal = reference.saveReportOnCloudToSaveLocally(reportResponse[0]);
+            let saveReportImagesLocal = reference.saveReportImageOnCloudToSaveLocally(reportResponse[0]);
+
+            Promise.all([saveReportLocal,saveReportImagesLocal]).then(function () {
+                resolve();
+            }).catch(function(err){
+                reject(err);
+            });
+        });
+    },
+    "saveReportOnCloudToSaveLocally": function (report) {
+        return new Promise(function (resolve, reject) {
+            indexDb.addReportAllProperties(report.reportId, report.templateId, report.visitId, report.status, report.author, true,
+                report.creationDate, report.completedDate, report.lastModification, report.checkbox_answer, report.date_answer, report.datetime_answer,
+                report.list_answer, report.month_answer, report.multiselect_answer, report.number_answer, report.radio_answer, report.select_answer, report.table_answer,
+                report.text_answer, report.textarea_answer, report.time_answer, report.week_answer);
+        });
+    },
+    "saveReportImageOnCloudToSaveLocally": function (report) {
+        return new Promise(function (resolve, reject) {
+            indexDb.addReportImages(report.reportImgId, report.reportId, report.images, report.author, report.image_1, true)
+                .then(function () {
+                    resolve();
+                })
+                .catch(function (err) {
+                    reject(err);
+                })
+        });
     },
     getReportsSaveonCloud: function () {
         let reference = this;
@@ -243,7 +326,7 @@ module.exports = {
                 });
                 $("#statisticCompleted").text(completed_reports.length);
                 resolve();
-            }).catch(function(err){
+            }).catch(function (err) {
                 reject(err);
             });
         })

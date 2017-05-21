@@ -10369,9 +10369,9 @@ module.exports = {
                 reports.createIndex("by_creation_date", "creationDate", { unique: false });
                 reports.createIndex("by_lastModification", "lastModification", { unique: false });
 
-                let reportsImages = active.createObjectStore("reportsImage", {keyPath: 'reportImgId'});
-                reportsImages.createIndex("by_reportId","reportId",{ unique: false });
-                reportsImages.createIndex("by_lastModification","lastModification",{ unique: false});
+                let reportsImages = active.createObjectStore("reportsImage", { keyPath: 'reportImgId' });
+                reportsImages.createIndex("by_reportId", "reportId", { unique: false });
+                reportsImages.createIndex("by_lastModification", "lastModification", { unique: false });
 
                 let reportsLog = active.createObjectStore("reportsLog", { keyPath: 'reportLogId', autoIncrement: true });
                 reportsLog.createIndex("by_reportLogId", "reportLogId", { unique: true });
@@ -10615,6 +10615,56 @@ module.exports = {
             }
         });
     },
+    "addReportAllProperties": function (reportId, templateId, visitId, status, author, cloud,
+        creationDate, completedDate, lastModification, checkbox_answer, date_answer, datetime_answer,
+        list_answer, month_answer, multiselect_answer, number_answer, radio_answer, select_answer, table_answer,
+        text_answer, textarea_answer, time_answer, week_answer) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports", "reportsLog"], "readwrite");
+            let object = data.objectStore("reports");
+            let request = object.put({
+                reportId: reportId,
+                visitId: visitId,
+                templateId: templateId,
+                cloud: cloud,
+                status: status,
+                author: author,
+                completedDate: completedDate,
+                creationDate: creationDate,
+                lastModification: lastModification,
+                checkbox_answer: checkbox_answer,
+                date_answer: date_answer,
+                datetime_answer: datetime_answer,
+                list_answer: list_answer,
+                month_answer: month_answer,
+                multiselect_answer: multiselect_answer,
+                number_answer: number_answer,
+                radio_answer: radio_answer,
+                select_answer: select_answer,
+                table_answer: table_answer,
+                text_answer: text_answer,
+                textarea_answer: textarea_answer,
+                time_answer: time_answer,
+                week_answer: week_answer
+            });
+
+            request.onerror = function (e) {
+                console.log("An error occurred " + request.error.name + " \n\n " + request.error.message);
+                reject(e);
+            }
+
+            request.onsuccess = function (e) {
+                reference.addReportLog(e.target.result, "Creacion", status);
+            }
+
+            data.oncomplete = function (e) {
+                console.log("The report was added to SmartDocsOffline", e);
+                resolve();
+            }
+        });
+    },
     "addReport": function (reportId, templateId, visitId, status, author, cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -10717,7 +10767,33 @@ module.exports = {
             }
         });
     },
-    "deleteReports": function(){
+    "deleteReports": function (reportId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports"], "readwrite");
+            let object = data.objectStore("reports");
+            let index = object.index("by_reportId");
+            var objectStoreRequest = index.openCursor(IDBKeyRange.only(reportId.toString()));
+
+            objectStoreRequest.onsuccess = function (e) {
+                let cursor = objectStoreRequest.result;
+                if (cursor) {
+                    cursor.delete();
+                    cursor.continue();
+                }
+
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+
+            data.oncomplete = function (e) {
+                resolve();
+            }
+        });
+    },
+    "deleteAllReports": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -10725,16 +10801,16 @@ module.exports = {
             let object = data.objectStore("reports");
             var objectStoreRequest = object.clear();
 
-           objectStoreRequest.onsuccess = function(e){
-               resolve();
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
                 console.log("Reports DB was cleared");
-           }
-           objectStoreRequest.onerror = function(e){
-               reject(e.error.name);
-           }
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
         });
     },
-    "addReportImages": function (reportImgId, reportId, images, author,image_1 = [], cloud = false) {
+    "addReportImages": function (reportImgId, reportId, images, author, image_1 = [], cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -10833,7 +10909,7 @@ module.exports = {
                 if (result === null) {
                     result;
                 } else {
-                    if(result.value.reportId == reportId){
+                    if (result.value.reportId == reportId) {
                         elements.push(result.value);
                         console.log(elements);
                     }
@@ -10846,7 +10922,33 @@ module.exports = {
             }
         });
     },
-    "deleteReportsImage": function(){
+    "deleteReportsImage": function (reportId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsImage"], "readwrite");
+            let object = data.objectStore("reportsImage");
+            let index = object.index("by_reportId");
+            var objectStoreRequest = index.openCursor(IDBKeyRange.only(reportId.toString()));
+
+            objectStoreRequest.onsuccess = function (e) {
+                let cursor = objectStoreRequest.result;
+                if (cursor) {
+                    cursor.delete();
+                    cursor.continue();
+                }
+
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+
+            data.oncomplete = function (e) {
+                resolve();
+            }
+        });
+    },
+    "deleteAllReportsImage": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -10854,13 +10956,13 @@ module.exports = {
             let object = data.objectStore("reportsImage");
             var objectStoreRequest = object.clear();
 
-           objectStoreRequest.onsuccess = function(e){
-               resolve();
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
                 console.log("Reports Img DB was cleared");
-           }
-           objectStoreRequest.onerror = function(e){
-               reject(e.error.name);
-           }
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
         });
     },
     "addReportLog": function (reportId, operation, status) {
@@ -11520,14 +11622,16 @@ module.exports = {
         let reportsToImgCreate = [];
         let cont = 0;
         for (let reportImgToCreate of reportImagesResponse) {
-            this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
-                reportImgId: reportImgToCreate.reportImgId,
-                reportId: reportImgToCreate.reportId,
-                images: JSON.stringify(reportImgToCreate.images),
-                author: reportImgToCreate.author,
-                lastModification: reportImgToCreate.lastModification
-            });
-            reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+            if (!reportImgToCreate.cloud) {
+                this["reportImgToCreateUpd" + cont] = reference.uploadReportCreate({
+                    reportImgId: reportImgToCreate.reportImgId,
+                    reportId: reportImgToCreate.reportId,
+                    images: JSON.stringify(reportImgToCreate.images),
+                    author: reportImgToCreate.author,
+                    lastModification: reportImgToCreate.lastModification
+                });
+                reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+            }
         }
         return new Promise(function (resolve, reject) {
             Promise.all(reportsToImgCreate).then(function () {
@@ -11536,8 +11640,6 @@ module.exports = {
                 reject(err);
             });
         });
-
-
     },
     uploadReportsImages1: function () {
         let reference = this;
@@ -11560,10 +11662,18 @@ module.exports = {
         });
     },
     uploadReportCreate: function (dataToUpdate) {
-        return new Promise(function (resolve, reject) {
+
+        let promiseUpdateLocally = indexDb.updateReportImages(dataToUpdate.reportImgId,"cloud",true);
+
+        let promiseUpdateCloud = new Promise(function(resolve,reject){
             $.post("https://smart-docs.herokuapp.com/reportsImg/",
                 dataToUpdate
             ).done(function () {
+                resolve();
+            });
+        });
+        return new Promise(function (resolve, reject) {
+            Promise.all([promiseUpdateLocally,promiseUpdateCloud]).then(function(){
                 resolve();
             });
         });
@@ -11779,6 +11889,92 @@ module.exports = {
             });
         });
     },
+    "validateReportsLocally": function (reportsOnCloud, reportsLocally) {
+        let reference = this;
+        let reportsToDelete = [];
+        //Iterate on Reports Locally
+        for (let reportLocal of reportsLocally) {
+            //Filter on reports Cloud
+            let reportFiltered = reportsOnCloud.filter(function (report) {
+                return report.idReport == reportLocal.idReport;
+            });
+
+            if (reportFiltered.length == 0) {
+                reportsToDelete.push(indexDb.deleteReports(reportLocal.idReport));
+                reportsToDelete.push(indexDb.deleteReportsImage(reportLocal.reportId));
+            }
+        }
+
+        //Iterate on Reports Cloud
+        for (let reportCloud of reportsOnCloud) {
+            //Filter on reports Locally
+            let reportFiltered = reportsLocally.filter(function (report) {
+                return report.idReport == reportCloud.idReport;
+            });
+
+            if (reportFiltered.length == 0) {
+                reportsToDelete.push(reference.getReportOnCloudToSaveLocally(reportCloud.idReport));
+            }
+        }
+
+        return new Promise(function () {
+            Promise.all(reportsToDelete).then(function () {
+                resolve();
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
+    },
+    "getReportOnCloudToSaveLocally": function (idReport) {
+        let reference = this;
+
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                method: "GET",
+                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + reportId,
+            })
+                .done(function (reportResponse) {
+                    reference.saveReportsLocally(reportResponse)
+                    .then(function(){
+                        resolve();
+                    })
+                    .catch(function(err){
+                        reject(err);
+                    });
+                });
+        });
+    },
+    "saveReportsLocally": function (reportResponse) {
+        return new Promise(function (resolve, reject) {
+            let saveReportLocal = reference.saveReportOnCloudToSaveLocally(reportResponse[0]);
+            let saveReportImagesLocal = reference.saveReportImageOnCloudToSaveLocally(reportResponse[0]);
+
+            Promise.all([saveReportLocal,saveReportImagesLocal]).then(function () {
+                resolve();
+            }).catch(function(err){
+                reject(err);
+            });
+        });
+    },
+    "saveReportOnCloudToSaveLocally": function (report) {
+        return new Promise(function (resolve, reject) {
+            indexDb.addReportAllProperties(report.reportId, report.templateId, report.visitId, report.status, report.author, true,
+                report.creationDate, report.completedDate, report.lastModification, report.checkbox_answer, report.date_answer, report.datetime_answer,
+                report.list_answer, report.month_answer, report.multiselect_answer, report.number_answer, report.radio_answer, report.select_answer, report.table_answer,
+                report.text_answer, report.textarea_answer, report.time_answer, report.week_answer);
+        });
+    },
+    "saveReportImageOnCloudToSaveLocally": function (report) {
+        return new Promise(function (resolve, reject) {
+            indexDb.addReportImages(report.reportImgId, report.reportId, report.images, report.author, report.image_1, true)
+                .then(function () {
+                    resolve();
+                })
+                .catch(function (err) {
+                    reject(err);
+                })
+        });
+    },
     getReportsSaveonCloud: function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -11870,7 +12066,7 @@ module.exports = {
                 });
                 $("#statisticCompleted").text(completed_reports.length);
                 resolve();
-            }).catch(function(err){
+            }).catch(function (err) {
                 reject(err);
             });
         })
@@ -13231,31 +13427,9 @@ module.exports = {
                 });
         });
     },
-    /*
-    updateLocalVisits: function () {
-        let reference = this;
-        let cont = 0;
-        let updateVisits = [];
-        reference.getVisits().then(function (visits) {
-            for (let siteRes of reference.visits) {
-                this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
-                updateVisits.push(this["updateVisit" + cont]);
-                cont++;
-            }
-            return new Promise(function (resolve, reject) {
-                if (updateVisits.length > 0) {
-                    Promise.all(updateVisits).then(function () {
-                        resolve();
-                    });
-                }
-                else {
-                    resolve();
-                }
-            });
-        })
-
+    "validateVisitLocally":function(){
+        
     }
-    */
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -15877,7 +16051,7 @@ let reportsImg = __webpack_require__(12);
                         $("#userStatus").css("color", "red");
                         break;
                 }
-                
+
                 reference.addEventsToMenu();
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
@@ -15888,6 +16062,8 @@ let reportsImg = __webpack_require__(12);
                  * If it's true == Connection Available
                  */
                 if (navigator.onLine == true) {
+                    let reportsLocal = [];
+                    let reportsCloud = [];
                     message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
                     visits.getVisits().then(function () {
@@ -15902,18 +16078,16 @@ let reportsImg = __webpack_require__(12);
                             return reports.getReports();
                         })
                         .then(function (reportsResponse) {
+                            reportsLocal = reportsResponse;
                             return reports.uploadReportToCloud(reportsResponse);
-                        })
-                        .then(function () {
-                            return reports.deleteReports();
                         })
                         .then(function () {
                             return reports.getReportsSaveonCloud();
                         })
                         .then(function (reportsOnCloud) {
-                            return reports.saveReportsSaveonCloud(reportsOnCloud);
+                            return reports.validateReportsLocally(reportsOnCloud,reportsLocal);
                         })
-                        .then(function(){
+                        .then(function () {
                             return reports.changeStatistic();
                         })
                         .then(function () {
@@ -15955,12 +16129,12 @@ let reportsImg = __webpack_require__(12);
                         message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
                         return indexDb.getTemplates();
                     })
-                    .then(function(){
-                        return reports.changeStatistic();
-                    })
-                    .then(function () {
-                        message.removeMessageLoader("#mainContent2");
-                    });
+                        .then(function () {
+                            return reports.changeStatistic();
+                        })
+                        .then(function () {
+                            message.removeMessageLoader("#mainContent2");
+                        });
 
                 }
             });
@@ -16086,8 +16260,8 @@ let reportsImg = __webpack_require__(12);
                 case "dashboard":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Sitios Almacenados");
-                    reports.changeStatistic().then(function(){
-                    message.removeMessageLoader("#mainContent2");    
+                    reports.changeStatistic().then(function () {
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
                 case "allVisits":

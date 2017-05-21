@@ -31,7 +31,7 @@ let reportsImg = require("./reportImages");
                         $("#userStatus").css("color", "red");
                         break;
                 }
-                
+
                 reference.addEventsToMenu();
                 reference.loadNavBar();
                 reference.grantPermissionPosition();
@@ -42,6 +42,8 @@ let reportsImg = require("./reportImages");
                  * If it's true == Connection Available
                  */
                 if (navigator.onLine == true) {
+                    let reportsLocal = [];
+                    let reportsCloud = [];
                     message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
                     visits.getVisits().then(function () {
@@ -56,18 +58,16 @@ let reportsImg = require("./reportImages");
                             return reports.getReports();
                         })
                         .then(function (reportsResponse) {
+                            reportsLocal = reportsResponse;
                             return reports.uploadReportToCloud(reportsResponse);
-                        })
-                        .then(function () {
-                            return reports.deleteReports();
                         })
                         .then(function () {
                             return reports.getReportsSaveonCloud();
                         })
                         .then(function (reportsOnCloud) {
-                            return reports.saveReportsSaveonCloud(reportsOnCloud);
+                            return reports.validateReportsLocally(reportsOnCloud,reportsLocal);
                         })
-                        .then(function(){
+                        .then(function () {
                             return reports.changeStatistic();
                         })
                         .then(function () {
@@ -109,12 +109,12 @@ let reportsImg = require("./reportImages");
                         message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
                         return indexDb.getTemplates();
                     })
-                    .then(function(){
-                        return reports.changeStatistic();
-                    })
-                    .then(function () {
-                        message.removeMessageLoader("#mainContent2");
-                    });
+                        .then(function () {
+                            return reports.changeStatistic();
+                        })
+                        .then(function () {
+                            message.removeMessageLoader("#mainContent2");
+                        });
 
                 }
             });
@@ -240,8 +240,8 @@ let reportsImg = require("./reportImages");
                 case "dashboard":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Sitios Almacenados");
-                    reports.changeStatistic().then(function(){
-                    message.removeMessageLoader("#mainContent2");    
+                    reports.changeStatistic().then(function () {
+                        message.removeMessageLoader("#mainContent2");
                     });
                     break;
                 case "allVisits":
