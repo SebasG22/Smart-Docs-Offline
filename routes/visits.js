@@ -69,7 +69,7 @@ router.delete('/:visitId', function (req, res, next) {
             obj: result
         });
     }).catch(function (err) {
-        return res.status(500).json({
+        res.status(500).json({
             title: 'An error ocurred',
             error: err
         });
