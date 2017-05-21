@@ -222,7 +222,7 @@ function removeAllReportsRelated(reports) {
     let promisesFind = [];
     for (reportToDelete of reports) {
         promisesRemove.push(removeReportsRelated(reportToDelete));
-        promisesRemove.push(findImagesReportsRelated(reportToDelete.reportId));
+        //promisesRemove.push(findImagesReportsRelated(reportToDelete.reportId));
     }
     return new Promise(function (resolve, reject) {
         Promise.all(promisesRemove).then(function () {
