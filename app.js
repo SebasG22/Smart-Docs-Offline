@@ -8,11 +8,13 @@ var bodyParser = require('body-parser');
 const mongoose = require("mongoose");
 
 var index = require('./routes/index');
+var userRoutes = require("./routes/user");
 var templateRoutes = require("./routes/templates");
 var siteRoutes = require("./routes/sites");
 var visitRoutes = require("./routes/visits");
 var reportRoutes = require("./routes/report");
 var reportImageRoutes = require("./routes/reportImages");
+
 
 var app = express();
 mongoose.connect("Smart-Admin:huaweiDevelopers2017@ds131621.mlab.com:31621/smartdocs");
@@ -45,6 +47,7 @@ app.use(function (req, res, next) {
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
 
 app.use('/', index);
+app.use('/user', userRoutes);
 app.use('/templates', templateRoutes);
 app.use('/sites', siteRoutes);
 app.use('/visits', visitRoutes);
