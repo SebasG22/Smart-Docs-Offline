@@ -145,8 +145,9 @@ function deleteVisits(visitId) {
     return new Promise(function (resolve, reject) {
         findVisitsRelated(visitId)
             .then(function (visits) {
-
-                if (visits.length == 0) resolve();
+                resolve();
+            }).catch(function(err){
+                reject(err);
             })
 
     });
@@ -162,7 +163,12 @@ function findVisitsRelated(visitId) {
                 resolve();
             }
             else {
-                removeVisitRelated(visits[0]);
+                removeVisitRelated(visits[0]).then(function(){
+                   resolve(); 
+                })
+                .catch(function(err){
+                    reject(err);
+                });
             }
         });
     });
