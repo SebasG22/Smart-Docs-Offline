@@ -1,6 +1,8 @@
 const express = require("express");
 var router = express.Router();
 const Visit = require("./../models/Visits");
+const Report = require("./../models/Report");
+const ReportImage = require("./../models/ReportImages");
 
 router.get('/', function (req, res, next) {
     Visit.find().then(function (visits) {
@@ -10,38 +12,38 @@ router.get('/', function (req, res, next) {
 
 router.post('/', function (req, res, next) {
 
-    Visit.findOne({ siteId: ''+ req.body.siteId, author: req.body.author }, function (err,visitResponse) {
-        if(err){
-             return res.status(500).json({
+    Visit.findOne({ siteId: '' + req.body.siteId, author: req.body.author }, function (err, visitResponse) {
+        if (err) {
+            return res.status(500).json({
                 title: 'An error ocurred',
                 error: err
             });
         }
-        if(!visitResponse){
+        if (!visitResponse) {
             //Not founded
             var visitEntry = new Visit({
-                    siteId: req.body.siteId,
-                    name: req.body.name,
-                    visitId: req.body.visitId,
-                    author: req.body.author,
-                    creationDate: req.body.creationDate
-                });
+                siteId: req.body.siteId,
+                name: req.body.name,
+                visitId: req.body.visitId,
+                author: req.body.author,
+                creationDate: req.body.creationDate
+            });
 
-                visitEntry.save(function (err, result) {
-                    if (err) {
-                        return res.status(500).json({
-                            title: 'An error ocurred',
-                            error: err
-                        })
-                    }
-
-                    res.status(201).json({
-                        message: 'Visit was saved',
-                        obj: result
+            visitEntry.save(function (err, result) {
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error ocurred',
+                        error: err
                     })
+                }
+
+                res.status(201).json({
+                    message: 'Visit was saved',
+                    obj: result
                 })
+            })
         }
-        else{
+        else {
             //Founded
 
             visitResponse.siteId = req.body.siteId;
@@ -49,45 +51,222 @@ router.post('/', function (req, res, next) {
             visitResponse.author = req.body.author;
             visitResponse.creationDate = req.body.creationDate;
 
-            visitResponse.save(function(err,visitRes){
+            visitResponse.save(function (err, visitRes) {
                 res.status(201).json({
-                message: 'Visit already exits was modified',
-                obj: visitRes
-            });
+                    message: 'Visit already exits was modified',
+                    obj: visitRes
+                });
             });
         }
     })
 });
 
-router.delete('/:id', function (req, res, next) {
-    Visit.findById(req.params.id, function (err, visit) {
-        if (err) {
-            return res.status(500).json({
-                title: 'An error ocurred',
-                error: err
-            });
-        }
+router.delete('/:visitId', function (req, res, next) {
 
-        if (!visit) {
-            return res.status(500).json({
-                title: 'No Visit Founded',
-                error: { message: "Visit not found" }
-            });
-        }
+    deleteVisits(req.params.visitId).then(function () {
+        res.status(201).json({
+            message: 'The visit was deleted',
+            obj: result
+        });
+    }).catch(function (err) {
+        return res.status(500).json({
+            title: 'An error ocurred',
+            error: err
+        });
+    });
 
-        visit.remove(function (err, result) {
+
+    /*
+        Visit.find({ visitId: req.params.visitId }, function (err, visit) {
             if (err) {
                 return res.status(500).json({
                     title: 'An error ocurred',
                     error: err
                 });
             }
-            res.status(201).json({
-                message: 'The visit was deleted',
-                obj: result
+    
+            if (!visit) {
+                return res.status(500).json({
+                    title: 'No Visit Founded',
+                    error: { message: "Visit not found" }
+                });
+            }
+    
+            Report.find({ visitId: req.params.visitId }, function (err, reportsRes) {
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error ocurred',
+                        error: err
+                    });
+                }
+    
+                if (!reportRes) {
+                    return res.status(500).json({
+                        title: 'No Reports Founded',
+                        error: { message: "Reports not found" }
+                    });
+                }
+                for (reportToDelete of reportsRes) {
+    
+    
+    
+                    reportRes.remove(function (err, result) {
+                        if (err) {
+                            return res.status(500).json({
+                                title: 'An error ocurred',
+                                error: err
+                            });
+                        }
+                        res.status(201).json({
+                            message: 'The visit was deleted',
+                            obj: result
+                        });
+                    });
+                }
             });
-        })
-    });
+    
+            visit.remove(function (err, result) {
+                if (err) {
+                    return res.status(500).json({
+                        title: 'An error ocurred',
+                        error: err
+                    });
+                }
+                res.status(201).json({
+                    message: 'The visit was deleted',
+                    obj: result
+                });
+            })
+        });
+        */
 });
+
+function deleteVisits(visitId) {
+    return new Promise(function (resolve, reject) {
+        findVisitsRelated(visitId)
+            .then(function (visits) {
+
+                if (visits.length == 0) resolve();
+            })
+
+    });
+}
+
+function findVisitsRelated(visitId) {
+    return new Promise(function (resolve, reject) {
+        Visit.find({ visitId: visitId }, function (err, visits) {
+            if (err) {
+                reject(err);
+            }
+            if (visits.length == 0) {
+                resolve();
+            }
+            else {
+                removeVisitRelated(visits[0]);
+            }
+        });
+    });
+}
+
+function removeVisitRelated(visit) {
+    return new Promise(function (resolve, reject) {
+        visit.remove(function (err, res) {
+            if (err) {
+                reject(err);
+            }
+            findReportsRelated(visit.visitId).then(function () {
+                resolve();
+            });
+        });
+    });
+}
+
+/* Find Reports Related */
+function findReportsRelated(visitId) {
+    return new Promise(function (resolve, reject) {
+        Reports.find({ visitId: visitId }, function (err, reports) {
+            if (err) {
+                reject(err);
+            }
+            if (reports.length == 0) {
+                resolve();
+            }
+            else {
+                removeAllReportsRelated(reports).then(function () {
+                    resolve();
+                });
+            }
+        });
+    });
+};
+
+function removeReportsRelated(report) {
+    return new Promise(function (resolve, reject) {
+        report.remove(function (err, res) {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        });
+    });
+};
+
+function removeAllReportsRelated(reports) {
+    let promisesRemove = [];
+    let promisesFind = [];
+    for (reportToDelete of reports) {
+        promisesRemove.push(removeReportsRelated(reportToDelete));
+        promisesRemove.push(findImagesReportsRelated(reportToDelete.reportId));
+    }
+    return new Promise(function (resolve, reject) {
+        Promise.all(promisesRemove).then(function () {
+            resolve();
+        }).catch(function (err) {
+            reject(err);
+        });
+    });
+}
+
+/* Find Images Reports */
+function findImagesReportsRelated(reportId) {
+    return new Promise(function (resolve, reject) {
+        ReportImage.find({ reportId: reportId }, function (err, reportImages) {
+            if (err) {
+                reject(err);
+            }
+            if (reportImages == 0) {
+                resolve();
+            }
+            else {
+                removeAllImagesReportsRelated(reportImages).then(function () {
+                    resolve(reportsImages);
+                });
+            }
+        });
+    });
+}
+function removeImagesReportsRelated(reportImage) {
+    return new Promise(function (resolve, reject) {
+        reportImage.remove(function (err, res) {
+            if (err) {
+                reject(err);
+            }
+            resolve();
+        });
+    });
+}
+function removeAllImagesReportsRelated(reportImages) {
+    let promisesRemove = [];
+    for (reportImagesToDelete of reportImages) {
+        promisesRemove.push(removeImagesReportsRelated(reportImagesToDelete));
+    }
+    return new Promise(function (resolve, reject) {
+        Promise.all(promisesRemove).then(function () {
+            resolve();
+        }).catch(function (err) {
+            reject(err);
+        });
+    });
+}
 
 module.exports = router;

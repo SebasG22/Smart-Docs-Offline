@@ -924,7 +924,7 @@ router.patch('/update/week_answer', function (req, res, next) {
 });
 
 router.delete('/:id', function (req, res, next) {
-    Report.findById(req.params.id, function (err, template) {
+    Report.findById(req.params.id, function (err, reportRes) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -932,14 +932,14 @@ router.delete('/:id', function (req, res, next) {
             });
         }
 
-        if (!template) {
+        if (!reportRes) {
             return res.status(500).json({
                 title: 'No Report Founded',
                 error: { message: "Report not found" }
             });
         }
-
-        template.remove(function (err, result) {
+        
+        reportRes.remove(function (err, result) {
             if (err) {
                 return res.status(500).json({
                     title: 'An error ocurred',
