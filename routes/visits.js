@@ -63,7 +63,7 @@ router.post('/', function (req, res, next) {
 
 router.delete('/:visitId', function (req, res, next) {
 
-    visits.findOneAndRemove({visitId: req.params.visitId}, function(err){
+    Visit.findOneAndRemove({visitId: req.params.visitId}, function(err){
         if(err){
             res.status(500).json({
             title: 'An error ocurred',
