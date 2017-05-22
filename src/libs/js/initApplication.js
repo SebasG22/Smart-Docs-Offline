@@ -79,12 +79,14 @@ let reportsImg = require("./reportImages");
                         .then(function () {
                             return reportsImg.uploadReportsImages1();
                         })
+                        /*
                         .then(function () {
                             return reportsImg.deleteReportsImg();
                         })
                         .then(function () {
                             return reportsImg.getReportsImgSaveonCloud();
                         })
+                        */
                         .then(function () {
                             console.log("Visits Saved ", visits.getVisits())
                             return reference.updateSiteExternal();
