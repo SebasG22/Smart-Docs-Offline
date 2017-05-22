@@ -459,19 +459,27 @@ let reportsImg = require("./reportImages");
             totalTabs = $('#templateNavTabs li a').length;
             $("#btnBefore").prop("disabled",true);
             $("#btnBefore").click(function(){
+                if(indexTab == 0){
+                    $("#btnBefore").prop("disabled",true);
+                }
+                else{
+                    indexTab -= 1;
+                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                }
+            });
+            $("#btnNext").click(function(){
+
+                //Disabled when the indexTab is the last
                 if(indexTab == totalTabs){
                     $("#btnNext").prop("disabled",true);
                 }
                 else{
-                    indexTab += 1;
-                }
-            });
-            $("#btnNext").click(function(){
-                indexTab +=1 ;
-                if(indexTab != 0 && indexTab < totalTabs){
+                    //Go to the next Tab
                     $("#btnBefore").prop("disabled",false);
-                $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                    indexTab +=1;
+                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
                 }
+
             });
         },
         fillAnswer: function () {
