@@ -16083,15 +16083,18 @@ let reportsImg = __webpack_require__(12);
                         message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         return visits.uploadVisitsToCloud();
                     }).then(function () {
+                        message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
                         return visits.getVisitsSaveonCloud();
                     })/*.then(function(){
                         return visits.updateLocalVisits();
                     })*/
                         .then(function () {
+                            message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
                             return reports.getReports();
                         })
                         .then(function (reportsResponse) {
                             reportsLocal = reportsResponse;
+                            message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
                             return reports.uploadReportToCloud(reportsResponse);
                         })
                         .then(function () {
@@ -16482,8 +16485,27 @@ let reportsImg = __webpack_require__(12);
         },
         showTemplate: function () {
             let reference = this;
+            let totalTabs;
+            let indexTab = 0;
             smartEngine.executeEngine(templates.templateSelected.content);
             $('#templateNavTabs a:first').tab('show');
+            totalTabs = $('#templateNavTabs li a').length;
+            $("#btnBefore").prop("disabled",true);
+            $("#btnBefore").click(function(){
+                if(indexTab == totalTabs){
+                    $("#btnNext").prop("disabled",true);
+                }
+                else{
+                    indexTab += 1;
+                }
+            });
+            $("#btnNext").click(function(){
+                indexTab +=1 ;
+                if(indexTab != 0 && indexTab < totalTabs){
+                    $("#btnBefore").prop("disabled",false);
+                $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                }
+            });
         },
         fillAnswer: function () {
             let reference = this;
