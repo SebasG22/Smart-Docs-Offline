@@ -475,15 +475,14 @@ let reportsImg = require("./reportImages");
                 if(indexTab+1 == totalTabs){
                     $("#btnNext").prop("disabled",true);
                     indexTab +=1;
-                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                    $("#templateNavTabs li:eq("+ indexTab +") a").tab('show');
                 }
                 else{
                     //Go to the next Tab
                     $("#btnBefore").prop("disabled",false);
                     indexTab +=1;
-                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                    $("#templateNavTabs li:eq("+ indexTab +") a").tab('show');
                 }
-
             });
         },
         fillAnswer: function () {
