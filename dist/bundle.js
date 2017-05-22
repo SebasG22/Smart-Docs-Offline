@@ -16459,7 +16459,9 @@ let reportsImg = __webpack_require__(12);
                 });
                 templateFilter = templateFilter[0];
                 console.log("Template Filter ", templateFilter);
-                $("#allReportsRelatedDiv").append( true? 'green' : 'red' +"'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado: " + (report.status == true) ? 'Sincronizado' : ' Falta Sincronizacion' +"</div> <button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
+                let syncronizedColor = (report.cloud == true) ? 'green' : 'red';
+                let syncronizedText = (report.cloud == true) ? 'Sincronizado ' : 'Falta Sincronizar';
+                $("#allReportsRelatedDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class='pricing-table " + report.status_background + "'><div class=pt-header><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + templateFilter.name + "</div><div class=pricing-type> Ultima Modificacion: " + report.lastModification.split("GMT")[0] + "</div></div></div><div class=pt-body><h4>" + report.status_name + "</h4><ul class=plan-detail><li><b>Report Id:<br></b>" + report.reportId + "</ul></div><div class=pt-footer><div style='color: "+ syncronizedColor +"'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado: " + syncronizedText +"</div> <button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
                 $("#viewReport_" + cont).on("click", function (event) {
                     reports.reportSelected = report;
                     templates.templateSelected = templateFilter;
