@@ -11970,14 +11970,22 @@ module.exports = {
         });
     },
     "saveReportImageOnCloudToSaveLocally": function (report) {
+        let promisesSave = [];
+        for(let reportImg of report.reportImages){
+            promisesSave.push(indexDb.addReportImages(reportImg.reportImgId, report.reportId, reportImg.images, report.author, reportImg.image_1, true));
+        }
         return new Promise(function (resolve, reject) {
-            indexDb.addReportImages(report.reportImgId, report.reportId, report.images, report.author, report.image_1, true)
-                .then(function () {
+            if(promisesSave.length == 0){
+                resolve();
+            }
+            else{
+                Promise.all(promisesSave).then(function () {
                     resolve();
                 })
                 .catch(function (err) {
                     reject(err);
-                })
+                });
+            }
         });
     },
     getReportsSaveonCloud: function () {

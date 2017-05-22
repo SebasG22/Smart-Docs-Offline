@@ -20,6 +20,7 @@ router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
             reportsImages.filter(function (reportImg) {
                 if(reportImg.reportId == req.params.reportId){
                     reportImagesToSend.push({
+                        reportImgId: reportImg.reportImgId,
                         images: reportImg.images,
                         image_1: reportImg.image_1
                     });
