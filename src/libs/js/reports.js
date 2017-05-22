@@ -156,7 +156,7 @@ module.exports = {
         for (let reportLocal of reportsLocally) {
             //Filter on reports Cloud
             let reportFiltered = reportsOnCloud.filter(function (report) {
-                return report.idReport == reportLocal.idReport;
+                return report.reportId == reportLocal.reportId;
             });
 
             if (reportFiltered.length == 0) {
@@ -169,7 +169,7 @@ module.exports = {
         for (let reportCloud of reportsOnCloud) {
             //Filter on reports Locally
             let reportFiltered = reportsLocally.filter(function (report) {
-                return report.idReport == reportCloud.idReport;
+                return report.reportId == reportCloud.reportId;
             });
 
             if (reportFiltered.length == 0) {
