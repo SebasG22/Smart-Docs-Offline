@@ -160,7 +160,7 @@ module.exports = {
             });
 
             if (reportFiltered.length == 0) {
-                reportsToDelete.push(indexDb.deleteReports(reportLocal.idReport));
+                reportsToDelete.push(indexDb.deleteReports(reportLocal.reportId));
                 reportsToDelete.push(indexDb.deleteReportsImage(reportLocal.reportId));
             }
         }
@@ -173,7 +173,7 @@ module.exports = {
             });
 
             if (reportFiltered.length == 0) {
-                reportsToDelete.push(reference.getReportOnCloudToSaveLocally(reportCloud.idReport));
+                reportsToDelete.push(reference.getReportOnCloudToSaveLocally(reportCloud.reportId));
             }
         }
 
@@ -185,13 +185,13 @@ module.exports = {
             });
         });
     },
-    "getReportOnCloudToSaveLocally": function (idReport) {
+    "getReportOnCloudToSaveLocally": function (reportId) {
         let reference = this;
 
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + idReport,
+                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + reportId,
             })
                 .done(function (reportResponse) {
                     reference.saveReportsLocally(reportResponse)
