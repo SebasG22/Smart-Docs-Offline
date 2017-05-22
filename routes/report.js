@@ -39,7 +39,7 @@ router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
             objToSend.templateId = reportFiltered[0].templateId;
             objToSend.status = reportFiltered[0].status;
             objToSend.creationDate = reportFiltered[0].creationDate;
-            objTosend.completedDate = reportFiltered[0].completedDate;
+            objToSend.completedDate = reportFiltered[0].completedDate;
             objToSend.lastModification = reportFiltered[0].lastModification,
             objToSend.author = reportFiltered[0].author,
             objToSend.checkbox_answer = reportFiltered[0].checkbox_answer,
