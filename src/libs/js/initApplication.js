@@ -18,6 +18,7 @@ let reportsImg = require("./reportImages");
     let smartDocsOffline = {
         initApplication: function () {
             let reference = this;
+            reference.disabledBackButton();
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
                 //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
@@ -124,7 +125,11 @@ let reportsImg = require("./reportImages");
                 }
             });
         },
-
+        disabledBackButton: function () {
+            window.location.hash = "no-back-button";
+            window.location.hash = "Again-No-back-button";//again because google chrome don't insert first hash into history
+            window.onhashchange = function () { window.location.hash = "no-back-button"; }
+        },
         loadNavBar: function () {
             $(function () {
                 $(".navbar-expand-toggle").click(function () {
@@ -428,7 +433,7 @@ let reportsImg = require("./reportImages");
                 console.log("Template Filter ", templateFilter);
                 let syncronizedColor = (report.cloud == true) ? 'green' : 'red';
                 let syncronizedText = (report.cloud == true) ? 'Sincronizado ' : 'Falta Sincronizar';
-                $("#allReportsRelatedDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class='pricing-table " + report.status_background + "'><div class=pt-header><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + templateFilter.name + "</div><div class=pricing-type> Ultima Modificacion: " + report.lastModification.split("GMT")[0] + "</div></div></div><div class=pt-body><h4>" + report.status_name + "</h4><ul class=plan-detail><li><b>Report Id:<br></b>" + report.reportId + "</ul></div><div class=pt-footer><div style='color: "+ syncronizedColor +"'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado: " + syncronizedText +"</div> <button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
+                $("#allReportsRelatedDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class='pricing-table " + report.status_background + "'><div class=pt-header><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + templateFilter.name + "</div><div class=pricing-type> Ultima Modificacion: " + report.lastModification.split("GMT")[0] + "</div></div></div><div class=pt-body><h4>" + report.status_name + "</h4><ul class=plan-detail><li><b>Report Id:<br></b>" + report.reportId + "</ul></div><div class=pt-footer><div style='color: "+ syncronizedColor +"'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado: " + syncr +"</div> <button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
                 $("#viewReport_" + cont).on("click", function (event) {
                     reports.reportSelected = report;
                     templates.templateSelected = templateFilter;
