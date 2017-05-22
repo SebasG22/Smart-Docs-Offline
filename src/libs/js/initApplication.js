@@ -50,15 +50,18 @@ let reportsImg = require("./reportImages");
                         message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         return visits.uploadVisitsToCloud();
                     }).then(function () {
+                        message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
                         return visits.getVisitsSaveonCloud();
                     })/*.then(function(){
                         return visits.updateLocalVisits();
                     })*/
                         .then(function () {
+                            message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
                             return reports.getReports();
                         })
                         .then(function (reportsResponse) {
                             reportsLocal = reportsResponse;
+                            message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
                             return reports.uploadReportToCloud(reportsResponse);
                         })
                         .then(function () {
