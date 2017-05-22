@@ -392,7 +392,9 @@ let reportsImg = require("./reportImages");
             let cont = 0;
             for (let visit of visitsResponse) {
                 $("#visitsNotFound").remove();
-                $("#allVisitsDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + visit.name + "</div><img style='width:100px' src='/img/visitIcon.svg' style=padding:10px><div class=pricing-type style='color:" + (visit.cloud == true) ? 'green' : 'black' + "'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado : " + (visit.cloud == true) ? 'Sincronizado' :'Falta Sincronizacion' + " <!--<b>Id:</b>" + visit.visitId + "!--></div></div></div><div class=pt-footer><button id='attachReports" + cont + "' class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Ver Visita</button></div></div></div>");
+                let syncronizedColor = (visit.cloud == true) ? 'green' : 'red';
+                let syncronizedText = (visit.cloud == true) ? 'Sincronizado ' : 'Falta Sincronizar';
+                $("#allVisitsDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + visit.name + "</div><img style='width:100px' src='/img/visitIcon.svg' style=padding:10px><div class=pricing-type style='color:" + syncronizedColor + "'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado : " + syncronizedText + " <!--<b>Id:</b>" + visit.visitId + "!--></div></div></div><div class=pt-footer><button id='attachReports" + cont + "' class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Ver Visita</button></div></div></div>");
                 $("#attachReports" + cont).on("click", function (event) {
                     visits.visitSelected = visit;
                     reference.changePage("allReportsRelated");
