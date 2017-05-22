@@ -459,18 +459,18 @@ let reportsImg = require("./reportImages");
             totalTabs = $('#templateNavTabs li a').length;
             $("#btnBefore").prop("disabled",true);
             $("#btnBefore").click(function(){
-                if(indexTab == 0){
+                if(indexTab-1 == 0){
                     $("#btnBefore").prop("disabled",true);
                 }
                 else{
+                    $("#btnNext").prop("disabled",false);
                     indexTab -= 1;
                     $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
                 }
             });
             $("#btnNext").click(function(){
-
                 //Disabled when the indexTab is the last
-                if(indexTab == totalTabs){
+                if(indexTab == totalTabs || indexTab+1 == totalTabs){
                     $("#btnNext").prop("disabled",true);
                 }
                 else{
