@@ -472,7 +472,7 @@ let reportsImg = require("./reportImages");
             });
             $("#btnNext").click(function(){
                 //Disabled when the indexTab is the last
-                if(indexTab == totalTabs || indexTab+1 == totalTabs){
+                if(indexTab+1 == totalTabs){
                     $("#btnNext").prop("disabled",true);
                     indexTab +=1;
                     $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
