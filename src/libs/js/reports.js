@@ -205,6 +205,7 @@ module.exports = {
         });
     },
     "saveReportsLocally": function (reportResponse) {
+        let reference = this;
         return new Promise(function (resolve, reject) {
             let saveReportLocal = reference.saveReportOnCloudToSaveLocally(reportResponse[0]);
             let saveReportImagesLocal = reference.saveReportImageOnCloudToSaveLocally(reportResponse[0]);
@@ -221,7 +222,11 @@ module.exports = {
             indexDb.addReportAllProperties(report.reportId, report.templateId, report.visitId, report.status, report.author, true,
                 report.creationDate, report.completedDate, report.lastModification, report.checkbox_answer, report.date_answer, report.datetime_answer,
                 report.list_answer, report.month_answer, report.multiselect_answer, report.number_answer, report.radio_answer, report.select_answer, report.table_answer,
-                report.text_answer, report.textarea_answer, report.time_answer, report.week_answer);
+                report.text_answer, report.textarea_answer, report.time_answer, report.week_answer).then(function(){
+                    resolve();
+                }).catch(function(err){
+                    reject(err);
+                });
         });
     },
     "saveReportImageOnCloudToSaveLocally": function (report) {
