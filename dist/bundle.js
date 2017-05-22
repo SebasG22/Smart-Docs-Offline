@@ -11931,7 +11931,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + reportId,
+                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + idReport,
             })
                 .done(function (reportResponse) {
                     reference.saveReportsLocally(reportResponse)
