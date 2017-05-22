@@ -452,8 +452,27 @@ let reportsImg = require("./reportImages");
         },
         showTemplate: function () {
             let reference = this;
+            let totalTabs;
+            let indexTab = 0;
             smartEngine.executeEngine(templates.templateSelected.content);
             $('#templateNavTabs a:first').tab('show');
+            totalTabs = $('#templateNavTabs li a').length;
+            $("#btnBefore").prop("disabled",true);
+            $("#btnBefore").click(function(){
+                if(indexTab == totalTabs){
+                    $("#btnNext").prop("disabled",true);
+                }
+                else{
+                    indexTab += 1;
+                }
+            });
+            $("#btnNext").click(function(){
+                indexTab +=1 ;
+                if(indexTab != 0 && indexTab < totalTabs){
+                    $("#btnBefore").prop("disabled",false);
+                $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                }
+            });
         },
         fillAnswer: function () {
             let reference = this;
