@@ -13077,7 +13077,7 @@ module.exports = {
                                         "<div id='" + valueSubPanelEle.idDiv + "' class='thumbnail' align='center'>" +
                                         "<img width='450' height='450' style='width: 450px;height: 450px' src='" + defaultImg + "' class='" + valueSubPanelEle.class + "' id='" + valueSubPanelEle.id + "'>" +
                                         "<div class='caption'> <h3>" + valueSubPanelEle.labels.firstLabel + "<a class='anchorjs-link' href='#thumbnail-label'><span class='anchorjs-icon'></span></a></h3> " +
-                                        "<div>  <label for='"+ valueSubPanelEle.id + "Event' class='bnt btn-primary'> Seleccionar Imagen </label>  <input type='file' id='" + valueSubPanelEle.id + "Event' accept='image/*' capture='camera' style='visibility:hidden;'></div> </div>" +
+                                        "<div>  <label for='"+ valueSubPanelEle.id + "Event' class='btn btn-primary'> Seleccionar Imagen </label>  <input type='file' id='" + valueSubPanelEle.id + "Event' accept='image/*' capture='camera' style='visibility:hidden;'></div> </div>" +
                                         "</div>");
 
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
