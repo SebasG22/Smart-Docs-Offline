@@ -13077,7 +13077,7 @@ module.exports = {
                                         "<div id='" + valueSubPanelEle.idDiv + "' class='thumbnail' align='center'>" +
                                         "<img width='450' height='450' style='width: 450px;height: 450px' src='" + defaultImg + "' class='" + valueSubPanelEle.class + "' id='" + valueSubPanelEle.id + "'>" +
                                         "<div class='caption'> <h3>" + valueSubPanelEle.labels.firstLabel + "<a class='anchorjs-link' href='#thumbnail-label'><span class='anchorjs-icon'></span></a></h3> " +
-                                        " <p><input type='file' id='" + valueSubPanelEle.id + "Event' accept='image/*'     capture='camera'></p></div> </div>" +
+                                        "<div>  <label for='"+ valueSubPanelEle.id + "Event' class='bnt btn-primary'> Seleccionar Imagen </label>  <input type='file' id='" + valueSubPanelEle.id + "Event' accept='image/*' capture='camera' style='visibility:hidden;'></div> </div>" +
                                         "</div>");
 
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
@@ -16425,7 +16425,7 @@ let reportsImg = __webpack_require__(12);
             let cont = 0;
             for (let visit of visitsResponse) {
                 $("#visitsNotFound").remove();
-                $("#allVisitsDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class=pricing-table><div class=pt-header style=background-color:#fff><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + visit.name + "</div><img style='width:100px' src='/img/visitIcon.svg' style=padding:10px><div class=pricing-type><!--<b>Id:</b>" + visit.visitId + "!--></div></div></div><div class=pt-footer><button id='attachReports" + cont + "' class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Ver Visita</button></div></div></div>");
+                $("#allVisitsDiv").append( true ? 'green' : 'black' + "'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado : " + (visit.cloud == true) ? 'Sincronizado' :'Falta Sincronizacion' + " <!--<b>Id:</b>" + visit.visitId + "!--></div></div></div><div class=pt-footer><button id='attachReports" + cont + "' class='btn btn-primary' style='margin-right:5px;box-shadow: 2px 2px 2px #888888;' type=button>Ver Visita</button></div></div></div>");
                 $("#attachReports" + cont).on("click", function (event) {
                     visits.visitSelected = visit;
                     reference.changePage("allReportsRelated");
@@ -16457,7 +16457,7 @@ let reportsImg = __webpack_require__(12);
                 });
                 templateFilter = templateFilter[0];
                 console.log("Template Filter ", templateFilter);
-                $("#allReportsRelatedDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class='pricing-table " + report.status_background + "'><div class=pt-header><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + templateFilter.name + "</div><div class=pricing-type> Ultima Modificacion: " + report.lastModification.split("GMT")[0] + "</div></div></div><div class=pt-body><h4>" + report.status_name + "</h4><ul class=plan-detail><li><b>Report Id:<br></b>" + report.reportId + "</ul></div><div class=pt-footer><button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
+                $("#allReportsRelatedDiv").append( true? 'green' : 'red' +"'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado: " + (report.status == true) ? 'Sincronizado' : ' Falta Sincronizacion' +"</div> <button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
                 $("#viewReport_" + cont).on("click", function (event) {
                     reports.reportSelected = report;
                     templates.templateSelected = templateFilter;
@@ -16505,18 +16505,17 @@ let reportsImg = __webpack_require__(12);
             });
             $("#btnNext").click(function(){
                 //Disabled when the indexTab is the last
-                if(indexTab == totalTabs || indexTab+1 == totalTabs){
+                if(indexTab+1 == totalTabs){
                     $("#btnNext").prop("disabled",true);
                     indexTab +=1;
-                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                    $("#templateNavTabs li:eq("+ indexTab +") a").tab('show');
                 }
                 else{
                     //Go to the next Tab
                     $("#btnBefore").prop("disabled",false);
                     indexTab +=1;
-                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                    $("#templateNavTabs li:eq("+ indexTab +") a").tab('show');
                 }
-
             });
         },
         fillAnswer: function () {
