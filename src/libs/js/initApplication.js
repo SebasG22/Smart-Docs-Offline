@@ -461,6 +461,8 @@ let reportsImg = require("./reportImages");
             $("#btnBefore").click(function(){
                 if(indexTab-1 == 0){
                     $("#btnBefore").prop("disabled",true);
+                    indexTab -= 1;
+                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
                 }
                 else{
                     $("#btnNext").prop("disabled",false);
@@ -472,6 +474,8 @@ let reportsImg = require("./reportImages");
                 //Disabled when the indexTab is the last
                 if(indexTab == totalTabs || indexTab+1 == totalTabs){
                     $("#btnNext").prop("disabled",true);
+                    indexTab +=1;
+                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
                 }
                 else{
                     //Go to the next Tab
