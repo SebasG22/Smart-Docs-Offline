@@ -260,33 +260,7 @@
 
 
     <script>
-        let serviceWorkerFile = $.ajax({
-            method: "GET",
-            dataType: "script",
-            url: "./../service-worker",
-            cache: false
-        });
-
-        $.when(serviceWorkerFile).done(function (serviceWorkerFileResponse) {
-            $('<script>')
-                .attr('type', 'javascript/worker')
-                .attr('id', 'workerloadPDF')
-                .text(serviceWorkerFile)
-                .appendTo('head');
-
-            let blob = new Blob([
-                $("#serviceWorker").text()
-            ], { type: "text/javascript" })
-
-            navigator.serviceWorker.register(blob,{scope: '/'})
-                    .then(function (reg) {
-                        console.log("Yes, it did.", reg.scope);
-                    }).catch(function (err) {
-                        console.log("No it didn't. This happened: ", err)
-                    });
-
-            $("#serviceWorker").remove();
-        });
+    
         /*
         if (navigator.onLine) {
             if ('serviceWorker' in navigator) {
