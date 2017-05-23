@@ -20,6 +20,7 @@ let reportsImg = require("./reportImages");
                 navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
                     .then(function (reg) {
                         console.log("Yes, it did.", reg.scope);
+                        notification.sendNotification("Bienvenido a Smart Docs ","Registra una visita para agregar reportes");
                     }).catch(function (err) {
                         console.log("No it didn't. This happened: ", err)
                     });
