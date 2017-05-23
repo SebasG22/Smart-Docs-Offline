@@ -18,7 +18,7 @@ var reportImageRoutes = require("./routes/reportImages");
 
 var app = express();
 //mongoose.connect("Smart-Admin:huaweiDevelopers2017@ds131621.mlab.com:31621/smartdocs");
-mongoose.connect("mongodb://SebasG:123@msdrecursos.com:27017/smartdocs");
+mongoose.connect("mongodb://SmartAdmin:huaweiDevelopers2017@msdrecursos.com:27017/smartdocs");
 mongoose.Promise = global.Promise;
 
 // view engine setup
