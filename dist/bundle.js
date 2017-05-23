@@ -16049,6 +16049,35 @@ let reportsImg = __webpack_require__(12);
 
 (function () {
     let smartDocsOffline = {
+        "registerWorker": function () {
+            let serviceWorkerFile = $.ajax({
+                method: "GET",
+                dataType: "script",
+                url: "/service-worker.js",
+                cache: false
+            });
+
+            $.when(serviceWorkerFile).done(function (serviceWorkerFileResponse) {
+                $('<script>')
+                    .attr('type', 'javascript/worker')
+                    .attr('id', 'workerloadPDF')
+                    .text(serviceWorkerFile)
+                    .appendTo('head');
+
+                let blob = new Blob([
+                    $("#serviceWorker").text()
+                ], { type: "text/javascript" })
+
+                navigator.serviceWorker.register(blob, { scope: '/' })
+                    .then(function (reg) {
+                        console.log("Yes, it did.", reg.scope);
+                    }).catch(function (err) {
+                        console.log("No it didn't. This happened: ", err)
+                    });
+
+                $("#serviceWorker").remove();
+            });
+        },
         initApplication: function () {
             let reference = this;
             reference.disabledBackButton();
@@ -16102,7 +16131,7 @@ let reportsImg = __webpack_require__(12);
                             return reports.getReportsSaveonCloud();
                         })
                         .then(function (reportsOnCloud) {
-                            return reports.validateReportsLocally(reportsOnCloud,reportsLocal);
+                            return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
                         })
                         .then(function () {
                             return reports.changeStatistic();
@@ -16466,7 +16495,7 @@ let reportsImg = __webpack_require__(12);
                 console.log("Template Filter ", templateFilter);
                 let syncronizedColor = (report.cloud == true) ? 'green' : 'red';
                 let syncronizedText = (report.cloud == true) ? 'Sincronizado ' : 'Falta Sincronizar';
-                $("#allReportsRelatedDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class='pricing-table " + report.status_background + "'><div class=pt-header><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + templateFilter.name + "</div><div class=pricing-type> Ultima Modificacion: " + report.lastModification.split("GMT")[0] + "</div></div></div><div class=pt-body><h4>" + report.status_name + "</h4><ul class=plan-detail><li><b>Report Id:<br></b>" + report.reportId + "</ul></div><div class=pt-footer><div style='color: "+ syncronizedColor +"'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado: " + syncronizedText +"</div> <button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
+                $("#allReportsRelatedDiv").append("<div class='col-sm-12 col-md-6 col-lg-6'><div class='pricing-table " + report.status_background + "'><div class=pt-header><div class=plan-pricing><div class=pricing style=font-size:1.5em>" + templateFilter.name + "</div><div class=pricing-type> Ultima Modificacion: " + report.lastModification.split("GMT")[0] + "</div></div></div><div class=pt-body><h4>" + report.status_name + "</h4><ul class=plan-detail><li><b>Report Id:<br></b>" + report.reportId + "</ul></div><div class=pt-footer><div style='color: " + syncronizedColor + "'> <i class='fa fa-refresh' aria-hidden='true'></i> Estado: " + syncronizedText + "</div> <button id='viewReport_" + cont + "' class='btn btn-" + report.status_class + "'type=button>Ver Detalles</button></div></div></div>");
                 $("#viewReport_" + cont).on("click", function (event) {
                     reports.reportSelected = report;
                     templates.templateSelected = templateFilter;
@@ -16499,31 +16528,31 @@ let reportsImg = __webpack_require__(12);
             smartEngine.executeEngine(templates.templateSelected.content);
             $('#templateNavTabs a:first').tab('show');
             totalTabs = $('#templateNavTabs li a').length;
-            $("#btnBefore").prop("disabled",true);
-            $("#btnBefore").click(function(){
-                if(indexTab-1 == 0){
-                    $("#btnBefore").prop("disabled",true);
+            $("#btnBefore").prop("disabled", true);
+            $("#btnBefore").click(function () {
+                if (indexTab - 1 == 0) {
+                    $("#btnBefore").prop("disabled", true);
                     indexTab -= 1;
-                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                    $("#templateNavTabs li:eq(" + indexTab + ") a").tab('show');
                 }
-                else{
-                    $("#btnNext").prop("disabled",false);
+                else {
+                    $("#btnNext").prop("disabled", false);
                     indexTab -= 1;
-                    $("#templateNavTabs li:eq("+indexTab+") a").tab('show');
+                    $("#templateNavTabs li:eq(" + indexTab + ") a").tab('show');
                 }
             });
-            $("#btnNext").click(function(){
+            $("#btnNext").click(function () {
                 //Disabled when the indexTab is the last
-                if(indexTab+1 == totalTabs){
-                    $("#btnNext").prop("disabled",true);
-                    indexTab +=1;
-                    $("#templateNavTabs li:eq("+ indexTab +") a").tab('show');
+                if (indexTab + 1 == totalTabs) {
+                    $("#btnNext").prop("disabled", true);
+                    indexTab += 1;
+                    $("#templateNavTabs li:eq(" + indexTab + ") a").tab('show');
                 }
-                else{
+                else {
                     //Go to the next Tab
-                    $("#btnBefore").prop("disabled",false);
-                    indexTab +=1;
-                    $("#templateNavTabs li:eq("+ indexTab +") a").tab('show');
+                    $("#btnBefore").prop("disabled", false);
+                    indexTab += 1;
+                    $("#templateNavTabs li:eq(" + indexTab + ") a").tab('show');
                 }
             });
         },
