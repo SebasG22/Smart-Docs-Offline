@@ -17,33 +17,12 @@ let reportsImg = require("./reportImages");
 (function () {
     let smartDocsOffline = {
         "registerSW": function () {
-            let serviceWorkerFile = $.ajax({
-                method: "GET",
-                dataType: "script",
-                url: "/service-worker.js",
-                cache: false
-            });
-
-            $.when(serviceWorkerFile).done(function (serviceWorkerFileResponse) {
-                $('<script>')
-                    .attr('type', 'javascript/worker')
-                    .attr('id', 'workerloadPDF')
-                    .text(serviceWorkerFile)
-                    .appendTo('head');
-
-                let blob = new Blob([
-                    $("#serviceWorker").text()
-                ], { type: "text/javascript" })
-
-                navigator.serviceWorker.register(blob, { scope: '/' })
+                navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
                     .then(function (reg) {
                         console.log("Yes, it did.", reg.scope);
                     }).catch(function (err) {
                         console.log("No it didn't. This happened: ", err)
                     });
-
-                $("#serviceWorker").remove();
-            });
         },
         initApplication: function () {
             let reference = this;
