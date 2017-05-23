@@ -16049,7 +16049,7 @@ let reportsImg = __webpack_require__(12);
 
 (function () {
     let smartDocsOffline = {
-        "registerWorker": function () {
+        "registerSW": function () {
             let serviceWorkerFile = $.ajax({
                 method: "GET",
                 dataType: "script",
@@ -16849,6 +16849,7 @@ let reportsImg = __webpack_require__(12);
     message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
+        smartDocsOffline.registerSW();
         if (localStorage.getItem("username") == null) {
             smartDocsOffline.launchUserModal();
         } else {

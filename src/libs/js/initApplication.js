@@ -16,7 +16,7 @@ let reportsImg = require("./reportImages");
 
 (function () {
     let smartDocsOffline = {
-        "registerWorker": function () {
+        "registerSW": function () {
             let serviceWorkerFile = $.ajax({
                 method: "GET",
                 dataType: "script",
@@ -816,6 +816,7 @@ let reportsImg = require("./reportImages");
     message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
+        smartDocsOffline.registerSW();
         if (localStorage.getItem("username") == null) {
             smartDocsOffline.launchUserModal();
         } else {
