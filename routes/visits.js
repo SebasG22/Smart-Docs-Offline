@@ -10,6 +10,16 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.get('/basicInformation', function (req, res, next) {
+    Visit.find().then(function (visits) {
+        let visitsToSend = [];
+        for (let visit of visits) {
+            visitsToSend.push({ visitId: visit.visitId });
+        }
+        res.send(visitsToSend);
+    });
+});
+
 router.post('/', function (req, res, next) {
 
     Visit.findOne({ siteId: '' + req.body.siteId, author: req.body.author }, function (err, visitResponse) {
