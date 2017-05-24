@@ -11591,9 +11591,10 @@ module.exports = {
                         icon: '/img/huaweiLogo-192x192.png',
                         vibrate: [200, 300, 200, 300, 200, 300, 200],
                         tag: 'Smart Docs Offline',
+                        bagde: '/img/huaweiLogo-192x192.png',
                         "actions": [
-                            { "action": "yes", "title": "Yes"},
-                            { "action": "no", "title": "No"}
+                            { "action": "yes", "title": "Yes" },
+                            { "action": "no", "title": "No" }
                         ]
                     });
                 });
