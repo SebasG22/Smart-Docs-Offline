@@ -16109,35 +16109,31 @@ let reportsImg = __webpack_require__(12);
 (function () {
     let smartDocsOffline = {
         "registerSW": function () {
+            let reference = this;
             navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
                 .then(function (reg) {
                     console.log("Yes, it did.", reg.scope);
                     notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
-                }).catch(function (err) {
+                    reference.showInstallationBanner();
+            }).catch(function (err) {
                     console.log("No it didn't. This happened: ", err)
                 });
         },
         "showInstallationBanner": function () {
-            if (localStorage.getItem("appInstalled") == null) {
                 window.addEventListener('beforeinstallprompt', function (e) {
                     // beforeinstallprompt Event fired
-
                     e.userChoice.then(function (choiceResult) {
-
                         console.log(choiceResult.outcome);
-
                         if (choiceResult.outcome == 'dismissed') {
                             console.log('User cancelled home screen install');
                         }
                         else {
-                            localStorage.setItem("appInstalled", "yes");
                             console.log('User added to home screen');
                         }
                     });
                     e.preventDefault();
                     return false;
                 });
-            }
         },
         initApplication: function () {
             let reference = this;
@@ -16922,7 +16918,6 @@ let reportsImg = __webpack_require__(12);
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
         smartDocsOffline.registerSW();
-        smartDocsOffline.showInstallationBanner();
         if (localStorage.getItem("username") == null) {
             smartDocsOffline.launchUserModal();
         } else {
