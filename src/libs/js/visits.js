@@ -74,25 +74,40 @@ module.exports = {
                 url: "https://smart-docs.herokuapp.com/visits/",
             })
                 .done(function (visitSavedCloud) {
-                    let cont = 0;
-                    let updateVisits = [];
-                    for (let siteRes of visitSavedCloud) {
-                        this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
-                        updateVisits.push(this["updateVisit" + cont]);
-                        cont++;
-                    }
-                    if (updateVisits.length > 0) {
-                        Promise.all(updateVisits).then(function () {
-                            resolve();
-                        });
-                    }
-                    else {
-                        resolve();
-                    }
+                    resolve(visitSavedCloud);
                 });
         });
     },
-    "validateVisitLocally":function(){
-        
+    "validateVisitLocally": function (visitsOnCloud, visitsLocally) {
+        let visitsToUpdate = [];
+        //Search for visits on the Cloud to update Locally
+        for (let visitCloud of visitsOnCloud) {
+            let visitFiltered = visitsLocally.filter(function (visit) {
+                return visit.visitId == visitCloud.visitId;
+            });
+            //Cloud has visit that is not saved locally
+            if (visitFiltered.length == 0) {
+                visitsToUpdate.push(indexDb.addVisit(
+                    visitCloud.visitId, visitCloud.siteId, visitCloud.name, visitCloud.author, true, visitCloud.creationDate));
+            }
+        }
+
+        //Delete unexisting visits Locally
+        for(let visitLocal of visitsLocally){
+            let visitFiltered = visitsOnCloud.filter(function(visit){
+                return visit.visitId == visitLocal.visitId;
+            });
+            if( visitFiltered.length == 0 ){
+                visitsToUpdate.push(indexDb.deleteVisit(visitLocal.visitId));
+            }    
+        }
+
+        return new Promise(function(resolve,reject){
+            Promise.all(visitsToUpdate).then(function(){
+                resolve();
+            }).catch(function(err){
+                reject(err);
+            });
+        });
     }
 }

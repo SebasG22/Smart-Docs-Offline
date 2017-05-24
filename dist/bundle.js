@@ -10546,6 +10546,49 @@ module.exports = {
             }
         });
     },
+    "deleteVisit": function (visitId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["visits"], "readwrite");
+            let object = data.objectStore("visits");
+            let index = object.index("by_visitId");
+            var objectStoreRequest = index.openCursor(IDBKeyRange.only(visitId.toString()));
+
+            objectStoreRequest.onsuccess = function (e) {
+                let cursor = objectStoreRequest.result;
+                if (cursor) {
+                    cursor.delete();
+                    cursor.continue();
+                }
+
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+
+            data.oncomplete = function (e) {
+                resolve();
+            }
+        });
+    },
+    "deleteAllVisits": function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["visits"], "readwrite");
+            let object = data.objectStore("visits");
+            var objectStoreRequest = object.clear();
+
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
+                console.log("Reports DB was cleared");
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+        });
+    },
     "addTemplate": function (templateId, name, project, taskType, icon, content) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -13423,26 +13466,41 @@ module.exports = {
                 url: "https://smart-docs.herokuapp.com/visits/",
             })
                 .done(function (visitSavedCloud) {
-                    let cont = 0;
-                    let updateVisits = [];
-                    for (let siteRes of visitSavedCloud) {
-                        this["updateVisit" + cont] = indexDb.addVisit(siteRes.visitId, siteRes.siteId, siteRes.name, siteRes.author, true, siteRes.creationDate);
-                        updateVisits.push(this["updateVisit" + cont]);
-                        cont++;
-                    }
-                    if (updateVisits.length > 0) {
-                        Promise.all(updateVisits).then(function () {
-                            resolve();
-                        });
-                    }
-                    else {
-                        resolve();
-                    }
+                    resolve(visitSavedCloud);
                 });
         });
     },
-    "validateVisitLocally":function(){
-        
+    "validateVisitLocally": function (visitsOnCloud, visitsLocally) {
+        let visitsToUpdate = [];
+        //Search for visits on the Cloud to update Locally
+        for (let visitCloud of visitsOnCloud) {
+            let visitFiltered = visitsLocally.filter(function (visit) {
+                return visit.visitId == visitCloud.visitId;
+            });
+            //Cloud has visit that is not saved locally
+            if (visitFiltered.length == 0) {
+                visitsToUpdate.push(indexDb.addVisit(
+                    visitCloud.visitId, visitCloud.siteId, visitCloud.name, visitCloud.author, true, visitCloud.creationDate));
+            }
+        }
+
+        //Delete unexisting visits Locally
+        for(let visitLocal of visitsLocally){
+            let visitFiltered = visitsOnCloud.filter(function(visit){
+                return visit.visitId == visitLocal.visitId;
+            });
+            if( visitFiltered.length == 0 ){
+                visitsToUpdate.push(indexDb.deleteVisit(visitLocal.visitId));
+            }    
+        }
+
+        return new Promise(function(resolve,reject){
+            Promise.all(visitsToUpdate).then(function(){
+                resolve();
+            }).catch(function(err){
+                reject(err);
+            });
+        });
     }
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
@@ -16051,13 +16109,13 @@ let reportsImg = __webpack_require__(12);
 (function () {
     let smartDocsOffline = {
         "registerSW": function () {
-                navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
-                    .then(function (reg) {
-                        console.log("Yes, it did.", reg.scope);
-                        notification.sendNotification("Bienvenido a Smart Docs ","Registra una visita para agregar reportes");
-                    }).catch(function (err) {
-                        console.log("No it didn't. This happened: ", err)
-                    });
+            navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+                .then(function (reg) {
+                    console.log("Yes, it did.", reg.scope);
+                    notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
+                }).catch(function (err) {
+                    console.log("No it didn't. This happened: ", err)
+                });
         },
         initApplication: function () {
             let reference = this;
@@ -16087,19 +16145,24 @@ let reportsImg = __webpack_require__(12);
                  * If it's true == Connection Available
                  */
                 if (navigator.onLine == true) {
+                    let visitsLocal = [];
+                    let visitsCloud = [];
                     let reportsLocal = [];
                     let reportsCloud = [];
                     message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
-                    visits.getVisits().then(function () {
+                    visits.getVisits().then(function (visitsLocalResponse) {
+                        visitsLocal = visitsLocalResponse;
                         message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         return visits.uploadVisitsToCloud();
                     }).then(function () {
                         message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
                         return visits.getVisitsSaveonCloud();
-                    })/*.then(function(){
-                        return visits.updateLocalVisits();
-                    })*/
+                    }).then(function (visitsCloudResponse) {
+                        visitsCloud = visitsCloudResponse;
+                        message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
+                        return visits.validateVisitLocally();
+                    })
                         .then(function () {
                             message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
                             return reports.getReports();

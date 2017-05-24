@@ -17,13 +17,13 @@ let reportsImg = require("./reportImages");
 (function () {
     let smartDocsOffline = {
         "registerSW": function () {
-                navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
-                    .then(function (reg) {
-                        console.log("Yes, it did.", reg.scope);
-                        notification.sendNotification("Bienvenido a Smart Docs ","Registra una visita para agregar reportes");
-                    }).catch(function (err) {
-                        console.log("No it didn't. This happened: ", err)
-                    });
+            navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
+                .then(function (reg) {
+                    console.log("Yes, it did.", reg.scope);
+                    notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
+                }).catch(function (err) {
+                    console.log("No it didn't. This happened: ", err)
+                });
         },
         initApplication: function () {
             let reference = this;
@@ -53,19 +53,24 @@ let reportsImg = require("./reportImages");
                  * If it's true == Connection Available
                  */
                 if (navigator.onLine == true) {
+                    let visitsLocal = [];
+                    let visitsCloud = [];
                     let reportsLocal = [];
                     let reportsCloud = [];
                     message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
-                    visits.getVisits().then(function () {
+                    visits.getVisits().then(function (visitsLocalResponse) {
+                        visitsLocal = visitsLocalResponse;
                         message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
                         return visits.uploadVisitsToCloud();
                     }).then(function () {
                         message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
                         return visits.getVisitsSaveonCloud();
-                    })/*.then(function(){
-                        return visits.updateLocalVisits();
-                    })*/
+                    }).then(function (visitsCloudResponse) {
+                        visitsCloud = visitsCloudResponse;
+                        message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
+                        return visits.validateVisitLocally();
+                    })
                         .then(function () {
                             message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
                             return reports.getReports();

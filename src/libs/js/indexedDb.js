@@ -214,6 +214,49 @@ module.exports = {
             }
         });
     },
+    "deleteVisit": function (visitId) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["visits"], "readwrite");
+            let object = data.objectStore("visits");
+            let index = object.index("by_visitId");
+            var objectStoreRequest = index.openCursor(IDBKeyRange.only(visitId.toString()));
+
+            objectStoreRequest.onsuccess = function (e) {
+                let cursor = objectStoreRequest.result;
+                if (cursor) {
+                    cursor.delete();
+                    cursor.continue();
+                }
+
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+
+            data.oncomplete = function (e) {
+                resolve();
+            }
+        });
+    },
+    "deleteAllVisits": function () {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["visits"], "readwrite");
+            let object = data.objectStore("visits");
+            var objectStoreRequest = object.clear();
+
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
+                console.log("Reports DB was cleared");
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+        });
+    },
     "addTemplate": function (templateId, name, project, taskType, icon, content) {
         let reference = this;
         return new Promise(function (resolve, reject) {
