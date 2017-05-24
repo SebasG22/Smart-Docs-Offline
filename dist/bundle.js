@@ -16161,7 +16161,7 @@ let reportsImg = __webpack_require__(12);
                     }).then(function (visitsCloudResponse) {
                         visitsCloud = visitsCloudResponse;
                         message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
-                        return visits.validateVisitLocally();
+                        return visits.validateVisitLocally(visitsCloud, visitsLocal);
                     })
                         .then(function () {
                             message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
