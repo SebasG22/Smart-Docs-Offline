@@ -16062,6 +16062,7 @@ let reportsImg = __webpack_require__(12);
         initApplication: function () {
             let reference = this;
             reference.disabledBackButton();
+            reference.promptRefreshMessage();
             $.get("/views/dashboard.html", function (page) {
                 $("#mainContent2").html(page);
                 //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
@@ -16172,6 +16173,11 @@ let reportsImg = __webpack_require__(12);
             window.location.hash = "no-back-button";
             window.location.hash = "Again-No-back-button";//again because google chrome don't insert first hash into history
             window.onhashchange = function () { window.location.hash = "no-back-button"; }
+        },
+        promptRefreshMessage: function () {
+            window.onbeforeunload = function () {
+                return "";
+            };
         },
         loadNavBar: function () {
             $(function () {
