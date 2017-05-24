@@ -25,6 +25,28 @@ let reportsImg = require("./reportImages");
                     console.log("No it didn't. This happened: ", err)
                 });
         },
+        "showInstallationBanner": function () {
+            if (localStorage.getItem("appInstalled") == null) {
+                window.addEventListener('beforeinstallprompt', function (e) {
+                    // beforeinstallprompt Event fired
+
+                    e.userChoice.then(function (choiceResult) {
+
+                        console.log(choiceResult.outcome);
+
+                        if (choiceResult.outcome == 'dismissed') {
+                            console.log('User cancelled home screen install');
+                        }
+                        else {
+                            localStorage.setItem("appInstalled", "yes");
+                            console.log('User added to home screen');
+                        }
+                    });
+                    e.preventDefault();
+                    return false;
+                });
+            }
+        },
         initApplication: function () {
             let reference = this;
             reference.disabledBackButton();
@@ -804,10 +826,11 @@ let reportsImg = require("./reportImages");
 
 
     message.addMessageLoder("loaderMessage", "#mainContent2");
-    message.changeMessageLoader("loaderMessage", "Iniciando La Conexion");
+    message.changeMessageLoader("loaderMessage", "Conectando Dispositivo");
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
         smartDocsOffline.registerSW();
+        smartDocsOffline.showInstallationBanner();
         if (localStorage.getItem("username") == null) {
             smartDocsOffline.launchUserModal();
         } else {
