@@ -575,7 +575,7 @@ a:hover {
       margin-top: 15px; }
 
 body.login-page {
-  background: url("https://100l-app.teleows.com/servicecreator/fileservice/get?batchId=9acf4c9d-b0e0-43ce-94c7-7fb29ed8bbb6&attachmentId=666966")no-repeat center center fixed;
+  background: url("/dist/img/huaweiOffice.jpg")no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
