@@ -105,34 +105,46 @@ let login = require("./login");
                 $.get("/views/dashboard.html", function (page) {
                     $("#mainContent2").html(page);
                     //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-
-                    message.launchChooseConnection().then(function (userChoiceConnection) {
-                        alert("Promise Resolved");
-                        switch (userChoiceConnection) {
-                            case true:
-                                $("#userStatus").html(" Estado: Online ");
-                                $("#userStatus").css("color", "green");
-                                break;
-                            case false:
-                                $("#userStatus").html(" Estado: Offline ");
-                                $("#userStatus").css("color", "red");
-                                break;
-                        }
-
-                    });
-
-
                     message.addMessageLoder("loaderMessage", "#mainContent2");
+                    message.changeMessageLoader("Solicitando Acceso a Red")
                     reference.addEventsToMenu();
                     reference.loadNavBar();
                     reference.grantPermissionPosition();
-                    message.changeMessageLoader("loaderMessage", "Consultando Plantillas");
-                    /**
-                     * Detect if the user has an internet connection available
-                     * If it's true == Connection Available
-                     */
                     if (navigator.onLine == true) {
-                        let visitsLocal = [];
+                        message.launchChooseConnection().then(function (userChoiceConnection) {
+                            switch (userChoiceConnection) {
+                                case true:
+                                    $("#userStatus").html(" Estado: Online ");
+                                    $("#userStatus").css("color", "green");
+                                    break;
+                                case false:
+                                    $("#userStatus").html(" Estado: Offline ");
+                                    $("#userStatus").css("color", "red");
+                                    break;
+                            }
+
+                        });
+                    }
+                    else{
+                        message.changeMessageLoader("Obteniendo Sitios Almacenados");
+                        indexDb.getSites().then(function (resolve, reject) {
+                            message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                            return indexDb.getTemplates();
+                        })
+                            .then(function () {
+                                return reports.changeStatistic();
+                            })
+                            .then(function () {
+                                message.removeMessageLoader("#mainContent2");
+                            });
+
+                    }
+                });
+            });
+
+        },
+        "updateInformation":  function(){
+            let visitsLocal = [];
                         let visitsCloud = [];
                         let reportsLocal = [];
                         let reportsCloud = [];
@@ -203,23 +215,6 @@ let login = require("./login");
                                     });
                                 });
                             });
-                    } else {
-                        message.changeMessageLoader("Obteniendo Sitios Almacenados");
-                        indexDb.getSites().then(function (resolve, reject) {
-                            message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                            return indexDb.getTemplates();
-                        })
-                            .then(function () {
-                                return reports.changeStatistic();
-                            })
-                            .then(function () {
-                                message.removeMessageLoader("#mainContent2");
-                            });
-
-                    }
-                });
-            });
-
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
