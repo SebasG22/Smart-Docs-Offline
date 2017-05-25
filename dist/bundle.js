@@ -11528,6 +11528,7 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
+let message = __webpack_require__(2);
 
 module.exports = {
     "templateSelected": "",
