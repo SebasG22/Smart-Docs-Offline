@@ -98,9 +98,10 @@ let login = require("./login");
             let reference = this;
             reference.disabledBackButton();
             reference.promptRefreshMessage();
-            message.addMessageLoder("loaderMessage", "#mainContent2");
+            message.addMessageLoder("loaderMessage", ".container");
             message.changeMessageLoader("loaderMessage", "Cargando Aplicacion");
             reference.loadIndex().then(function () {
+                message.removeMessageLoader(".container");
                 $.get("/views/dashboard.html", function (page) {
                     $("#mainContent2").html(page);
                     //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
@@ -114,7 +115,7 @@ let login = require("./login");
                             $("#userStatus").css("color", "red");
                             break;
                     }
-
+                    message.addMessageLoder("loaderMessage","#mainContent2");
                     reference.addEventsToMenu();
                     reference.loadNavBar();
                     reference.grantPermissionPosition();
