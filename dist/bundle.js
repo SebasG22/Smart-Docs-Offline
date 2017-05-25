@@ -16283,6 +16283,7 @@ let login = __webpack_require__(11);
 
         },
         "updateInformation": function () {
+            let reference = this;
             let visitsLocal = [];
             let visitsCloud = [];
             let reportsLocal = [];
@@ -16356,6 +16357,7 @@ let login = __webpack_require__(11);
                 });
         },
         "noUpdateInformation": function () {
+            let reference = this;
             message.changeMessageLoader("Obteniendo Sitios Almacenados");
             indexDb.getSites().then(function (resolve, reject) {
                 message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
