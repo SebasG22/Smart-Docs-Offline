@@ -11091,11 +11091,16 @@ module.exports = {
         $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=error_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> " + title + " </h4></div><div class=modal-body><img src='/img/errorIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input class='btn btn-danger'data-dismiss=modal type=button value='Lo entiendo'></div></div></div></div>");
         $("#error_modal").modal('show');
     },
+    launchErrorNotAuthenthicateModal: function (title, description, recomendation) {
+        $("#errorAuth_modal").remove();
+        $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=errorAuth_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> " + title + " </h4></div><div class=modal-body><img src='/img/errorIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input class='btn btn-primary' onclick='location.href='https://smart-docs.herokuapp.com';' data-dismiss=modal type=button value='Iniciar Sesion></div></div></div></div>");
+        $("#errorAuth_modal").modal({ backdrop: 'static', keyboard: false });
+    },
     launchChooseConnection: function () {
         return new Promise(function (resolve, reject) {
             $("#connection_modal").remove();
             $("body").append("<div class='fade modal modal-warning' aria-hidden=true aria-labelledby=myModalLabel1 id=connection_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> Selecciona el tipo de conexion </h4></div><div class=modal-body><img src='/img/internetIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Actualmente estas conectado a Internet </h4><h5 style=text-align:center> Deseas sincronizar todo tu trabajo ? </h5></div><div class=modal-footer><input id='yesConnection' class='btn btn-warning' type=button value='Si'><input id='noConnection' class='btn btn-warning' type=button value='No'></div></div></div></div>");
-            $("#connection_modal").modal('show');
+            $("#connection_modal").modal({ backdrop: 'static', keyboard: false });
 
             $("#yesConnection").click(function () {
                 resolve(true);
@@ -11520,16 +11525,52 @@ module.exports = {
 
 /***/ }),
 /* 6 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = {
+/* WEBPACK VAR INJECTION */(function($) {module.exports = {
     "templateSelected": "",
-    "templates":[],
-    "getTemplates": function(){
+    "templates": [],
+    "getTemplates": function () {
         let reference = this;
         return reference.templates;
+    },
+    "getTemplatesOnCloud": function () {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: 'https://smart-docs.herokuapp.com/user/signin?token=' + localStorage.getItem('token'),
+                type: 'GET',
+                dataType: 'json',
+                statusCode: {
+                    401: function () {
+                        message.launchErrorModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (msgRes) {
+                    resolve(msgRes.responseJSON);
+                }
+            });
+        });
+    },
+    "updateTemplatesLocally": function (templatesOnCloud) {
+        let templatesToUpdate = [];
+        for (let template of templatesOnCloud) {
+            templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
+        }
+        return new Promise(function(resolve,reject){
+            Promise.all(templatesToUpdate).then(function(){
+              resolve();  
+            }).catch(function(err){
+                reject(err);
+            });
+        });
     }
+
 }
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 7 */
@@ -16341,19 +16382,19 @@ let login = __webpack_require__(11);
                     console.log("Visits Saved ", visits.getVisits())
                     return reference.updateSiteExternal();
                 }).then(function () {
-                    message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
-                    $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
-                        templates.templates = templatesResponse;
-                        for (let template of templates.templates) {
-                            indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
-                        }
-                        return indexDb.getTemplates();
-                    }).then(function () {
-                        message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
-                        indexDb.getTemplates().then(function () {
-                            message.removeMessageLoader("#mainContent2");
-                        });
-                    });
+                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Cloud");
+                    return templates.getTemplatesOnCloud();
+                })
+                .then(function (templatesOnCloud) {
+                    message.changeMessageLoader("loaderMessage", "Actualizando Plantillas Almacenadas");
+                    return templates.updateTemplatesLocally(templatesOnCloud);
+                })
+                .then(function () {
+                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
+                    return indexDb.getTemplates();
+                })
+                .then(function () {
+                    message.removeMessageLoader("#mainContent2");
                 });
         },
         "noUpdateInformation": function () {

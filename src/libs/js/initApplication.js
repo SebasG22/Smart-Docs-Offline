@@ -193,19 +193,19 @@ let login = require("./login");
                     console.log("Visits Saved ", visits.getVisits())
                     return reference.updateSiteExternal();
                 }).then(function () {
-                    message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
-                    $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
-                        templates.templates = templatesResponse;
-                        for (let template of templates.templates) {
-                            indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
-                        }
-                        return indexDb.getTemplates();
-                    }).then(function () {
-                        message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
-                        indexDb.getTemplates().then(function () {
-                            message.removeMessageLoader("#mainContent2");
-                        });
-                    });
+                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Cloud");
+                    return templates.getTemplatesOnCloud();
+                })
+                .then(function (templatesOnCloud) {
+                    message.changeMessageLoader("loaderMessage", "Actualizando Plantillas Almacenadas");
+                    return templates.updateTemplatesLocally(templatesOnCloud);
+                })
+                .then(function () {
+                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
+                    return indexDb.getTemplates();
+                })
+                .then(function () {
+                    message.removeMessageLoader("#mainContent2");
                 });
         },
         "noUpdateInformation": function () {
