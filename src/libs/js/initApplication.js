@@ -80,11 +80,11 @@ let login = require("./login");
                         reject();
                     },
                     complete: function (data) {
-                        console.log("Index Loaded",data);
+                        console.log("Index Loaded", data);
                         $(".container").remove();
                         $("body").removeClass("login-page");
                         $("body").append(data.responseText);
-                        $("#userFirstName").text(reference.userInformation.firstname + ' ' + reference.userInformation.lastname + "<span class='caret'></span>");
+                        $("#userFirstName").html(reference.userInformation.firstname + ' ' + reference.userInformation.lastname + "<span class='caret'></span>");
                         $("#username").text(reference.userInformation.username);
                         $("#userRole").text(reference.userInformation.role);
                         $("#userCompany").text(reference.userInformation.company);
@@ -105,17 +105,24 @@ let login = require("./login");
                 $.get("/views/dashboard.html", function (page) {
                     $("#mainContent2").html(page);
                     //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-                    switch (navigator.onLine) {
-                        case true:
-                            $("#userStatus").html(" Estado: Online ");
-                            $("#userStatus").css("color", "green");
-                            break;
-                        case false:
-                            $("#userStatus").html(" Estado: Offline ");
-                            $("#userStatus").css("color", "red");
-                            break;
-                    }
-                    message.addMessageLoder("loaderMessage","#mainContent2");
+
+                    message.launchChooseConnection().then(function (userChoiceConnection) {
+                        alert("Promise Resolved");
+                        switch (userChoiceConnection) {
+                            case true:
+                                $("#userStatus").html(" Estado: Online ");
+                                $("#userStatus").css("color", "green");
+                                break;
+                            case false:
+                                $("#userStatus").html(" Estado: Offline ");
+                                $("#userStatus").css("color", "red");
+                                break;
+                        }
+
+                    });
+
+
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
                     reference.addEventsToMenu();
                     reference.loadNavBar();
                     reference.grantPermissionPosition();

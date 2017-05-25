@@ -11065,32 +11065,49 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {module.exports = {
-    addMessageLoder: function (selector,location) {
+    addMessageLoder: function (selector, location) {
         $(location).addClass("loader");
-        $(location).append("<div id='loader' class='loader-container text-center color-white'><div><i style='color:white' class='fa fa-spinner fa-pulse fa-3x'></i></div><div style='color:white'><h4>Smart Docs <br> <small> Cargando Recursos <div id='"+selector+"'> </div> </small> <br><small>... Se esta preparando para ti ...</small></h4><h5>Desarollado por: Huawei Colombia  <br> OSS IT Team </h5></div></div>");
+        $(location).append("<div id='loader' class='loader-container text-center color-white'><div><i style='color:white' class='fa fa-spinner fa-pulse fa-3x'></i></div><div style='color:white'><h4>Smart Docs <br> <small> Cargando Recursos <div id='" + selector + "'> </div> </small> <br><small>... Se esta preparando para ti ...</small></h4><h5>Desarollado por: Huawei Colombia  <br> OSS IT Team </h5></div></div>");
     },
     changeMessageLoader: function (selector, msg) {
-        console.log("Selector: "+ selector);
+        console.log("Selector: " + selector);
         console.log("Message: " + msg);
         $("#" + selector).text(msg);
     },
-    removeMessageLoader: function (location){
+    removeMessageLoader: function (location) {
         $("#loader").remove();
         $(location).removeClass("loader");
     },
-    launchProcessImageModal: function(){
+    launchProcessImageModal: function () {
         $("#process_image_modal").remove();
         $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=process_image_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>La imagen esta siendo procesada </h4></div><div class=modal-body> <img src='/img/mapIcon.svg' style='margin-left:auto;margin-right:auto;display:block' width='150px'><h4 style='text-align:center'> Espera un momento, este proceso puede tomar algunos segundos dependiendo de tu conexion</h4></div></div></div></div>");
         $("#process_image_modal").modal({ backdrop: 'static', keyboard: false });
     },
-    removeProcessImageModal:function(){
+    removeProcessImageModal: function () {
         $("#process_image_modal").modal('hide');
     },
-    launchErrorModal: function( title, description, recomendation){
+    launchErrorModal: function (title, description, recomendation) {
         $("#error_modal").remove();
-        $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=error_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> "+ title + " </h4></div><div class=modal-body><img src='/img/errorIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input class='btn btn-danger'data-dismiss=modal type=button value='Lo entiendo'></div></div></div></div>");
+        $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=error_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> " + title + " </h4></div><div class=modal-body><img src='/img/errorIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input class='btn btn-danger'data-dismiss=modal type=button value='Lo entiendo'></div></div></div></div>");
         $("#error_modal").modal('show');
-}
+    },
+    launchChooseConnection: function () {
+        return new Promise(function (resolve, reject) {
+            $("#connection_modal").remove();
+            $("body").append("<div class='fade modal modal-warning' aria-hidden=true aria-labelledby=myModalLabel1 id=connection_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> Selecciona el tipo de conexion </h4></div><div class=modal-body><img src='/img/internetIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Actualmente estas conectado a Internet </h4><h5 style=text-align:center> Deseas sincronizar todo tu trabajo ? </h5></div><div class=modal-footer><input id='yesConnection' class='btn btn-warning' type=button value='Si'><input id='noConnection' class='btn btn-warning' type=button value='No'></div></div></div></div>");
+            $("#connection_modal").modal('show');
+
+            $("#yesConnection").click(function () {
+                resolve(true);
+                $("#connection_modal").hide();
+            });
+
+            $("#noConnection").click(function () {
+                resolve(false);
+                $("#connection_modal").hide();
+            });
+        });
+    }
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -16211,11 +16228,11 @@ let login = __webpack_require__(11);
                         reject();
                     },
                     complete: function (data) {
-                        console.log("Index Loaded",data);
+                        console.log("Index Loaded", data);
                         $(".container").remove();
                         $("body").removeClass("login-page");
                         $("body").append(data.responseText);
-                        $("#userFirstName").text(reference.userInformation.firstname + ' ' + reference.userInformation.lastname + "<span class='caret'></span>");
+                        $("#userFirstName").html(reference.userInformation.firstname + ' ' + reference.userInformation.lastname + "<span class='caret'></span>");
                         $("#username").text(reference.userInformation.username);
                         $("#userRole").text(reference.userInformation.role);
                         $("#userCompany").text(reference.userInformation.company);
@@ -16236,17 +16253,24 @@ let login = __webpack_require__(11);
                 $.get("/views/dashboard.html", function (page) {
                     $("#mainContent2").html(page);
                     //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-                    switch (navigator.onLine) {
-                        case true:
-                            $("#userStatus").html(" Estado: Online ");
-                            $("#userStatus").css("color", "green");
-                            break;
-                        case false:
-                            $("#userStatus").html(" Estado: Offline ");
-                            $("#userStatus").css("color", "red");
-                            break;
-                    }
-                    message.addMessageLoder("loaderMessage","#mainContent2");
+
+                    message.launchChooseConnection().then(function (userChoiceConnection) {
+                        alert("Promise Resolved");
+                        switch (userChoiceConnection) {
+                            case true:
+                                $("#userStatus").html(" Estado: Online ");
+                                $("#userStatus").css("color", "green");
+                                break;
+                            case false:
+                                $("#userStatus").html(" Estado: Offline ");
+                                $("#userStatus").css("color", "red");
+                                break;
+                        }
+
+                    });
+
+
+                    message.addMessageLoder("loaderMessage", "#mainContent2");
                     reference.addEventsToMenu();
                     reference.loadNavBar();
                     reference.grantPermissionPosition();
