@@ -1,3 +1,5 @@
+let indexDb = require("./indexedDb");
+
 module.exports = {
     "templateSelected": "",
     "templates": [],

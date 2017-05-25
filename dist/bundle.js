@@ -11527,7 +11527,9 @@ module.exports = {
 /* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {module.exports = {
+/* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
+
+module.exports = {
     "templateSelected": "",
     "templates": [],
     "getTemplates": function () {
