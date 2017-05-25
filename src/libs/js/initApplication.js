@@ -198,7 +198,7 @@ let login = require("./login");
                 })
                 .then(function (templatesOnCloud) {
                     message.changeMessageLoader("loaderMessage", "Actualizando Plantillas Almacenadas");
-                    return templates.updateTemplatesLocally(templatesOnCloud);
+                    return reference.updateTemplatesLocally(templatesOnCloud);
                 })
                 .then(function () {
                     message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
@@ -303,6 +303,19 @@ let login = require("./login");
             $("#errorPosition").remove();
             $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel2 id=errorPosition role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>No has permitido el acceso a tu localizacion </h4></div><div class=modal-body><img src='https://cdn4.iconfinder.com/data/icons/flatified/128/map.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Por favor, configura tu dispositivo correctamente </h4><h5 style=text-align:center>El accesor a la localizacion ha sido bloqueado <br> <b> Solucion> </b> Ingresa a la configuracion del navegador y modifica los permisos de localizacion </h5><div class='text-center'></div></div></div></div></div>");
             $("#errorPosition").modal({ backdrop: 'static', keyboard: false });
+        },
+        updateTemplatesLocally: function (templatesOnCloud) {
+        let templatesToUpdate = [];
+        for (let template of templatesOnCloud) {
+            templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
+        }
+        return new Promise(function(resolve,reject){
+            Promise.all(templatesToUpdate).then(function(){
+              resolve();  
+            }).catch(function(err){
+                reject(err);
+            });
+        });
         },
         updateSiteExternal: function () {
             return new Promise(function (resolve, reject) {

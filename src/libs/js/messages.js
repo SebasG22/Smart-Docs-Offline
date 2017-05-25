@@ -27,7 +27,10 @@ module.exports = {
     },
     launchErrorNotAuthenthicateModal: function (title, description, recomendation) {
         $("#errorAuth_modal").remove();
-        $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=errorAuth_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> " + title + " </h4></div><div class=modal-body><img src='/img/errorIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input class='btn btn-primary' onclick='location.href='https://smart-docs.herokuapp.com';' data-dismiss=modal type=button value='Iniciar Sesion></div></div></div></div>");
+        $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=errorAuth_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> " + title + " </h4></div><div class=modal-body><img src='/img/errorIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input id='initApplication' class='btn btn-primary' data-dismiss=modal type=button value='Iniciar Sesion></div></div></div></div>");
+        $("#initApplication").click(function(){
+            window.location.replace("https://smart-docs.herokuapp.com");
+        });
         $("#errorAuth_modal").modal({ backdrop: 'static', keyboard: false });
     },
     launchChooseConnection: function () {

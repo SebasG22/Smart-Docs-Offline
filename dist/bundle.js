@@ -11093,7 +11093,10 @@ module.exports = {
     },
     launchErrorNotAuthenthicateModal: function (title, description, recomendation) {
         $("#errorAuth_modal").remove();
-        $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=errorAuth_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> " + title + " </h4></div><div class=modal-body><img src='/img/errorIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input class='btn btn-primary' onclick='location.href='https://smart-docs.herokuapp.com';' data-dismiss=modal type=button value='Iniciar Sesion></div></div></div></div>");
+        $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=errorAuth_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> " + title + " </h4></div><div class=modal-body><img src='/img/errorIcon.svg' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input id='initApplication' class='btn btn-primary' data-dismiss=modal type=button value='Iniciar Sesion></div></div></div></div>");
+        $("#initApplication").click(function(){
+            window.location.replace("https://smart-docs.herokuapp.com");
+        });
         $("#errorAuth_modal").modal({ backdrop: 'static', keyboard: false });
     },
     launchChooseConnection: function () {
@@ -11557,21 +11560,7 @@ module.exports = {
                 }
             });
         });
-    },
-    "updateTemplatesLocally": function (templatesOnCloud) {
-        let templatesToUpdate = [];
-        for (let template of templatesOnCloud) {
-            templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
-        }
-        return new Promise(function(resolve,reject){
-            Promise.all(templatesToUpdate).then(function(){
-              resolve();  
-            }).catch(function(err){
-                reject(err);
-            });
-        });
     }
-
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -16390,7 +16379,7 @@ let login = __webpack_require__(11);
                 })
                 .then(function (templatesOnCloud) {
                     message.changeMessageLoader("loaderMessage", "Actualizando Plantillas Almacenadas");
-                    return templates.updateTemplatesLocally(templatesOnCloud);
+                    return reference.updateTemplatesLocally(templatesOnCloud);
                 })
                 .then(function () {
                     message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
@@ -16495,6 +16484,19 @@ let login = __webpack_require__(11);
             $("#errorPosition").remove();
             $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel2 id=errorPosition role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>No has permitido el acceso a tu localizacion </h4></div><div class=modal-body><img src='https://cdn4.iconfinder.com/data/icons/flatified/128/map.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Por favor, configura tu dispositivo correctamente </h4><h5 style=text-align:center>El accesor a la localizacion ha sido bloqueado <br> <b> Solucion> </b> Ingresa a la configuracion del navegador y modifica los permisos de localizacion </h5><div class='text-center'></div></div></div></div></div>");
             $("#errorPosition").modal({ backdrop: 'static', keyboard: false });
+        },
+        updateTemplatesLocally: function (templatesOnCloud) {
+        let templatesToUpdate = [];
+        for (let template of templatesOnCloud) {
+            templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
+        }
+        return new Promise(function(resolve,reject){
+            Promise.all(templatesToUpdate).then(function(){
+              resolve();  
+            }).catch(function(err){
+                reject(err);
+            });
+        });
         },
         updateSiteExternal: function () {
             return new Promise(function (resolve, reject) {

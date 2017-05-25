@@ -28,19 +28,5 @@ module.exports = {
                 }
             });
         });
-    },
-    "updateTemplatesLocally": function (templatesOnCloud) {
-        let templatesToUpdate = [];
-        for (let template of templatesOnCloud) {
-            templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
-        }
-        return new Promise(function(resolve,reject){
-            Promise.all(templatesToUpdate).then(function(){
-              resolve();  
-            }).catch(function(err){
-                reject(err);
-            });
-        });
     }
-
 }
