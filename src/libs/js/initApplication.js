@@ -116,105 +116,109 @@ let login = require("./login");
                                 case true:
                                     $("#userStatus").html(" Estado: Online ");
                                     $("#userStatus").css("color", "green");
+                                    reference.updateInformation();
                                     break;
                                 case false:
                                     $("#userStatus").html(" Estado: Offline ");
                                     $("#userStatus").css("color", "red");
+                                    reference.noUpdateInformation();
                                     break;
                             }
 
                         });
                     }
-                    else{
-                        message.changeMessageLoader("Obteniendo Sitios Almacenados");
-                        indexDb.getSites().then(function (resolve, reject) {
-                            message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                            return indexDb.getTemplates();
-                        })
-                            .then(function () {
-                                return reports.changeStatistic();
-                            })
-                            .then(function () {
-                                message.removeMessageLoader("#mainContent2");
-                            });
-
+                    else {
+                        reference.noUpdateInformation();
                     }
                 });
             });
 
         },
-        "updateInformation":  function(){
+        "updateInformation": function () {
             let visitsLocal = [];
-                        let visitsCloud = [];
-                        let reportsLocal = [];
-                        let reportsCloud = [];
-                        message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
+            let visitsCloud = [];
+            let reportsLocal = [];
+            let reportsCloud = [];
+            message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
-                        visits.getVisits().then(function (visitsLocalResponse) {
-                            visitsLocal = visitsLocalResponse;
-                            message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
-                            return visits.uploadVisitsToCloud();
-                        }).then(function () {
-                            message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
-                            return visits.getVisitsSaveonCloud();
-                        }).then(function (visitsCloudResponse) {
-                            visitsCloud = visitsCloudResponse;
-                            message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
-                            return visits.validateVisitLocally(visitsCloud, visitsLocal);
-                        })
-                            .then(function () {
-                                message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
-                                return reports.getReports();
-                            })
-                            .then(function (reportsResponse) {
-                                reportsLocal = reportsResponse;
-                                message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
-                                return reports.uploadReportToCloud(reportsResponse);
-                            })
-                            .then(function () {
-                                return reports.getReportsSaveonCloud();
-                            })
-                            .then(function (reportsOnCloud) {
-                                return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
-                            })
-                            .then(function () {
-                                return reports.changeStatistic();
-                            })
-                            .then(function () {
-                                return reportsImg.getReportsImages();
-                            })
-                            .then(function (reportImagesResponse) {
-                                return reportsImg.uploadReportsImages(reportImagesResponse);
-                            })
-                            .then(function () {
-                                return reportsImg.uploadReportsImages1();
-                            })
-                            /*
-                            .then(function () {
-                                return reportsImg.deleteReportsImg();
-                            })
-                            .then(function () {
-                                return reportsImg.getReportsImgSaveonCloud();
-                            })
-                            */
-                            .then(function () {
-                                console.log("Visits Saved ", visits.getVisits())
-                                return reference.updateSiteExternal();
-                            }).then(function () {
-                                message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
-                                $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
-                                    templates.templates = templatesResponse;
-                                    for (let template of templates.templates) {
-                                        indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
-                                    }
-                                    return indexDb.getTemplates();
-                                }).then(function () {
-                                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
-                                    indexDb.getTemplates().then(function () {
-                                        message.removeMessageLoader("#mainContent2");
-                                    });
-                                });
-                            });
+            visits.getVisits().then(function (visitsLocalResponse) {
+                visitsLocal = visitsLocalResponse;
+                message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
+                return visits.uploadVisitsToCloud();
+            }).then(function () {
+                message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
+                return visits.getVisitsSaveonCloud();
+            }).then(function (visitsCloudResponse) {
+                visitsCloud = visitsCloudResponse;
+                message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
+                return visits.validateVisitLocally(visitsCloud, visitsLocal);
+            })
+                .then(function () {
+                    message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
+                    return reports.getReports();
+                })
+                .then(function (reportsResponse) {
+                    reportsLocal = reportsResponse;
+                    message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
+                    return reports.uploadReportToCloud(reportsResponse);
+                })
+                .then(function () {
+                    return reports.getReportsSaveonCloud();
+                })
+                .then(function (reportsOnCloud) {
+                    return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
+                })
+                .then(function () {
+                    return reports.changeStatistic();
+                })
+                .then(function () {
+                    return reportsImg.getReportsImages();
+                })
+                .then(function (reportImagesResponse) {
+                    return reportsImg.uploadReportsImages(reportImagesResponse);
+                })
+                .then(function () {
+                    return reportsImg.uploadReportsImages1();
+                })
+                /*
+                .then(function () {
+                    return reportsImg.deleteReportsImg();
+                })
+                .then(function () {
+                    return reportsImg.getReportsImgSaveonCloud();
+                })
+                */
+                .then(function () {
+                    console.log("Visits Saved ", visits.getVisits())
+                    return reference.updateSiteExternal();
+                }).then(function () {
+                    message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
+                    $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
+                        templates.templates = templatesResponse;
+                        for (let template of templates.templates) {
+                            indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
+                        }
+                        return indexDb.getTemplates();
+                    }).then(function () {
+                        message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
+                        indexDb.getTemplates().then(function () {
+                            message.removeMessageLoader("#mainContent2");
+                        });
+                    });
+                });
+        },
+        "noUpdateInformation": function () {
+            message.changeMessageLoader("Obteniendo Sitios Almacenados");
+            indexDb.getSites().then(function (resolve, reject) {
+                message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                return indexDb.getTemplates();
+            })
+                .then(function () {
+                    return reports.changeStatistic();
+                })
+                .then(function () {
+                    message.removeMessageLoader("#mainContent2");
+                });
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
