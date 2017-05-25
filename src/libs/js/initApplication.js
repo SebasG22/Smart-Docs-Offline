@@ -46,6 +46,7 @@ let login = require("./login");
         },
         "startEventsLoginPage": function () {
             let reference = this;
+            jQuery.migrateMute = true;
             if (!localStorage.getItem("user")) {
                 $("#loginButton").click(function () {
                     let username = $("#username").val();
