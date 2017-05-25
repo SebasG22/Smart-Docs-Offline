@@ -16211,7 +16211,7 @@ let login = __webpack_require__(11);
                         console.log("Index Loaded",data);
                         $(".container").remove();
                         $("body").removeClass("login-page");
-                        $("body").append(data);
+                        $("body").append(data.responseText);
                         resolve();
                     }
                 })

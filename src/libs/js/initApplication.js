@@ -82,7 +82,7 @@ let login = require("./login");
                         console.log("Index Loaded",data);
                         $(".container").remove();
                         $("body").removeClass("login-page");
-                        $("body").append(data);
+                        $("body").append(data.responseText);
                         resolve();
                     }
                 })
