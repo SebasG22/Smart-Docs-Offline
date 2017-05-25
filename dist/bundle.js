@@ -16215,7 +16215,7 @@ let login = __webpack_require__(11);
                         $(".container").remove();
                         $("body").removeClass("login-page");
                         $("body").append(data.responseText);
-                        $("#userFirstName").text(reference.userInformation.firstname + ' ' + reference.userInformation.lastname );
+                        $("#userFirstName").text(reference.userInformation.firstname + ' ' + reference.userInformation.lastname + "<span class='caret'></span>");
                         $("#username").text(reference.userInformation.username);
                         $("#userRole").text(reference.userInformation.role);
                         $("#userCompany").text(reference.userInformation.company);
