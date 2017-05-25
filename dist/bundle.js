@@ -16178,10 +16178,12 @@ let login = __webpack_require__(11);
                 $("#loginButton").click(function () {
                     let username = $("#username").val();
                     let password = $("#userpassword").val();
-                    login.signin(username, password).then(function (userInformation) {
-                        reference.userInformation = userInformation;
-                        reference.initApplication();
-                    });
+                    if (username.length != 0 && password.length != 0) {
+                        login.signin(username, password).then(function (userInformation) {
+                            reference.userInformation = userInformation;
+                            reference.initApplication();
+                        });
+                    }
                 });
             }
             else {
@@ -16191,26 +16193,26 @@ let login = __webpack_require__(11);
         },
         "userInformation": "",
         "loadIndex": function () {
-            return new Promise(function(resolve,reject){
+            return new Promise(function (resolve, reject) {
                 $.ajax({
-                url: '/views/index.html',
-                type: 'GET',
-                statusCode: {
-                    500: function (msgRes) {
-                        message.launchErrorModal(msgRes.responseJSON.title, msgRes.responseJSON.message, " Revisa tus credenciales");
+                    url: '/views/index.html',
+                    type: 'GET',
+                    statusCode: {
+                        500: function (msgRes) {
+                            message.launchErrorModal(msgRes.responseJSON.title, msgRes.responseJSON.message, " Revisa tus credenciales");
+                        }
+                    },
+                    error: function () {
+                        reject();
+                    },
+                    complete: function (page) {
+                        $(".container").remove();
+                        $("body").removeClass("login-page");
+                        $("body").append(page);
+                        resolve();
                     }
-                },
-                error: function () {
-                    reject();
-                },
-                complete: function (page) {
-                    $(".container").remove();
-                    $("body").removeClass("login-page");
-                    $("body").append(page);
-                    resolve();
-                }
-            })
-            }); 
+                })
+            });
         },
         initApplication: function () {
             let reference = this;
