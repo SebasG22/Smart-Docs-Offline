@@ -60,12 +60,13 @@ let login = require("./login");
                 });
             }
             else {
-                reference.userInformation = localStorage.getItem("user");
+                reference.userInformation = JSON.parse(localStorage.getItem("user"));
                 reference.initApplication();
             }
         },
         "userInformation": "",
         "loadIndex": function () {
+            let reference = this;
             return new Promise(function (resolve, reject) {
                 $.ajax({
                     url: '/views/index.html',
@@ -83,6 +84,11 @@ let login = require("./login");
                         $(".container").remove();
                         $("body").removeClass("login-page");
                         $("body").append(data.responseText);
+                        $("#userFirstName").text(reference.userInformation.firstname + ' ' + reference.userInformation.lastname );
+                        $("#username").text(reference.userInformation.username);
+                        $("#userRole").text(reference.userInformation.role);
+                        $("#userCompany").text(reference.userInformation.company);
+                        $("#userEmail").text(reference.userInformation.email);
                         resolve();
                     }
                 })

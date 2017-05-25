@@ -17,7 +17,9 @@ module.exports = {
                     reject();
                 },
                 complete: function (data) {
-                    resolve(data.responseJSON);
+                    localStorage.setItem("user",JSON.stringify(data.user));
+                    localStorage.setItem("token",data.token);
+                    resolve();
                 }
             })
         });
