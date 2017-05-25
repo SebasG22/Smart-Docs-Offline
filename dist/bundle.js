@@ -11548,7 +11548,7 @@ module.exports = {
                 dataType: 'json',
                 statusCode: {
                     401: function () {
-                        message.launchErrorModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
                         localStorage.clear();
                     }
                 },
