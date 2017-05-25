@@ -19,7 +19,7 @@ module.exports = {
                 complete: function (msgRes) {
                     localStorage.setItem("user",JSON.stringify(msgRes.responseJSON.user));
                     localStorage.setItem("token",msgRes.responseJSON.token);
-                    resolve();
+                    resolve(msgRes.responseJSON.user);
                 }
             })
         });
