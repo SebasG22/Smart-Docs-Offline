@@ -10,7 +10,7 @@ module.exports = {
                 data: { username: username, password: password },
                 statusCode: {
                     500: function (msgRes) {
-                        message.launchErrorModal(msgRes.responseJSON.title,msgRes.responseJSON.message, " Revisa tus credenciales");
+                        message.launchErrorModal(msgRes.responseJSON.title,msgRes.responseJSON.error.message, " Revisa tus credenciales");
                     }
                 },
                 error: function () {
