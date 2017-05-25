@@ -10,7 +10,7 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.post('/', function (req, res, next) {
+router.post('/registerUser', function (req, res, next) {
     var user = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
@@ -18,7 +18,7 @@ router.post('/', function (req, res, next) {
         company: req.body.company,
         cellphone: req.body.cellphone,
         password: bcrypt.hashSync(req.body.password, 10),
-        userName: req.body.userName,
+        username: req.body.userName,
         email: req.body.email,
     });
 
