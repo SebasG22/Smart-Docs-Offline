@@ -46,7 +46,7 @@ let login = require("./login");
         },
         "startEventsLoginPage": function () {
             let reference = this;
-            if (localStorage.getItem("user")) {
+            if (!localStorage.getItem("user")) {
                 $("#loginButton").click(function () {
                     let username = $("#username").val();
                     let password = $("#userpassword").val();

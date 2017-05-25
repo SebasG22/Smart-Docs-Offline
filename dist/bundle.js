@@ -16174,7 +16174,7 @@ let login = __webpack_require__(11);
         },
         "startEventsLoginPage": function () {
             let reference = this;
-            if (localStorage.getItem("user")) {
+            if (!localStorage.getItem("user")) {
                 $("#loginButton").click(function () {
                     let username = $("#username").val();
                     let password = $("#userpassword").val();
