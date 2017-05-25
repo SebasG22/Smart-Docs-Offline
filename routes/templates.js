@@ -1,6 +1,8 @@
 const express = require("express");
 var router = express.Router();
 const Template = require("./../models/Template");
+var jwt = require("jsonwebtoken");
+
 
 router.use('/', function(req, res, next) {
     jwt.verify(req.query.token, 'SDLHW', function(err, decoded) {
