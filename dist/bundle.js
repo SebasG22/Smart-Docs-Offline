@@ -11099,12 +11099,12 @@ module.exports = {
 
             $("#yesConnection").click(function () {
                 resolve(true);
-                $("#connection_modal").hide();
+                $("#connection_modal").modal('hide');
             });
 
             $("#noConnection").click(function () {
                 resolve(false);
-                $("#connection_modal").hide();
+                $("#connection_modal").modal('hide');
             });
         });
     }
