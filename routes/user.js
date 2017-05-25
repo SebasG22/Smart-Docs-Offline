@@ -58,7 +58,7 @@ router.post('/signin', function (req, res, next) {
                 error: { message: 'Invalid login credentials' }
             });
         }
-        var token = jwt.sign({ user: user }, 'SDL', { expiresIn: 7200 });
+        var token = jwt.sign({ user: user }, 'SDLHW', { expiresIn: 7200 });
         res.status(200).json({
             message: "Sucessfully signin",
             token: token,
