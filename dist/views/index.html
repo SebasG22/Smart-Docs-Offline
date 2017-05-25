@@ -1,33 +1,36 @@
 <div class="app-container">
-        <div class="row content-container">
-            <nav class="navbar navbar-default navbar-fixed-top navbar-top" style="max-height: 60px">
-                <div class="container-fluid" style="max-height: 60px">
-                    <div class="navbar-header">
-                        <button type="button" class="navbar-expand-toggle">
+    <div class="row content-container">
+        <nav class="navbar navbar-default navbar-fixed-top navbar-top" style="max-height: 60px">
+            <div class="container-fluid" style="max-height: 60px">
+                <div class="navbar-header">
+                    <button type="button" class="navbar-expand-toggle">
                 <i class="fa fa-bars icon"></i>
             </button>
-                        <ol class="breadcrumb navbar-breadcrumb">
-                            <li class="active" id="pageName"> Inicio </li>
-                        </ol>
-                        <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                    <ol class="breadcrumb navbar-breadcrumb">
+                        <li class="active" id="pageName"> Inicio </li>
+                    </ol>
+                    <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
                 <i class="fa fa-th icon"></i>
             </button>
-                    </div>
-                    <ul id="navbarBig" class="nav navbar-nav navbar-right">
-                        <li class="dropdown profile">
-                            <span class="caret"></span>
-                            <a href="" class="dropdown-toggle" id="userFirstName" data-toggle="dropdown" role="button" aria-expanded="false">  <span class="caret"></span></a>
-                            <ul class="dropdown-menu animated fadeInDown">
-                                <li class="profile-img">
-                                    <img src="/img/huaweiLogo.png" class="profile-img">
-                                </li>
-                                <li>
-                                    <div class="profile-info">
-                                        <h4 id="username"> </h4>
-                                        <p id="userRole">  </p>
-                                        <p id="userCompany"> </p>
-                                        <p id="userEmail">  </p>
-                                        <p id="userStatus"> <?p>
+                </div>
+                <ul id="navbarBig" class="nav navbar-nav navbar-right">
+                   <button type="button" class="navbar-right-expand-toggle pull-right visible-xs">
+                <i class="fa fa-times icon"></i>
+            </button>
+                    <li class="dropdown profile">
+                        <a href="" class="dropdown-toggle" id="userFirstName" data-toggle="dropdown" role="button" aria-expanded="false"> <span class="caret"></span></a>
+                        <ul class="dropdown-menu animated fadeInDown">
+                            <li class="profile-img">
+                                <img src="/img/huaweiLogo.png" class="profile-img">
+                            </li>
+                            <li>
+                                <div class="profile-info">
+                                    <h4 id="username"> </h4>
+                                    <p id="userRole"> </p>
+                                    <p id="userCompany"> </p>
+                                    <p id="userEmail"> </p>
+                                    <p id="userStatus">
+                                        <?p>
                                         <div class="btn-group margin-bottom-2x" role="group">
                                             <a id="btnlogOut" href="javascript:window.open('','_self').close();" class="btn btn-default"><i class="fa fa-sign-out"></i> Salir App</a>
                                         </div>
