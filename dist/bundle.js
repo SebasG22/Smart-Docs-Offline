@@ -11053,8 +11053,7 @@ module.exports = {
 
             data.oncomplete = function (e) {
                 console.log("elements", elements);
-                reportsConnection.reportsLog = elements;
-                resolve();
+                resolve(elements);
             }
         });
     }
@@ -11843,8 +11842,15 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reportsImg/",
-            })
+                url: 'https://smart-docs.herokuapp.com/reportsImg/?token=' + localStorage.getItem('token'),
+                dataType: 'json',
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                }
+        })
                 .done(function (reportImgResponse) {
                     let cont = 0;
                     let updateReportImg = [];
@@ -11877,7 +11883,14 @@ module.exports = {
     "reportsLog": [],
     "getReportsLog": function () {
         let reference = this;
-        return reference.reportsLog;
+        return new Promise(function (resolve, reject) {
+            indexDb.getReportsLog().then(function (reportsLogRes) {
+                reference.reportsLog =  reportsLogRes;
+                resolve(reportsLogRes);
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
     },
     "reportSelected": {},
     "getReports": function () {
@@ -12050,7 +12063,7 @@ module.exports = {
             }
         }
 
-        return new Promise(function (resolve,reject) {
+        return new Promise(function (resolve, reject) {
             Promise.all(reportsToDelete).then(function () {
                 resolve();
             }).catch(function (err) {
@@ -12068,12 +12081,12 @@ module.exports = {
             })
                 .done(function (reportResponse) {
                     reference.saveReportsLocally(reportResponse)
-                    .then(function(){
-                        resolve();
-                    })
-                    .catch(function(err){
-                        reject(err);
-                    });
+                        .then(function () {
+                            resolve();
+                        })
+                        .catch(function (err) {
+                            reject(err);
+                        });
                 });
         });
     },
@@ -12083,9 +12096,9 @@ module.exports = {
             let saveReportLocal = reference.saveReportOnCloudToSaveLocally(reportResponse[0]);
             let saveReportImagesLocal = reference.saveReportImageOnCloudToSaveLocally(reportResponse[0]);
 
-            Promise.all([saveReportLocal,saveReportImagesLocal]).then(function () {
+            Promise.all([saveReportLocal, saveReportImagesLocal]).then(function () {
                 resolve();
-            }).catch(function(err){
+            }).catch(function (err) {
                 reject(err);
             });
         });
@@ -12095,29 +12108,29 @@ module.exports = {
             indexDb.addReportAllProperties(report.reportId, report.templateId, report.visitId, report.status, report.author, true,
                 report.creationDate, report.completedDate, report.lastModification, report.checkbox_answer, report.date_answer, report.datetime_answer,
                 report.list_answer, report.month_answer, report.multiselect_answer, report.number_answer, report.radio_answer, report.select_answer, report.table_answer,
-                report.text_answer, report.textarea_answer, report.time_answer, report.week_answer).then(function(){
+                report.text_answer, report.textarea_answer, report.time_answer, report.week_answer).then(function () {
                     resolve();
-                }).catch(function(err){
+                }).catch(function (err) {
                     reject(err);
                 });
         });
     },
     "saveReportImageOnCloudToSaveLocally": function (report) {
         let promisesSave = [];
-        for(let reportImg of report.reportImages){
+        for (let reportImg of report.reportImages) {
             promisesSave.push(indexDb.addReportImages(reportImg.reportImgId, report.reportId, reportImg.images, report.author, reportImg.image_1, true));
         }
         return new Promise(function (resolve, reject) {
-            if(promisesSave.length == 0){
+            if (promisesSave.length == 0) {
                 resolve();
             }
-            else{
+            else {
                 Promise.all(promisesSave).then(function () {
                     resolve();
                 })
-                .catch(function (err) {
-                    reject(err);
-                });
+                    .catch(function (err) {
+                        reject(err);
+                    });
             }
         });
     },
@@ -16649,8 +16662,8 @@ let login = __webpack_require__(11);
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    let keyGenerateVisit = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
-                    indexDb.addVisit(keyGenerateVisit, siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
+                    let keyGenerateVisit = uidGenerator.uidGen() + "-" + JSON.parse(localStorage.getItem("user").userId);
+                    indexDb.addVisit(keyGenerateVisit, siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), JSON.parse(localStorage.getItem("user")).userId, false).then(function () {
                         indexDb.getVisitByVisitId(keyGenerateVisit).then(function (visitResponse) {
                             visits.visitSelected = visitResponse;
                             reference.changePage("allTemplatesBoxes");
@@ -16863,11 +16876,11 @@ let login = __webpack_require__(11);
 
                 if (Object.keys(reports.reportSelected).length == 0) {
 
-                    let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
+                    let keyGenerated = uidGenerator.uidGen() + "-" + JSON.parse(localStorage.getItem("user")).userId;
                     reference.keyGenerated = keyGenerated;
 
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
-                        status, localStorage.getItem("username")).then(function () {
+                        status, JSON.parse(localStorage.getItem("user")).userId).then(function () {
 
                             let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", JSON.parse(answerDate));
                             let saveAnswerDateTime = indexDb.updateReport(keyGenerated, "datetime_answer", JSON.parse(answerDateTime));
@@ -16907,7 +16920,7 @@ let login = __webpack_require__(11);
                 }
                 else {
                     indexDb.addReport(reports.reportSelected.reportId, reports.reportSelected.templateId, reports.reportSelected.visitId,
-                        status, localStorage.getItem("username")).then(function () {
+                        status, JSON.parse(localStorage.getItem("user")).userId).then(function () {
                             reference.keyGenerated = reports.reportSelected.reportId;
                             let saveAnswerDate = indexDb.updateReport(reports.reportSelected.reportId, "date_answer", JSON.parse(answerDate));
                             let saveAnswerDateTime = indexDb.updateReport(reports.reportSelected.reportId, "datetime_answer", JSON.parse(answerDateTime));
@@ -16970,7 +16983,7 @@ let login = __webpack_require__(11);
             let promisesSaveImg = []
             do {
                 if (contProImg % 2 == 0) {
-                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(reference.keyGenerated + subId + subIdNumber, reference.keyGenerated, this["answerImages_" + contProImg], localStorage.getItem("username"));
+                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(reference.keyGenerated + subId + subIdNumber, reference.keyGenerated, this["answerImages_" + contProImg], JSON.parse(localStorage.getItem("user")).userId);
                     promisesSaveImg.push(this["saveAnswerImage_" + contProImg]);
                     subIdNumber++;
                 }
@@ -17085,7 +17098,7 @@ let login = __webpack_require__(11);
         //smartDocsOffline.registerSW();
         smartDocsOffline.startEventsLoginPage();
         /*
-        if (localStorage.getItem("username") == null) {
+        if (JSON.parse(localStorage.getItem("user")).userId == null) {
             smartDocsOffline.launchUserModal();
         } else {
             smartDocsOffline.initApplication();

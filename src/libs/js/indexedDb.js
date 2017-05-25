@@ -721,8 +721,7 @@ module.exports = {
 
             data.oncomplete = function (e) {
                 console.log("elements", elements);
-                reportsConnection.reportsLog = elements;
-                resolve();
+                resolve(elements);
             }
         });
     }

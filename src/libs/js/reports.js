@@ -4,7 +4,14 @@ module.exports = {
     "reportsLog": [],
     "getReportsLog": function () {
         let reference = this;
-        return reference.reportsLog;
+        return new Promise(function (resolve, reject) {
+            indexDb.getReportsLog().then(function (reportsLogRes) {
+                reference.reportsLog =  reportsLogRes;
+                resolve(reportsLogRes);
+            }).catch(function (err) {
+                reject(err);
+            });
+        });
     },
     "reportSelected": {},
     "getReports": function () {
@@ -177,7 +184,7 @@ module.exports = {
             }
         }
 
-        return new Promise(function (resolve,reject) {
+        return new Promise(function (resolve, reject) {
             Promise.all(reportsToDelete).then(function () {
                 resolve();
             }).catch(function (err) {
@@ -195,12 +202,12 @@ module.exports = {
             })
                 .done(function (reportResponse) {
                     reference.saveReportsLocally(reportResponse)
-                    .then(function(){
-                        resolve();
-                    })
-                    .catch(function(err){
-                        reject(err);
-                    });
+                        .then(function () {
+                            resolve();
+                        })
+                        .catch(function (err) {
+                            reject(err);
+                        });
                 });
         });
     },
@@ -210,9 +217,9 @@ module.exports = {
             let saveReportLocal = reference.saveReportOnCloudToSaveLocally(reportResponse[0]);
             let saveReportImagesLocal = reference.saveReportImageOnCloudToSaveLocally(reportResponse[0]);
 
-            Promise.all([saveReportLocal,saveReportImagesLocal]).then(function () {
+            Promise.all([saveReportLocal, saveReportImagesLocal]).then(function () {
                 resolve();
-            }).catch(function(err){
+            }).catch(function (err) {
                 reject(err);
             });
         });
@@ -222,29 +229,29 @@ module.exports = {
             indexDb.addReportAllProperties(report.reportId, report.templateId, report.visitId, report.status, report.author, true,
                 report.creationDate, report.completedDate, report.lastModification, report.checkbox_answer, report.date_answer, report.datetime_answer,
                 report.list_answer, report.month_answer, report.multiselect_answer, report.number_answer, report.radio_answer, report.select_answer, report.table_answer,
-                report.text_answer, report.textarea_answer, report.time_answer, report.week_answer).then(function(){
+                report.text_answer, report.textarea_answer, report.time_answer, report.week_answer).then(function () {
                     resolve();
-                }).catch(function(err){
+                }).catch(function (err) {
                     reject(err);
                 });
         });
     },
     "saveReportImageOnCloudToSaveLocally": function (report) {
         let promisesSave = [];
-        for(let reportImg of report.reportImages){
+        for (let reportImg of report.reportImages) {
             promisesSave.push(indexDb.addReportImages(reportImg.reportImgId, report.reportId, reportImg.images, report.author, reportImg.image_1, true));
         }
         return new Promise(function (resolve, reject) {
-            if(promisesSave.length == 0){
+            if (promisesSave.length == 0) {
                 resolve();
             }
-            else{
+            else {
                 Promise.all(promisesSave).then(function () {
                     resolve();
                 })
-                .catch(function (err) {
-                    reject(err);
-                });
+                    .catch(function (err) {
+                        reject(err);
+                    });
             }
         });
     },

@@ -106,8 +106,15 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reportsImg/",
-            })
+                url: 'https://smart-docs.herokuapp.com/reportsImg/?token=' + localStorage.getItem('token'),
+                dataType: 'json',
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                }
+        })
                 .done(function (reportImgResponse) {
                     let cont = 0;
                     let updateReportImg = [];

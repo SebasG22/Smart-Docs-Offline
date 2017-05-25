@@ -468,8 +468,8 @@ let login = require("./login");
                     console.log("Site Filter ", siteFilter);
 
                     $("#new_visit_modal").modal('hide');
-                    let keyGenerateVisit = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
-                    indexDb.addVisit(keyGenerateVisit, siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), localStorage.getItem("username"), false).then(function () {
+                    let keyGenerateVisit = uidGenerator.uidGen() + "-" + JSON.parse(localStorage.getItem("user").userId);
+                    indexDb.addVisit(keyGenerateVisit, siteFilter[0].siteId, siteFilter[0].name + " - " + siteFilter[0].project + " - " + new Date().toDateString(), JSON.parse(localStorage.getItem("user")).userId, false).then(function () {
                         indexDb.getVisitByVisitId(keyGenerateVisit).then(function (visitResponse) {
                             visits.visitSelected = visitResponse;
                             reference.changePage("allTemplatesBoxes");
@@ -682,11 +682,11 @@ let login = require("./login");
 
                 if (Object.keys(reports.reportSelected).length == 0) {
 
-                    let keyGenerated = uidGenerator.uidGen() + "-" + localStorage.getItem("username");
+                    let keyGenerated = uidGenerator.uidGen() + "-" + JSON.parse(localStorage.getItem("user")).userId;
                     reference.keyGenerated = keyGenerated;
 
                     indexDb.addReport(keyGenerated, templates.templateSelected.templateId, visits.visitSelected.visitId,
-                        status, localStorage.getItem("username")).then(function () {
+                        status, JSON.parse(localStorage.getItem("user")).userId).then(function () {
 
                             let saveAnswerDate = indexDb.updateReport(keyGenerated, "date_answer", JSON.parse(answerDate));
                             let saveAnswerDateTime = indexDb.updateReport(keyGenerated, "datetime_answer", JSON.parse(answerDateTime));
@@ -726,7 +726,7 @@ let login = require("./login");
                 }
                 else {
                     indexDb.addReport(reports.reportSelected.reportId, reports.reportSelected.templateId, reports.reportSelected.visitId,
-                        status, localStorage.getItem("username")).then(function () {
+                        status, JSON.parse(localStorage.getItem("user")).userId).then(function () {
                             reference.keyGenerated = reports.reportSelected.reportId;
                             let saveAnswerDate = indexDb.updateReport(reports.reportSelected.reportId, "date_answer", JSON.parse(answerDate));
                             let saveAnswerDateTime = indexDb.updateReport(reports.reportSelected.reportId, "datetime_answer", JSON.parse(answerDateTime));
@@ -789,7 +789,7 @@ let login = require("./login");
             let promisesSaveImg = []
             do {
                 if (contProImg % 2 == 0) {
-                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(reference.keyGenerated + subId + subIdNumber, reference.keyGenerated, this["answerImages_" + contProImg], localStorage.getItem("username"));
+                    this["saveAnswerImage_" + contProImg] = indexDb.addReportImages(reference.keyGenerated + subId + subIdNumber, reference.keyGenerated, this["answerImages_" + contProImg], JSON.parse(localStorage.getItem("user")).userId);
                     promisesSaveImg.push(this["saveAnswerImage_" + contProImg]);
                     subIdNumber++;
                 }
@@ -904,7 +904,7 @@ let login = require("./login");
         //smartDocsOffline.registerSW();
         smartDocsOffline.startEventsLoginPage();
         /*
-        if (localStorage.getItem("username") == null) {
+        if (JSON.parse(localStorage.getItem("user")).userId == null) {
             smartDocsOffline.launchUserModal();
         } else {
             smartDocsOffline.initApplication();
