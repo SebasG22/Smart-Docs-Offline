@@ -1,28 +1,4 @@
-<!DOCTYPE html>
-<html manifest="/smartdocs.appcache">
-<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
-<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
-<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
-<!--[if gt IE 8]><!-->
-<!--<![endif]-->
-
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>Smart Docs Lite </title>
-    <meta name="description" content="">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name='mobile-web-app-capable' content='yes'>
-    <link href='http://fonts.googleapis.com/css?family=Roboto+Condensed:300,400' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Lato:300,400,700,900' rel='stylesheet' type='text/css'>
-    <link rel="manifest" href="./../manifest.json">
-    <link rel='icon' sizes='192x192' href='/img/huaweiLogo-192x192.png'>
-    <link rel="stylesheet" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/css/font-awesome.min.css">
-</head>
-
-<body class="flat-blue">
-    <div class="app-container">
+<div class="app-container">
         <div class="row content-container">
             <nav class="navbar navbar-default navbar-fixed-top navbar-top" style="max-height: 60px">
                 <div class="container-fluid" style="max-height: 60px">
@@ -71,29 +47,29 @@
     width: 60px;
     float: left;
 ">
-                                    <div class="title" style="float: left; margin-left:10px; margin-top=2px;">Smart Docs Lite</div>
+                                    <div class="title" style="float: left; margin-left:10px; margin-top : 2px;">Smart Docs Lite</div>
                                 </a>
                                 <button type="button" class="navbar-expand-toggle pull-right visible-xs">
                         <i class="fa fa-times icon"></i>
                     </button>
                             </div>
                             <ul class="nav navbar-nav">
-                                <li id="itemInicio" class="active" style="cursor: pointer">
+                                <li id="itemInicio" class="active" style="cursor : pointer">
                                     <a>
                                         <span class="icon fa fa-tachometer"></span><span class="title">Inicio</span>
                                     </a>
                                 </li>
-                                <li id="itemVisitas" style="cursor: pointer">
+                                <li id="itemVisitas" style="cursor : pointer">
                                     <a>
                                         <span class="icon fa fa-map-marker"></span><span class="title">Mis Visitas</span>
                                     </a>
                                 </li>
-                                <li id="itemLogger" style="cursor: pointer">
+                                <li id="itemLogger" style="cursor : pointer">
                                     <a>
                                         <span class="icon fa fa-database"></span><span class="title">Logger</span>
                                     </a>
                                 </li>
-                                <li id="itemFaq" class="noPage" style="cursor: pointer">
+                                <li id="itemFaq" class="noPage" style="cursor : pointer">
                                     <a>
                                         <span class="icon fa fa-question"></span><span class="title">FAQ</span>
                                     </a>
@@ -153,58 +129,5 @@
             </div>
         </div>
         <div>
-            <!--<script src="/js/jquery-2.2.4.min.js"></script>
-            <script src="/js/bootstrap.min.js"></script> 
-            -->
-            <script src="/bundle.js"></script>
-
-
         </div>
     </div>
-
-    <!--[if lt IE 7]>
-            <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="#">upgrade your browser</a> to improve your experience.</p>
-        <![endif]-->
-
-
-    <script>
-        /*
-        if (navigator.onLine) {
-            if ('serviceWorker' in navigator) {
-                console.log("Will the service worker register?");
-                navigator.serviceWorker.register('/service-worker.js')
-                    .then(function (reg) {
-                        console.log("Yes, it did.", reg.scope);
-                    }).catch(function (err) {
-                        console.log("No it didn't. This happened: ", err)
-                    });
-            }
-
-            if (localStorage.getItem("appInstalled") == null) {
-                window.addEventListener('beforeinstallprompt', function (e) {
-                    // beforeinstallprompt Event fired
-
-                    // e.userChoice will return a Promise. 
-                    // For more details read: https://developers.google.com/web/fundamentals/getting-started/primers/promises
-                    e.userChoice.then(function (choiceResult) {
-
-                        console.log(choiceResult.outcome);
-
-                        if (choiceResult.outcome == 'dismissed') {
-                            console.log('User cancelled home screen install');
-                        }
-                        else {
-                            localStorage.setItem("appInstalled", "yes");
-                            console.log('User added to home screen');
-                        }
-                    });
-                    e.preventDefault();
-                    return false;
-                });
-            }
-        }
-        */
-    </script>
-</body>
-
-</html>

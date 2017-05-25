@@ -13,6 +13,7 @@ let notification = require("./notifications");
 let sites = require("./sites");
 let uidGenerator = require("./uidGenerator");
 let reportsImg = require("./reportImages");
+let login = require("./login");
 
 (function () {
     let smartDocsOffline = {
@@ -23,140 +24,182 @@ let reportsImg = require("./reportImages");
                     console.log("Yes, it did.", reg.scope);
                     notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
                     reference.showInstallationBanner();
-            }).catch(function (err) {
+                }).catch(function (err) {
                     console.log("No it didn't. This happened: ", err)
                 });
         },
         "showInstallationBanner": function () {
-                window.addEventListener('beforeinstallprompt', function (e) {
-                    // beforeinstallprompt Event fired
-                    e.userChoice.then(function (choiceResult) {
-                        console.log(choiceResult.outcome);
-                        if (choiceResult.outcome == 'dismissed') {
-                            console.log('User cancelled home screen install');
-                        }
-                        else {
-                            console.log('User added to home screen');
-                        }
-                    });
-                    e.preventDefault();
-                    return false;
+            window.addEventListener('beforeinstallprompt', function (e) {
+                // beforeinstallprompt Event fired
+                e.userChoice.then(function (choiceResult) {
+                    console.log(choiceResult.outcome);
+                    if (choiceResult.outcome == 'dismissed') {
+                        console.log('User cancelled home screen install');
+                    }
+                    else {
+                        console.log('User added to home screen');
+                    }
                 });
+                e.preventDefault();
+                return false;
+            });
+        },
+        "startEventsLoginPage": function () {
+            let reference = this;
+            if (localStorage.getItem("user")) {
+                $("#loginButton").click(function () {
+                    let username = $("#username").val();
+                    let password = $("#userpassword").val();
+                    login.signin(username, password).then(function (userInformation) {
+                        reference.userInformation = userInformation;
+                        reference.initApplication();
+                    });
+                });
+            }
+            else {
+                reference.userInformation = localStorage.getItem("user");
+                reference.initApplication();
+            }
+        },
+        "userInformation": "",
+        "loadIndex": function () {
+            $.ajax({
+                url: 'https://smart-docs.herokuapp.com/user/signin',
+                type: 'GET',
+                statusCode: {
+                    500: function (msgRes) {
+                        message.launchErrorModal(msgRes.responseJSON.title, msgRes.responseJSON.message, " Revisa tus credenciales");
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (page) {
+                    $(".container").remove();
+                    $("body").removeClass("login-page");
+                    $("body").append(page);
+                    resolve();
+                }
+            })
         },
         initApplication: function () {
             let reference = this;
             reference.disabledBackButton();
             reference.promptRefreshMessage();
-            $.get("/views/dashboard.html", function (page) {
-                $("#mainContent2").html(page);
-                //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-                switch (navigator.onLine) {
-                    case true:
-                        $("#userStatus").html(" Estado: Online ");
-                        $("#userStatus").css("color", "green");
-                        break;
-                    case false:
-                        $("#userStatus").html(" Estado: Offline ");
-                        $("#userStatus").css("color", "red");
-                        break;
-                }
+            message.addMessageLoder("loaderMessage", "#mainContent2");
+            message.changeMessageLoader("loaderMessage", "Cargando Aplicacion");
+            reference.loadIndex().then(function () {
+                $.get("/views/dashboard.html", function (page) {
+                    $("#mainContent2").html(page);
+                    //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
+                    switch (navigator.onLine) {
+                        case true:
+                            $("#userStatus").html(" Estado: Online ");
+                            $("#userStatus").css("color", "green");
+                            break;
+                        case false:
+                            $("#userStatus").html(" Estado: Offline ");
+                            $("#userStatus").css("color", "red");
+                            break;
+                    }
 
-                reference.addEventsToMenu();
-                reference.loadNavBar();
-                reference.grantPermissionPosition();
-                message.addMessageLoder("loaderMessage", "#mainContent2");
-                message.changeMessageLoader("loaderMessage", "Consultando Plantillas");
-                /**
-                 * Detect if the user has an internet connection available
-                 * If it's true == Connection Available
-                 */
-                if (navigator.onLine == true) {
-                    let visitsLocal = [];
-                    let visitsCloud = [];
-                    let reportsLocal = [];
-                    let reportsCloud = [];
-                    message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
+                    reference.addEventsToMenu();
+                    reference.loadNavBar();
+                    reference.grantPermissionPosition();
+                    message.changeMessageLoader("loaderMessage", "Consultando Plantillas");
+                    /**
+                     * Detect if the user has an internet connection available
+                     * If it's true == Connection Available
+                     */
+                    if (navigator.onLine == true) {
+                        let visitsLocal = [];
+                        let visitsCloud = [];
+                        let reportsLocal = [];
+                        let reportsCloud = [];
+                        message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
-                    visits.getVisits().then(function (visitsLocalResponse) {
-                        visitsLocal = visitsLocalResponse;
-                        message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
-                        return visits.uploadVisitsToCloud();
-                    }).then(function () {
-                        message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
-                        return visits.getVisitsSaveonCloud();
-                    }).then(function (visitsCloudResponse) {
-                        visitsCloud = visitsCloudResponse;
-                        message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
-                        return visits.validateVisitLocally(visitsCloud, visitsLocal);
-                    })
-                        .then(function () {
-                            message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
-                            return reports.getReports();
-                        })
-                        .then(function (reportsResponse) {
-                            reportsLocal = reportsResponse;
-                            message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
-                            return reports.uploadReportToCloud(reportsResponse);
-                        })
-                        .then(function () {
-                            return reports.getReportsSaveonCloud();
-                        })
-                        .then(function (reportsOnCloud) {
-                            return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
-                        })
-                        .then(function () {
-                            return reports.changeStatistic();
-                        })
-                        .then(function () {
-                            return reportsImg.getReportsImages();
-                        })
-                        .then(function (reportImagesResponse) {
-                            return reportsImg.uploadReportsImages(reportImagesResponse);
-                        })
-                        .then(function () {
-                            return reportsImg.uploadReportsImages1();
-                        })
-                        /*
-                        .then(function () {
-                            return reportsImg.deleteReportsImg();
-                        })
-                        .then(function () {
-                            return reportsImg.getReportsImgSaveonCloud();
-                        })
-                        */
-                        .then(function () {
-                            console.log("Visits Saved ", visits.getVisits())
-                            return reference.updateSiteExternal();
+                        visits.getVisits().then(function (visitsLocalResponse) {
+                            visitsLocal = visitsLocalResponse;
+                            message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
+                            return visits.uploadVisitsToCloud();
                         }).then(function () {
-                            message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
-                            $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
-                                templates.templates = templatesResponse;
-                                for (let template of templates.templates) {
-                                    indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
-                                }
-                                return indexDb.getTemplates();
+                            message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
+                            return visits.getVisitsSaveonCloud();
+                        }).then(function (visitsCloudResponse) {
+                            visitsCloud = visitsCloudResponse;
+                            message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
+                            return visits.validateVisitLocally(visitsCloud, visitsLocal);
+                        })
+                            .then(function () {
+                                message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
+                                return reports.getReports();
+                            })
+                            .then(function (reportsResponse) {
+                                reportsLocal = reportsResponse;
+                                message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
+                                return reports.uploadReportToCloud(reportsResponse);
+                            })
+                            .then(function () {
+                                return reports.getReportsSaveonCloud();
+                            })
+                            .then(function (reportsOnCloud) {
+                                return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
+                            })
+                            .then(function () {
+                                return reports.changeStatistic();
+                            })
+                            .then(function () {
+                                return reportsImg.getReportsImages();
+                            })
+                            .then(function (reportImagesResponse) {
+                                return reportsImg.uploadReportsImages(reportImagesResponse);
+                            })
+                            .then(function () {
+                                return reportsImg.uploadReportsImages1();
+                            })
+                            /*
+                            .then(function () {
+                                return reportsImg.deleteReportsImg();
+                            })
+                            .then(function () {
+                                return reportsImg.getReportsImgSaveonCloud();
+                            })
+                            */
+                            .then(function () {
+                                console.log("Visits Saved ", visits.getVisits())
+                                return reference.updateSiteExternal();
                             }).then(function () {
-                                message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
-                                indexDb.getTemplates().then(function () {
-                                    message.removeMessageLoader("#mainContent2");
+                                message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
+                                $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
+                                    templates.templates = templatesResponse;
+                                    for (let template of templates.templates) {
+                                        indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
+                                    }
+                                    return indexDb.getTemplates();
+                                }).then(function () {
+                                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
+                                    indexDb.getTemplates().then(function () {
+                                        message.removeMessageLoader("#mainContent2");
+                                    });
                                 });
                             });
-                        });
-                } else {
-                    message.changeMessageLoader("Obteniendo Sitios Almacenados");
-                    indexDb.getSites().then(function (resolve, reject) {
-                        message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                        return indexDb.getTemplates();
-                    })
-                        .then(function () {
-                            return reports.changeStatistic();
+                    } else {
+                        message.changeMessageLoader("Obteniendo Sitios Almacenados");
+                        indexDb.getSites().then(function (resolve, reject) {
+                            message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                            return indexDb.getTemplates();
                         })
-                        .then(function () {
-                            message.removeMessageLoader("#mainContent2");
-                        });
+                            .then(function () {
+                                return reports.changeStatistic();
+                            })
+                            .then(function () {
+                                message.removeMessageLoader("#mainContent2");
+                            });
 
-                }
+                    }
+                });
             });
+
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
@@ -821,15 +864,17 @@ let reportsImg = require("./reportImages");
     }
 
 
-    message.addMessageLoder("loaderMessage", "#mainContent2");
-    message.changeMessageLoader("loaderMessage", "Conectando Dispositivo");
+
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
         smartDocsOffline.registerSW();
+        smartDocsOffline.startEventsLoginPage();
+        /*
         if (localStorage.getItem("username") == null) {
             smartDocsOffline.launchUserModal();
         } else {
             smartDocsOffline.initApplication();
         }
+        */
     });
 })();

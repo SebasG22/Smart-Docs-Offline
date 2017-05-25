@@ -63,7 +63,7 @@
 /******/ 	__webpack_require__.p = "/dist";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 33);
+/******/ 	return __webpack_require__(__webpack_require__.s = 34);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -11062,6 +11062,39 @@ module.exports = {
 
 /***/ }),
 /* 2 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function($) {module.exports = {
+    addMessageLoder: function (selector,location) {
+        $(location).addClass("loader");
+        $(location).append("<div id='loader' class='loader-container text-center color-white'><div><i style='color:white' class='fa fa-spinner fa-pulse fa-3x'></i></div><div style='color:white'><h4>Smart Docs <br> <small> Cargando Recursos <div id='"+selector+"'> </div> </small> <br><small>... Se esta preparando para ti ...</small></h4><h5>Desarollado por: Huawei Colombia  <br> OSS IT Team </h5></div></div>");
+    },
+    changeMessageLoader: function (selector, msg) {
+        console.log("Selector: "+ selector);
+        console.log("Message: " + msg);
+        $("#" + selector).text(msg);
+    },
+    removeMessageLoader: function (location){
+        $("#loader").remove();
+        $(location).removeClass("loader");
+    },
+    launchProcessImageModal: function(){
+        $("#process_image_modal").remove();
+        $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=process_image_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>La imagen esta siendo procesada </h4></div><div class=modal-body> <img src='/img/mapIcon.svg' style='margin-left:auto;margin-right:auto;display:block' width='150px'><h4 style='text-align:center'> Espera un momento, este proceso puede tomar algunos segundos dependiendo de tu conexion</h4></div></div></div></div>");
+        $("#process_image_modal").modal({ backdrop: 'static', keyboard: false });
+    },
+    removeProcessImageModal:function(){
+        $("#process_image_modal").modal('hide');
+    },
+    launchErrorModal: function( title, description, recomendation){
+        $("#error_modal").remove();
+        $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel1 id=error_modal role=dialog style=display:none tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel9> "+ title + " </h4></div><div class=modal-body><img src=''style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> " + description + " </h4><h5 style=text-align:center> " + recomendation + " </h5></div><div class=modal-footer><input class='btn btn-danger'data-dismiss=modal type=button value='Lo entiendo'></div></div></div></div>");
+    }
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 3 */
 /***/ (function(module, exports) {
 
 /*
@@ -11143,7 +11176,7 @@ function toComment(sourceMap) {
 
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*
@@ -11180,7 +11213,7 @@ var stylesInDom = {},
 	singletonElement = null,
 	singletonCounter = 0,
 	styleElementsInsertedAtTop = [],
-	fixUrls = __webpack_require__(32);
+	fixUrls = __webpack_require__(33);
 
 module.exports = function(list, options) {
 	if(typeof DEBUG !== "undefined" && DEBUG) {
@@ -11456,35 +11489,6 @@ function updateLink(linkElement, options, obj) {
 
 
 /***/ }),
-/* 4 */
-/***/ (function(module, exports, __webpack_require__) {
-
-/* WEBPACK VAR INJECTION */(function($) {module.exports = {
-    addMessageLoder: function (selector,location) {
-        $(location).addClass("loader");
-        $(location).append("<div id='loader' class='loader-container text-center color-white'><div><i style='color:white' class='fa fa-spinner fa-pulse fa-3x'></i></div><div style='color:white'><h4>Smart Docs <br> <small> Cargando Recursos <div id='"+selector+"'> </div> </small> <br><small>... Se esta preparando para ti ...</small></h4><h5>Desarollado por: Huawei Colombia  <br> OSS IT Team </h5></div></div>");
-    },
-    changeMessageLoader: function (selector, msg) {
-        console.log("Selector: "+ selector);
-        console.log("Message: " + msg);
-        $("#" + selector).text(msg);
-    },
-    removeMessageLoader: function (location){
-        $("#loader").remove();
-        $(location).removeClass("loader");
-    },
-    launchProcessImageModal: function(){
-        $("#process_image_modal").remove();
-        $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=process_image_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>La imagen esta siendo procesada </h4></div><div class=modal-body> <img src='/img/mapIcon.svg' style='margin-left:auto;margin-right:auto;display:block' width='150px'><h4 style='text-align:center'> Espera un momento, este proceso puede tomar algunos segundos dependiendo de tu conexion</h4></div></div></div></div>");
-        $("#process_image_modal").modal({ backdrop: 'static', keyboard: false });
-    },
-    removeProcessImageModal:function(){
-        $("#process_image_modal").modal('hide');
-    }
-}
-/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
-
-/***/ }),
 /* 5 */
 /***/ (function(module, exports) {
 
@@ -11514,18 +11518,18 @@ module.exports = {
 /***/ (function(module, exports, __webpack_require__) {
 
 // This file is autogenerated via the `commonjs` Grunt task. You can require() this file in a CommonJS environment.
-__webpack_require__(28)
-__webpack_require__(18)
+__webpack_require__(29)
 __webpack_require__(19)
 __webpack_require__(20)
 __webpack_require__(21)
 __webpack_require__(22)
 __webpack_require__(23)
-__webpack_require__(27)
 __webpack_require__(24)
+__webpack_require__(28)
 __webpack_require__(25)
 __webpack_require__(26)
-__webpack_require__(17)
+__webpack_require__(27)
+__webpack_require__(18)
 
 /***/ }),
 /* 8 */
@@ -11534,7 +11538,7 @@ __webpack_require__(17)
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(29);
+var content = __webpack_require__(30);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11542,7 +11546,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(4)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11565,7 +11569,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(30);
+var content = __webpack_require__(31);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11573,7 +11577,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(4)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11596,7 +11600,7 @@ if(false) {
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(31);
+var content = __webpack_require__(32);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // Prepare cssTransformation
 var transform;
@@ -11604,7 +11608,7 @@ var transform;
 var options = {}
 options.transform = transform
 // add the styles to the DOM
-var update = __webpack_require__(3)(content, options);
+var update = __webpack_require__(4)(content, options);
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -11622,6 +11626,38 @@ if(false) {
 
 /***/ }),
 /* 11 */
+/***/ (function(module, exports, __webpack_require__) {
+
+/* WEBPACK VAR INJECTION */(function($) {let message = __webpack_require__(2);
+
+module.exports = {
+    "signin": function (username,password) {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: 'https://smart-docs.herokuapp.com/user/signin',
+                type: 'POST',
+                dataType: 'json',
+                data: { username: username, password: password },
+                statusCode: {
+                    500: function (msgRes) {
+                        message.launchErrorModal(msgRes.responseJSON.title,msgRes.responseJSON.message, " Revisa tus credenciales");
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (data) {
+                    resolve(data.responseJSON);
+                }
+            })
+        });
+
+    }
+}
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
+
+/***/ }),
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -11643,7 +11679,7 @@ module.exports = {
 }
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
@@ -11779,7 +11815,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
@@ -12132,10 +12168,10 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function($) {let message = __webpack_require__(4);
+/* WEBPACK VAR INJECTION */(function($) {let message = __webpack_require__(2);
 
 module.exports = {
     "imgTo64": function (input) {
@@ -13371,7 +13407,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = {
@@ -13387,7 +13423,7 @@ module.exports = {
 }
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function($) {let indexDb = __webpack_require__(1);
@@ -13506,7 +13542,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -13675,7 +13711,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -13776,7 +13812,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -13908,7 +13944,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14152,7 +14188,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14371,7 +14407,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14543,7 +14579,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -14889,7 +14925,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -15004,7 +15040,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -15183,7 +15219,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -15345,7 +15381,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -15872,7 +15908,7 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(jQuery) {/* ========================================================================
@@ -15938,10 +15974,10 @@ module.exports = {
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -15952,10 +15988,10 @@ exports.push([module.i, ".checkbox3 label::before,.radio3 label::before{overflow
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -15966,10 +16002,10 @@ exports.push([module.i, ".flat-blue {\n  background-color: #F9F9F9;\n  /* small 
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(2)(undefined);
+exports = module.exports = __webpack_require__(3)(undefined);
 // imports
 
 
@@ -15980,7 +16016,7 @@ exports.push([module.i, "html {\n  height: 100%; }\n\nbody {\n  padding-top: 0px
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, exports) {
 
 
@@ -16075,7 +16111,7 @@ module.exports = function (css) {
 
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -16095,16 +16131,17 @@ module.exports = function (css) {
 
 
 
-let visits = __webpack_require__(16);
-let reports = __webpack_require__(13);
-let smartEngine = __webpack_require__(14);
+let visits = __webpack_require__(17);
+let reports = __webpack_require__(14);
+let smartEngine = __webpack_require__(15);
 let templates = __webpack_require__(6);
 let indexDb = __webpack_require__(1);
-let message = __webpack_require__(4);
-let notification = __webpack_require__(11);
+let message = __webpack_require__(2);
+let notification = __webpack_require__(12);
 let sites = __webpack_require__(5);
-let uidGenerator = __webpack_require__(15);
-let reportsImg = __webpack_require__(12);
+let uidGenerator = __webpack_require__(16);
+let reportsImg = __webpack_require__(13);
+let login = __webpack_require__(11);
 
 (function () {
     let smartDocsOffline = {
@@ -16115,140 +16152,182 @@ let reportsImg = __webpack_require__(12);
                     console.log("Yes, it did.", reg.scope);
                     notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
                     reference.showInstallationBanner();
-            }).catch(function (err) {
+                }).catch(function (err) {
                     console.log("No it didn't. This happened: ", err)
                 });
         },
         "showInstallationBanner": function () {
-                window.addEventListener('beforeinstallprompt', function (e) {
-                    // beforeinstallprompt Event fired
-                    e.userChoice.then(function (choiceResult) {
-                        console.log(choiceResult.outcome);
-                        if (choiceResult.outcome == 'dismissed') {
-                            console.log('User cancelled home screen install');
-                        }
-                        else {
-                            console.log('User added to home screen');
-                        }
-                    });
-                    e.preventDefault();
-                    return false;
+            window.addEventListener('beforeinstallprompt', function (e) {
+                // beforeinstallprompt Event fired
+                e.userChoice.then(function (choiceResult) {
+                    console.log(choiceResult.outcome);
+                    if (choiceResult.outcome == 'dismissed') {
+                        console.log('User cancelled home screen install');
+                    }
+                    else {
+                        console.log('User added to home screen');
+                    }
                 });
+                e.preventDefault();
+                return false;
+            });
+        },
+        "startEventsLoginPage": function () {
+            let reference = this;
+            if (localStorage.getItem("user")) {
+                $("#loginButton").click(function () {
+                    let username = $("#username").val();
+                    let password = $("#userpassword").val();
+                    login.signin(username, password).then(function (userInformation) {
+                        reference.userInformation = userInformation;
+                        reference.initApplication();
+                    });
+                });
+            }
+            else {
+                reference.userInformation = localStorage.getItem("user");
+                reference.initApplication();
+            }
+        },
+        "userInformation": "",
+        "loadIndex": function () {
+            $.ajax({
+                url: 'https://smart-docs.herokuapp.com/user/signin',
+                type: 'GET',
+                statusCode: {
+                    500: function (msgRes) {
+                        message.launchErrorModal(msgRes.responseJSON.title, msgRes.responseJSON.message, " Revisa tus credenciales");
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (page) {
+                    $(".container").remove();
+                    $("body").removeClass("login-page");
+                    $("body").append(page);
+                    resolve();
+                }
+            })
         },
         initApplication: function () {
             let reference = this;
             reference.disabledBackButton();
             reference.promptRefreshMessage();
-            $.get("/views/dashboard.html", function (page) {
-                $("#mainContent2").html(page);
-                //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-                switch (navigator.onLine) {
-                    case true:
-                        $("#userStatus").html(" Estado: Online ");
-                        $("#userStatus").css("color", "green");
-                        break;
-                    case false:
-                        $("#userStatus").html(" Estado: Offline ");
-                        $("#userStatus").css("color", "red");
-                        break;
-                }
+            message.addMessageLoder("loaderMessage", "#mainContent2");
+            message.changeMessageLoader("loaderMessage", "Cargando Aplicacion");
+            reference.loadIndex().then(function () {
+                $.get("/views/dashboard.html", function (page) {
+                    $("#mainContent2").html(page);
+                    //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
+                    switch (navigator.onLine) {
+                        case true:
+                            $("#userStatus").html(" Estado: Online ");
+                            $("#userStatus").css("color", "green");
+                            break;
+                        case false:
+                            $("#userStatus").html(" Estado: Offline ");
+                            $("#userStatus").css("color", "red");
+                            break;
+                    }
 
-                reference.addEventsToMenu();
-                reference.loadNavBar();
-                reference.grantPermissionPosition();
-                message.addMessageLoder("loaderMessage", "#mainContent2");
-                message.changeMessageLoader("loaderMessage", "Consultando Plantillas");
-                /**
-                 * Detect if the user has an internet connection available
-                 * If it's true == Connection Available
-                 */
-                if (navigator.onLine == true) {
-                    let visitsLocal = [];
-                    let visitsCloud = [];
-                    let reportsLocal = [];
-                    let reportsCloud = [];
-                    message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
+                    reference.addEventsToMenu();
+                    reference.loadNavBar();
+                    reference.grantPermissionPosition();
+                    message.changeMessageLoader("loaderMessage", "Consultando Plantillas");
+                    /**
+                     * Detect if the user has an internet connection available
+                     * If it's true == Connection Available
+                     */
+                    if (navigator.onLine == true) {
+                        let visitsLocal = [];
+                        let visitsCloud = [];
+                        let reportsLocal = [];
+                        let reportsCloud = [];
+                        message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
 
-                    visits.getVisits().then(function (visitsLocalResponse) {
-                        visitsLocal = visitsLocalResponse;
-                        message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
-                        return visits.uploadVisitsToCloud();
-                    }).then(function () {
-                        message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
-                        return visits.getVisitsSaveonCloud();
-                    }).then(function (visitsCloudResponse) {
-                        visitsCloud = visitsCloudResponse;
-                        message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
-                        return visits.validateVisitLocally(visitsCloud, visitsLocal);
-                    })
-                        .then(function () {
-                            message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
-                            return reports.getReports();
-                        })
-                        .then(function (reportsResponse) {
-                            reportsLocal = reportsResponse;
-                            message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
-                            return reports.uploadReportToCloud(reportsResponse);
-                        })
-                        .then(function () {
-                            return reports.getReportsSaveonCloud();
-                        })
-                        .then(function (reportsOnCloud) {
-                            return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
-                        })
-                        .then(function () {
-                            return reports.changeStatistic();
-                        })
-                        .then(function () {
-                            return reportsImg.getReportsImages();
-                        })
-                        .then(function (reportImagesResponse) {
-                            return reportsImg.uploadReportsImages(reportImagesResponse);
-                        })
-                        .then(function () {
-                            return reportsImg.uploadReportsImages1();
-                        })
-                        /*
-                        .then(function () {
-                            return reportsImg.deleteReportsImg();
-                        })
-                        .then(function () {
-                            return reportsImg.getReportsImgSaveonCloud();
-                        })
-                        */
-                        .then(function () {
-                            console.log("Visits Saved ", visits.getVisits())
-                            return reference.updateSiteExternal();
+                        visits.getVisits().then(function (visitsLocalResponse) {
+                            visitsLocal = visitsLocalResponse;
+                            message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
+                            return visits.uploadVisitsToCloud();
                         }).then(function () {
-                            message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
-                            $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
-                                templates.templates = templatesResponse;
-                                for (let template of templates.templates) {
-                                    indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
-                                }
-                                return indexDb.getTemplates();
+                            message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
+                            return visits.getVisitsSaveonCloud();
+                        }).then(function (visitsCloudResponse) {
+                            visitsCloud = visitsCloudResponse;
+                            message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
+                            return visits.validateVisitLocally(visitsCloud, visitsLocal);
+                        })
+                            .then(function () {
+                                message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
+                                return reports.getReports();
+                            })
+                            .then(function (reportsResponse) {
+                                reportsLocal = reportsResponse;
+                                message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
+                                return reports.uploadReportToCloud(reportsResponse);
+                            })
+                            .then(function () {
+                                return reports.getReportsSaveonCloud();
+                            })
+                            .then(function (reportsOnCloud) {
+                                return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
+                            })
+                            .then(function () {
+                                return reports.changeStatistic();
+                            })
+                            .then(function () {
+                                return reportsImg.getReportsImages();
+                            })
+                            .then(function (reportImagesResponse) {
+                                return reportsImg.uploadReportsImages(reportImagesResponse);
+                            })
+                            .then(function () {
+                                return reportsImg.uploadReportsImages1();
+                            })
+                            /*
+                            .then(function () {
+                                return reportsImg.deleteReportsImg();
+                            })
+                            .then(function () {
+                                return reportsImg.getReportsImgSaveonCloud();
+                            })
+                            */
+                            .then(function () {
+                                console.log("Visits Saved ", visits.getVisits())
+                                return reference.updateSiteExternal();
                             }).then(function () {
-                                message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
-                                indexDb.getTemplates().then(function () {
-                                    message.removeMessageLoader("#mainContent2");
+                                message.changeMessageLoader("loaderMessage", "Actualizando Plantillas");
+                                $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
+                                    templates.templates = templatesResponse;
+                                    for (let template of templates.templates) {
+                                        indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
+                                    }
+                                    return indexDb.getTemplates();
+                                }).then(function () {
+                                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
+                                    indexDb.getTemplates().then(function () {
+                                        message.removeMessageLoader("#mainContent2");
+                                    });
                                 });
                             });
-                        });
-                } else {
-                    message.changeMessageLoader("Obteniendo Sitios Almacenados");
-                    indexDb.getSites().then(function (resolve, reject) {
-                        message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
-                        return indexDb.getTemplates();
-                    })
-                        .then(function () {
-                            return reports.changeStatistic();
+                    } else {
+                        message.changeMessageLoader("Obteniendo Sitios Almacenados");
+                        indexDb.getSites().then(function (resolve, reject) {
+                            message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                            return indexDb.getTemplates();
                         })
-                        .then(function () {
-                            message.removeMessageLoader("#mainContent2");
-                        });
+                            .then(function () {
+                                return reports.changeStatistic();
+                            })
+                            .then(function () {
+                                message.removeMessageLoader("#mainContent2");
+                            });
 
-                }
+                    }
+                });
             });
+
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
@@ -16913,16 +16992,18 @@ let reportsImg = __webpack_require__(12);
     }
 
 
-    message.addMessageLoder("loaderMessage", "#mainContent2");
-    message.changeMessageLoader("loaderMessage", "Conectando Dispositivo");
+
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
         smartDocsOffline.registerSW();
+        smartDocsOffline.startEventsLoginPage();
+        /*
         if (localStorage.getItem("username") == null) {
             smartDocsOffline.launchUserModal();
         } else {
             smartDocsOffline.initApplication();
         }
+        */
     });
 })();
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0)))

@@ -37,8 +37,8 @@ router.post('/', function (req, res, next) {
     })
 });
 
-router.post('/sigin', function (req, res, next) {
-    User.findOne({ userName: req.body.userName }, function (err, user) {
+router.post('/signin', function (req, res, next) {
+    User.findOne({ username: req.body.username }, function (err, user) {
         if (err) {
             return res.status(500).json({
                 title: 'An error ocurred',
@@ -62,7 +62,7 @@ router.post('/sigin', function (req, res, next) {
         res.status(200).json({
             message: "Sucessfully signin",
             token: token,
-            userId: user._id
+            user: user
         });
     });
 });
