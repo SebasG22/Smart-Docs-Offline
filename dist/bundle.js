@@ -11537,7 +11537,7 @@ module.exports = {
     "getTemplatesOnCloud": function () {
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/user/signin?token=' + localStorage.getItem('token'),
+                url: 'https://smart-docs.herokuapp.com/templates/?token=' + localStorage.getItem('token'),
                 type: 'GET',
                 dataType: 'json',
                 statusCode: {
