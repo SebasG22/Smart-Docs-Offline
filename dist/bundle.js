@@ -16191,7 +16191,8 @@ let login = __webpack_require__(11);
         },
         "userInformation": "",
         "loadIndex": function () {
-            $.ajax({
+            return new Promise(function(resolve,reject){
+                $.ajax({
                 url: 'https://smart-docs.herokuapp.com/user/signin',
                 type: 'GET',
                 statusCode: {
@@ -16209,6 +16210,7 @@ let login = __webpack_require__(11);
                     resolve();
                 }
             })
+            }); 
         },
         initApplication: function () {
             let reference = this;

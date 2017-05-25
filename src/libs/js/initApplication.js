@@ -63,7 +63,8 @@ let login = require("./login");
         },
         "userInformation": "",
         "loadIndex": function () {
-            $.ajax({
+            return new Promise(function(resolve,reject){
+                $.ajax({
                 url: 'https://smart-docs.herokuapp.com/user/signin',
                 type: 'GET',
                 statusCode: {
@@ -81,6 +82,7 @@ let login = require("./login");
                     resolve();
                 }
             })
+            }); 
         },
         initApplication: function () {
             let reference = this;
