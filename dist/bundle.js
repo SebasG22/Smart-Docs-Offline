@@ -16193,7 +16193,7 @@ let login = __webpack_require__(11);
         "loadIndex": function () {
             return new Promise(function(resolve,reject){
                 $.ajax({
-                url: 'https://smart-docs.herokuapp.com/user/signin',
+                url: '/views/index.html',
                 type: 'GET',
                 statusCode: {
                     500: function (msgRes) {
