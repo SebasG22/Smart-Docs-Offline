@@ -16671,8 +16671,6 @@ let login = __webpack_require__(11);
                     });
                 });
             });
-
-
         },
         addEventsReportRelated: function () {
             let reference = this;
@@ -16686,7 +16684,7 @@ let login = __webpack_require__(11);
         },
         getAllTemplates: function () {
             let reference = this;
-            if (navigator.onLine) {
+            /*if (navigator.onLine) {
                 $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
                     templates.templates = templatesResponse;
                     for (let template of templates.templates) {
@@ -16694,11 +16692,10 @@ let login = __webpack_require__(11);
                     }
                     reference.fillTemplatesPage();
                 })
-            } else {
+            } */
                 indexDb.getTemplates().then(function () {
                     reference.fillTemplatesPage({});
-                });
-            }
+                });  
         },
         fillVisitsPage: function () {
             let reference = this;

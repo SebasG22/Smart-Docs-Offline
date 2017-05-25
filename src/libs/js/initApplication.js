@@ -477,8 +477,6 @@ let login = require("./login");
                     });
                 });
             });
-
-
         },
         addEventsReportRelated: function () {
             let reference = this;
@@ -492,7 +490,7 @@ let login = require("./login");
         },
         getAllTemplates: function () {
             let reference = this;
-            if (navigator.onLine) {
+            /*if (navigator.onLine) {
                 $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
                     templates.templates = templatesResponse;
                     for (let template of templates.templates) {
@@ -500,11 +498,10 @@ let login = require("./login");
                     }
                     reference.fillTemplatesPage();
                 })
-            } else {
+            } */
                 indexDb.getTemplates().then(function () {
                     reference.fillTemplatesPage({});
-                });
-            }
+                });  
         },
         fillVisitsPage: function () {
             let reference = this;
