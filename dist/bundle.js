@@ -16207,10 +16207,11 @@ let login = __webpack_require__(11);
                     error: function () {
                         reject();
                     },
-                    complete: function (page) {
+                    complete: function (data) {
+                        console.log(data);
                         $(".container").remove();
                         $("body").removeClass("login-page");
-                        $("body").append(page);
+                        $("body").append(data);
                         resolve();
                     }
                 })

@@ -78,10 +78,11 @@ let login = require("./login");
                     error: function () {
                         reject();
                     },
-                    complete: function (page) {
+                    complete: function (data) {
+                        console.log(data);
                         $(".container").remove();
                         $("body").removeClass("login-page");
-                        $("body").append(page);
+                        $("body").append(data);
                         resolve();
                     }
                 })
