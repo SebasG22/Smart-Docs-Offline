@@ -869,7 +869,7 @@ let login = require("./login");
 
     indexDb.startIndexedDB().then(function () {
         message.removeMessageLoader("#mainContent2");
-        smartDocsOffline.registerSW();
+        //smartDocsOffline.registerSW();
         smartDocsOffline.startEventsLoginPage();
         /*
         if (localStorage.getItem("username") == null) {

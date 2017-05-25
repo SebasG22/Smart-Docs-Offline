@@ -16,6 +16,7 @@ css/font-awesome.min.css
 fonts/fontawesome-webfont.ttf
 fonts/fontawesome-webfont.ttf
 fonts/fontawesome-webfont.woff2
+views/index.html
 views/allTemplatesBoxes.html
 views/dashboard.html
 views/allVisits.html
@@ -27,6 +28,8 @@ views/newTemplate.html
 bundle.js
 manifest.json
 service-worker.js
+https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400
+https://fonts.googleapis.com/css?family=Lato:300,400,700,900
 
 
 NETWORK:
