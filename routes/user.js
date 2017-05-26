@@ -63,8 +63,7 @@ router.post('/signin', function (req, res, next) {
             token: token,
             user: {
                 userId: user._id,
-                firstname: user.firstname,
-                lastname: user.lastname,
+                fullname: user.fullname,
                 role: user.role,
                 company: user.company,
                 cellphone: user.cellphone,
