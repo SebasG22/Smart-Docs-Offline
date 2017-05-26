@@ -19,8 +19,7 @@ router.use('/', function (req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-    var decoded = jwt.decode(req.query.token);
-    Visit.find({ author: decoded.user._id }, function(visits){
+    Visit.find().then(function(visits){
         if(!visits) {
             res.send([]);
         }
@@ -30,7 +29,7 @@ router.get('/', function (req, res, next) {
 
 router.get('/basicInformation', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
-    Visit.find({ author: user._id }, function (visits) {
+    Visit.find().then(function (visits) {
         let visitsToSend = [];
         for (let visit of visits) {
             visitsToSend.push({ visitId: visit.visitId });

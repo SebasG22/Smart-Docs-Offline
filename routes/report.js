@@ -19,7 +19,7 @@ router.use('/', function (req, res, next) {
 
 router.get('/', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
-    Report.find({ author: decoded.user._id }, function (reports) {
+    Report.find().then(function (reports) {
         let reportsToSend = [];
         for (let report of reports) {
             reportsToSend.push({ reportId: report.reportId, lastModification: report.lastModification });
