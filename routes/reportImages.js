@@ -19,6 +19,9 @@ router.use('/', function(req, res, next) {
 router.get('/', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
     ReportImages.find({author: decoded.user._id}, function(reportImages){
+        if(!reportImages){
+            res.send([]);
+        }
             res.send(reportImages);
     });
 });
