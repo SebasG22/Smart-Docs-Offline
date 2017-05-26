@@ -11515,15 +11515,35 @@ function updateLink(linkElement, options, obj) {
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = {
-    "sites" : [],
-    "getAllSites": function(){
+/* WEBPACK VAR INJECTION */(function($) {module.exports = {
+    "sites": [],
+    "getAllSites": function () {
         let reference = this;
         return reference.sites;
+    },
+    "getSitesOnCloud": function () {
+        $.ajax({
+            url: 'https://smart-docs.herokuapp.com/sites/?token=' + localStorage.getItem('token'),
+            type: 'GET',
+            dataType: 'json',
+            statusCode: {
+                401: function () {
+                    message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                    localStorage.clear();
+                }
+            },
+            error: function () {
+                reject();
+            },
+            complete: function (msgRes) {
+                resolve(msgRes.responseJSON);
+            }
+        });
     }
 }
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 6 */
@@ -16477,9 +16497,12 @@ let login = __webpack_require__(11);
                     return reportsImg.getReportsImgSaveonCloud();
                 })
                 */
-                .then(function () {
+                .then(function(){
+                    return sites.getSitesOnCloud();
+                })
+                .then(function (visitsOnCloud) {
                     console.log("Visits Saved ", visits.getVisits())
-                    return reference.updateSiteExternal();
+                    return reference.updateSiteExternal(visitsOnCloud);
                 }).then(function () {
                     message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Cloud");
                     return templates.getTemplatesOnCloud();
@@ -16593,28 +16616,26 @@ let login = __webpack_require__(11);
             $("#errorPosition").modal({ backdrop: 'static', keyboard: false });
         },
         updateTemplatesLocally: function (templatesOnCloud) {
-        let templatesToUpdate = [];
-        for (let template of templatesOnCloud) {
-            templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
-        }
-        return new Promise(function(resolve,reject){
-            Promise.all(templatesToUpdate).then(function(){
-              resolve();  
-            }).catch(function(err){
-                reject(err);
-            });
-        });
-        },
-        updateSiteExternal: function () {
+            let templatesToUpdate = [];
+            for (let template of templatesOnCloud) {
+                templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
+            }
             return new Promise(function (resolve, reject) {
-                $.get("https://smart-docs.herokuapp.com/sites/", function (sitesResponse) {
-                    for (let site of sitesResponse) {
-                        indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project);
-                    }
-                    indexDb.getSites().then(function () {
-                        resolve();
-                    });
-                })
+                Promise.all(templatesToUpdate).then(function () {
+                    resolve();
+                }).catch(function (err) {
+                    reject(err);
+                });
+            });
+        },
+        updateSiteExternal: function (sitesOnCloud) {
+            return new Promise(function (resolve, reject) {
+                for (let site of sitesOnCloud) {
+                    indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project);
+                }
+                indexDb.getSites().then(function () {
+                    resolve();
+                });
             });
         },
         addEventsToMenu: function () {
@@ -16787,9 +16808,9 @@ let login = __webpack_require__(11);
                     reference.fillTemplatesPage();
                 })
             } */
-                indexDb.getTemplates().then(function () {
-                    reference.fillTemplatesPage({});
-                });  
+            indexDb.getTemplates().then(function () {
+                reference.fillTemplatesPage({});
+            });
         },
         fillVisitsPage: function () {
             let reference = this;

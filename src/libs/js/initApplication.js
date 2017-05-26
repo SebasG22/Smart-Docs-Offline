@@ -189,9 +189,12 @@ let login = require("./login");
                     return reportsImg.getReportsImgSaveonCloud();
                 })
                 */
-                .then(function () {
+                .then(function(){
+                    return sites.getSitesOnCloud();
+                })
+                .then(function (visitsOnCloud) {
                     console.log("Visits Saved ", visits.getVisits())
-                    return reference.updateSiteExternal();
+                    return reference.updateSiteExternal(visitsOnCloud);
                 }).then(function () {
                     message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Cloud");
                     return templates.getTemplatesOnCloud();
@@ -305,28 +308,26 @@ let login = require("./login");
             $("#errorPosition").modal({ backdrop: 'static', keyboard: false });
         },
         updateTemplatesLocally: function (templatesOnCloud) {
-        let templatesToUpdate = [];
-        for (let template of templatesOnCloud) {
-            templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
-        }
-        return new Promise(function(resolve,reject){
-            Promise.all(templatesToUpdate).then(function(){
-              resolve();  
-            }).catch(function(err){
-                reject(err);
-            });
-        });
-        },
-        updateSiteExternal: function () {
+            let templatesToUpdate = [];
+            for (let template of templatesOnCloud) {
+                templatesToUpdate.push(indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content));
+            }
             return new Promise(function (resolve, reject) {
-                $.get("https://smart-docs.herokuapp.com/sites/", function (sitesResponse) {
-                    for (let site of sitesResponse) {
-                        indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project);
-                    }
-                    indexDb.getSites().then(function () {
-                        resolve();
-                    });
-                })
+                Promise.all(templatesToUpdate).then(function () {
+                    resolve();
+                }).catch(function (err) {
+                    reject(err);
+                });
+            });
+        },
+        updateSiteExternal: function (sitesOnCloud) {
+            return new Promise(function (resolve, reject) {
+                for (let site of sitesOnCloud) {
+                    indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project);
+                }
+                indexDb.getSites().then(function () {
+                    resolve();
+                });
             });
         },
         addEventsToMenu: function () {
@@ -499,9 +500,9 @@ let login = require("./login");
                     reference.fillTemplatesPage();
                 })
             } */
-                indexDb.getTemplates().then(function () {
-                    reference.fillTemplatesPage({});
-                });  
+            indexDb.getTemplates().then(function () {
+                reference.fillTemplatesPage({});
+            });
         },
         fillVisitsPage: function () {
             let reference = this;
