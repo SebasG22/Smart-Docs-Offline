@@ -12,8 +12,7 @@ router.get('/', function (req, res, next) {
 
 router.post('/registerUser', function (req, res, next) {
     var user = new User({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
+        fullname: req.body.fullname,
         role: req.body.role,
         company: req.body.company,
         cellphone: req.body.cellphone,

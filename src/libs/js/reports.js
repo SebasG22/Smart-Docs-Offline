@@ -149,7 +149,7 @@ module.exports = {
         let reference = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/reports/update/' + prop + "/?token="+ localStorage.getItem('token'),
+                url: 'https://smart-docs.herokuapp.com/reports/update/' + prop + "?token="+ localStorage.getItem('token'),
                 type: 'PATCH',
                 data: { reportId: reportId, content: JSON.stringify(valuePro) },
                 dataType: 'json',
@@ -383,7 +383,7 @@ module.exports = {
                 });
                 $("#statisticDraft").text(draft_reports.length);
                 let completed_reports = reportsResponse.filter(function (report) {
-                    return report.status == "SM-Status001"
+                    return report.status == "SM-Status002"
                 });
                 $("#statisticCompleted").text(completed_reports.length);
                 resolve();
