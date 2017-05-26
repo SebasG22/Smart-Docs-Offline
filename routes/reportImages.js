@@ -2,9 +2,22 @@ const express = require("express");
 var router = express.Router();
 const ReportImages = require("./../models/ReportImages");
 
+router.use('/', function(req, res, next) {
+    jwt.verify(req.query.token, 'SDLHW', function(err, decoded) {
+        if (err) {
+            return res.status('401').json({
+                message: 'Not Authenticated',
+                error: err
+            });
+        }
+        next();
+    })
+});
+
 router.get('/', function (req, res, next) {
-    ReportImages.find().then(function (reportImages) {
-        res.send(reportImages);
+    var decoded = jwt.decode(req.query.token);
+    ReportImages.find({author: decoded.user._id}, function(reportImages){
+            res.send(reportImages);
     });
 });
 

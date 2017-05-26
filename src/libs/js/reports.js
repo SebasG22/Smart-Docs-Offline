@@ -6,7 +6,7 @@ module.exports = {
         let reference = this;
         return new Promise(function (resolve, reject) {
             indexDb.getReportsLog().then(function (reportsLogRes) {
-                reference.reportsLog =  reportsLogRes;
+                reference.reportsLog = reportsLogRes;
                 resolve(reportsLogRes);
             }).catch(function (err) {
                 reject(err);
@@ -79,17 +79,33 @@ module.exports = {
             });
         });
         let updateReportCloud = new Promise(function (resolve, reject) {
-            $.post("https://smart-docs.herokuapp.com/reports/", {
-                reportId: dataToUpdate.reportId,
-                templateId: dataToUpdate.templateId,
-                visitId: dataToUpdate.visitId,
-                status: dataToUpdate.status,
-                lastModification: dataToUpdate.lastModification,
-                author: dataToUpdate.author,
-                completedDate: dataToUpdate.completedDate,
-                creationDate: dataToUpdate.creationDate,
-            })
-                .done(function () {
+
+
+
+            $.ajax({
+                url: 'https://smart-docs.herokuapp.com/reports/?token=' + localStorage.getItem('token'),
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    reportId: dataToUpdate.reportId,
+                    templateId: dataToUpdate.templateId,
+                    visitId: dataToUpdate.visitId,
+                    status: dataToUpdate.status,
+                    lastModification: dataToUpdate.lastModification,
+                    author: dataToUpdate.author,
+                    completedDate: dataToUpdate.completedDate,
+                    creationDate: dataToUpdate.creationDate
+                },
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (msgRes) {
                     let updateReportProCloud = new Promise(function (resolve, reject) {
                         let answerDate = reference.uploadReportProp(dataToUpdate.reportId, "date_answer", dataToUpdate.date_answer);
                         let answerDateTime = reference.uploadReportProp(dataToUpdate.reportId, "datetime_answer", dataToUpdate.datetime_answer);
@@ -115,7 +131,9 @@ module.exports = {
                     updateReportProCloud.then(function () {
                         resolve();
                     });
-                });
+                }
+            });
+
         });
 
 
@@ -131,14 +149,20 @@ module.exports = {
         let reference = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/reports/update/' + prop,
+                url: 'https://smart-docs.herokuapp.com/reports/update/' + prop + "/?token="+ localStorage.getItem('token'),
                 type: 'PATCH',
                 data: { reportId: reportId, content: JSON.stringify(valuePro) },
                 dataType: 'json',
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // log the error to the console
                     console.log("The following error occured: " + textStatus, errorThrown);
-                    reject();
+                    reject(textStatus);
                 },
                 complete: function () {
                     console.log(prop + " was updated ");
@@ -198,17 +222,28 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + reportId,
-            })
-                .done(function (reportResponse) {
-                    reference.saveReportsLocally(reportResponse)
+                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + reportId+ "?token="+ localStorage.getItem("token"),
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // log the error to the console
+                    console.log("The following error occured: " + textStatus, errorThrown);
+                    reject(textStatus);
+                },
+                complete: function (reqRes) {
+                    reference.saveReportsLocally(reqRes.responseJSON)
                         .then(function () {
                             resolve();
                         })
                         .catch(function (err) {
                             reject(err);
                         });
-                });
+                }
+            });
         });
     },
     "saveReportsLocally": function (reportResponse) {
@@ -260,14 +295,20 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reports/",
+                url: "https://smart-docs.herokuapp.com/reports/?token="+ localStorage.getItem("token"),
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log("request failed" + textStatus);
+                },
+                complete: function (reqRes) {
+                   resolve(reqRes.responseJSON); 
                 }
             })
-                .done(function (reportsSaveonCloud) {
-                    resolve(reportsSaveonCloud);
-                });
         });
     },
     saveReportsSaveonCloud: function (reportsSaveOnCloud) {

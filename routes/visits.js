@@ -4,14 +4,28 @@ const Visit = require("./../models/Visits");
 const Report = require("./../models/Report");
 const ReportImage = require("./../models/ReportImages");
 
+router.use('/', function (req, res, next) {
+    jwt.verify(req.query.token, 'SDLHW', function (err, decoded) {
+        if (err) {
+            return res.status('401').json({
+                message: 'Not Authenticated',
+                error: err
+            });
+        }
+        next();
+    })
+});
+
 router.get('/', function (req, res, next) {
-    Visit.find().then(function (visits) {
+    var decoded = jwt.decode(req.query.token);
+    Visit.find({author:decoded.user._id}).then(function (visits) {
         res.send(visits);
     });
 });
 
 router.get('/basicInformation', function (req, res, next) {
-    Visit.find().then(function (visits) {
+    var decoded = jwt.decode(req.query.token);
+    Visit.find({author:user,}, function(visits){
         let visitsToSend = [];
         for (let visit of visits) {
             visitsToSend.push({ visitId: visit.visitId });

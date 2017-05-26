@@ -52,10 +52,25 @@ module.exports = {
         });
 
         let updateVisitCloud = new Promise(function (resolve, reject) {
-            $.post("https://smart-docs.herokuapp.com/visits/", dataToUpdate)
-                .done(function (data) {
-                    resolve(data);
-                });
+
+            $.ajax({
+                url: 'https://smart-docs.herokuapp.com/visits/?token=' + localStorage.getItem('token'),
+                type: 'POST',
+                dataType: 'json',
+                data: dataToUpdate,
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (msgRes) {
+                    resolve(msgRes.responseJSON);
+                }
+            });
         });
 
         return new Promise(function (resolve, reject) {
@@ -69,13 +84,24 @@ module.exports = {
     getVisitsSaveonCloud: function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
+
             $.ajax({
-                method: "GET",
-                url: "https://smart-docs.herokuapp.com/visits/",
-            })
-                .done(function (visitSavedCloud) {
-                    resolve(visitSavedCloud);
-                });
+                url: 'https://smart-docs.herokuapp.com/visits/?token=' + localStorage.getItem('token'),
+                type: 'GET',
+                dataType: 'json',
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (msgRes) {
+                    resolve(msgRes.responseJSON);
+                }
+            });
         });
     },
     "validateVisitLocally": function (visitsOnCloud, visitsLocally) {
@@ -93,19 +119,19 @@ module.exports = {
         }
 
         //Delete unexisting visits Locally
-        for(let visitLocal of visitsLocally){
-            let visitFiltered = visitsOnCloud.filter(function(visit){
+        for (let visitLocal of visitsLocally) {
+            let visitFiltered = visitsOnCloud.filter(function (visit) {
                 return visit.visitId == visitLocal.visitId;
             });
-            if( visitFiltered.length == 0 ){
+            if (visitFiltered.length == 0) {
                 visitsToUpdate.push(indexDb.deleteVisit(visitLocal.visitId));
-            }    
+            }
         }
 
-        return new Promise(function(resolve,reject){
-            Promise.all(visitsToUpdate).then(function(){
+        return new Promise(function (resolve, reject) {
+            Promise.all(visitsToUpdate).then(function () {
                 resolve();
-            }).catch(function(err){
+            }).catch(function (err) {
                 reject(err);
             });
         });

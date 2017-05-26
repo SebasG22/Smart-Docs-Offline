@@ -2,11 +2,25 @@ const express = require("express");
 var router = express.Router();
 const Report = require("./../models/Report");
 const ReportImages = require("./../models/ReportImages");
+
+router.use('/', function (req, res, next) {
+    jwt.verify(req.query.token, 'SDLHW', function (err, decoded) {
+        if (err) {
+            return res.status('401').json({
+                message: 'Not Authenticated',
+                error: err
+            });
+        }
+        next();
+    })
+});
+
 router.get('/', function (req, res, next) {
-    Report.find().then(function (reports) {
+    var decoded = jwt.decode(req.query.token);
+    Report.find({ author: decoded.user._id }, function (reports) {
         let reportsToSend = [];
-        for(let report of reports){
-            reportsToSend.push({reportId:report.reportId, lastModification:report.lastModification});
+        for (let report of reports) {
+            reportsToSend.push({ reportId: report.reportId, lastModification: report.lastModification });
         }
         res.send(reportsToSend);
     });
@@ -15,10 +29,10 @@ router.get('/', function (req, res, next) {
 
 router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
     Report.find().then(function (reports) {
-            let reportImagesToSend = [];
+        let reportImagesToSend = [];
         ReportImages.find().then(function (reportsImages) {
             reportsImages.filter(function (reportImg) {
-                if(reportImg.reportId == req.params.reportId){
+                if (reportImg.reportId == req.params.reportId) {
                     reportImagesToSend.push({
                         reportImgId: reportImg.reportImgId,
                         images: reportImg.images,
@@ -41,26 +55,26 @@ router.get('/getAllFieldsReport/:reportId', function (req, res, next) {
             objToSend.creationDate = reportFiltered[0].creationDate;
             objToSend.completedDate = reportFiltered[0].completedDate;
             objToSend.lastModification = reportFiltered[0].lastModification,
-            objToSend.author = reportFiltered[0].author,
-            objToSend.checkbox_answer = reportFiltered[0].checkbox_answer,
-            objToSend.date_answer = reportFiltered[0].date_answer,
-            objToSend.datetime_answer = reportFiltered[0].datetime_answer,
-            objToSend.list_answer = reportFiltered[0].list_answer,
-            objToSend.month_answer = reportFiltered[0].month_answer,
-            objToSend.multiselect_answer = reportFiltered[0].multiselect_answer,
-            objToSend.number_answer = reportFiltered[0].number_answer,
-            objToSend.radio_answer = reportFiltered[0].radio_answer,
-            objToSend.select_answer = reportFiltered[0].select_answer,
-            objToSend.table_answer = reportFiltered[0].table_answer,
-            objToSend.text_answer = reportFiltered[0].text_answer,
-            objToSend.textarea_answer = reportFiltered[0].textarea_answer,
-            objToSend.time_answer = reportFiltered[0].time_answer,
-            objToSend.week_answer = reportFiltered[0].week_answer,
-            objToSend.reportImages = reportImagesToSend
+                objToSend.author = reportFiltered[0].author,
+                objToSend.checkbox_answer = reportFiltered[0].checkbox_answer,
+                objToSend.date_answer = reportFiltered[0].date_answer,
+                objToSend.datetime_answer = reportFiltered[0].datetime_answer,
+                objToSend.list_answer = reportFiltered[0].list_answer,
+                objToSend.month_answer = reportFiltered[0].month_answer,
+                objToSend.multiselect_answer = reportFiltered[0].multiselect_answer,
+                objToSend.number_answer = reportFiltered[0].number_answer,
+                objToSend.radio_answer = reportFiltered[0].radio_answer,
+                objToSend.select_answer = reportFiltered[0].select_answer,
+                objToSend.table_answer = reportFiltered[0].table_answer,
+                objToSend.text_answer = reportFiltered[0].text_answer,
+                objToSend.textarea_answer = reportFiltered[0].textarea_answer,
+                objToSend.time_answer = reportFiltered[0].time_answer,
+                objToSend.week_answer = reportFiltered[0].week_answer,
+                objToSend.reportImages = reportImagesToSend
             reportToSend.push(objToSend);
-        res.send(reportToSend);
+            res.send(reportToSend);
+        });
     });
-});
 });
 
 router.get('/:visitId', function (req, res, next) {
@@ -947,7 +961,7 @@ router.delete('/:id', function (req, res, next) {
                 error: { message: "Report not found" }
             });
         }
-        
+
         reportRes.remove(function (err, result) {
             if (err) {
                 return res.status(500).json({

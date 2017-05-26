@@ -2,6 +2,18 @@ const express = require("express");
 var router = express.Router();
 const Site = require("./../models/Sites");
 
+router.use('/', function(req, res, next) {
+    jwt.verify(req.query.token, 'SDLHW', function(err, decoded) {
+        if (err) {
+            return res.status('401').json({
+                message: 'Not Authenticated',
+                error: err
+            });
+        }
+        next();
+    })
+});
+
 router.get('/', function (req, res, next) {
     Site.find().then(function (sites) {
         res.send(sites);

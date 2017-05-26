@@ -1,4 +1,6 @@
 let indexDb = require("./indexedDb");
+let message = require("./messages");
+
 module.exports = {
     "reportsImages": [],
     "getReportsImages": function () {
@@ -62,10 +64,24 @@ module.exports = {
         let promiseUpdateLocally = indexDb.updateReportImages(dataToUpdate.reportImgId,"cloud",true);
 
         let promiseUpdateCloud = new Promise(function(resolve,reject){
-            $.post("https://smart-docs.herokuapp.com/reportsImg/",
-                dataToUpdate
-            ).done(function () {
-                resolve();
+
+            $.ajax({
+                url: 'https://smart-docs.herokuapp.com/reportsImg/?token='+ localStorage.getItem(token),
+                type: 'POST',
+                dataType: 'json',
+                data: dataToUpdate,
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (msgRes) {
+                    resolve();
+                }
             });
         });
         return new Promise(function (resolve, reject) {
@@ -77,10 +93,16 @@ module.exports = {
     uploadReportUpdate: function (dataToUpdate) {
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/reportsImg/update/',
+                url: 'https://smart-docs.herokuapp.com/reportsImg/update/?token='+ localStorage.getItem(token),
                 type: 'PATCH',
                 data: { reportImgId: dataToUpdate.reportImgId, reportId: dataToUpdate.reportId, image_1: JSON.stringify(dataToUpdate.image_1) },
                 dataType: 'json',
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
                 error: function (jqXHR, textStatus, errorThrown) {
                     // log the error to the console
                     console.log("The following error occured: " + textStatus, errorThrown);
@@ -91,7 +113,8 @@ module.exports = {
                 }
             });
         });
-    },
+    }
+    ,
     deleteReportsImg: function () {
         return new Promise(function (resolve, reject) {
             indexDb.deleteReportsImage().then(function () {
@@ -106,19 +129,22 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: 'https://smart-docs.herokuapp.com/reportsImg/?token=' + localStorage.getItem('token'),
-                dataType: 'json',
+                url: 'https://smart-docs.herokuapp.com/reportsImg/?token='+ localStorage.getItem(token),
                 statusCode: {
                     401: function () {
                         message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
                         localStorage.clear();
                     }
-                }
-        })
-                .done(function (reportImgResponse) {
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    // log the error to the console
+                    console.log("The following error occured: " + textStatus, errorThrown);
+                    reject();
+                },
+                complete: function (reqRes) {
                     let cont = 0;
                     let updateReportImg = [];
-                    for (let reportImgRes of reportImgResponse) {
+                    for (let reportImgRes of reqRes.responseJSON) {
                         this["updateReportImage" + cont] = indexDb.addReportImages(reportImgRes.reportImgId, reportImgRes.reportId, reportImgRes.images, reportImgRes.author, reportImgRes.image_1);
                         updateReportImg.push(this["updateReportImage" + cont]);
                         cont++;
@@ -131,7 +157,8 @@ module.exports = {
                     else {
                         resolve();
                     }
-                });
+                }
+            })
         });
     },
 }
