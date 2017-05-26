@@ -3,6 +3,8 @@ var router = express.Router();
 const Visit = require("./../models/Visits");
 const Report = require("./../models/Report");
 const ReportImage = require("./../models/ReportImages");
+const jwt = require("jsonwebtoken");
+
 
 router.use('/', function (req, res, next) {
     jwt.verify(req.query.token, 'SDLHW', function (err, decoded) {
