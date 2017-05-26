@@ -19,13 +19,14 @@ router.use('/', function (req, res, next) {
 router.get('/', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
     Visit.find({ author: decoded.user._id }, function(visits){
+        console.log("Visits",visits);
         res.send(visits);
     });
 });
 
 router.get('/basicInformation', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
-    Visit.find({ author: user }, function (visits) {
+    Visit.find({ author: user._id }, function (visits) {
         let visitsToSend = [];
         for (let visit of visits) {
             visitsToSend.push({ visitId: visit.visitId });
