@@ -11719,7 +11719,7 @@ module.exports = {
                     reject();
                 },
                 complete: function (msgRes) {
-                    localStorage.setItem("user",JSON.stringify(msgRes.responseJSON.user));
+                    localStorage.setItem("user",JSON.stringify(msgRes.responseJSON).user);
                     localStorage.setItem("token",msgRes.responseJSON.token);
                     resolve(msgRes.responseJSON.user);
                 }
