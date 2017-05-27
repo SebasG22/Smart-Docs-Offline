@@ -16404,6 +16404,12 @@ let login = __webpack_require__(11);
                 })
             });
         },
+        loadEventButtonCloseApp: function () {
+            $("#btnLogout").click(function () {
+                localStorage.clear();
+                window.location.replace("https://smart-docs.herokuapp.com");
+            });
+        },
         initApplication: function () {
             let reference = this;
             reference.disabledBackButton();
@@ -16499,7 +16505,7 @@ let login = __webpack_require__(11);
                     return reportsImg.getReportsImgSaveonCloud();
                 })
                 */
-                .then(function(){
+                .then(function () {
                     return sites.getSitesOnCloud();
                 })
                 .then(function (visitsOnCloud) {

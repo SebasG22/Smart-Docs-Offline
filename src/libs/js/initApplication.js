@@ -94,6 +94,12 @@ let login = require("./login");
                 })
             });
         },
+        loadEventButtonCloseApp: function () {
+            $("#btnLogout").click(function () {
+                localStorage.clear();
+                window.location.replace("https://smart-docs.herokuapp.com");
+            });
+        },
         initApplication: function () {
             let reference = this;
             reference.disabledBackButton();
@@ -189,7 +195,7 @@ let login = require("./login");
                     return reportsImg.getReportsImgSaveonCloud();
                 })
                 */
-                .then(function(){
+                .then(function () {
                     return sites.getSitesOnCloud();
                 })
                 .then(function (visitsOnCloud) {
