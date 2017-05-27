@@ -16399,6 +16399,7 @@ let login = __webpack_require__(11);
                         $("#userRole").text(reference.userInformation.role);
                         $("#userCompany").text(reference.userInformation.company);
                         $("#userEmail").text(reference.userInformation.email);
+                        reference.loadEventButtonCloseApp();
                         resolve();
                     }
                 })

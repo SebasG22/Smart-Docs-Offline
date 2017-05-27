@@ -89,6 +89,7 @@ let login = require("./login");
                         $("#userRole").text(reference.userInformation.role);
                         $("#userCompany").text(reference.userInformation.company);
                         $("#userEmail").text(reference.userInformation.email);
+                        reference.loadEventButtonCloseApp();
                         resolve();
                     }
                 })
