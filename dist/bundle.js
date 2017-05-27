@@ -11719,7 +11719,7 @@ module.exports = {
                     reject();
                 },
                 complete: function (msgRes) {
-                    localStorage.setItem("user",JSON.stringify(msgRes.responseJSON).user);
+                    localStorage.setItem("user",JSON.stringify(msgRes.responseJSON.user));
                     localStorage.setItem("token",msgRes.responseJSON.token);
                     resolve(msgRes.responseJSON.user);
                 }
@@ -16394,7 +16394,7 @@ let login = __webpack_require__(11);
                         $(".container").remove();
                         $("body").removeClass("login-page");
                         $("body").append(data.responseText);
-                        $("#userFirstName").html(reference.userInformation.firstname + ' ' + reference.userInformation.lastname + "<span class='caret'></span>");
+                        $("#userFirstName").html(reference.userInformation.fullname + "<span class='caret'></span>");
                         $("#username").text(reference.userInformation.username);
                         $("#userRole").text(reference.userInformation.role);
                         $("#userCompany").text(reference.userInformation.company);
