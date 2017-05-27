@@ -2,6 +2,7 @@ let message = require("./messages");
 
 module.exports = {
     "signin": function (username,password) {
+        console.log("Sign in Start");
         return new Promise(function (resolve, reject) {
             $.ajax({
                 url: 'https://smart-docs.herokuapp.com/user/signin',
