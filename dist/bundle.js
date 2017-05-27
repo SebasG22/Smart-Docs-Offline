@@ -16358,7 +16358,9 @@ let login = __webpack_require__(11);
         "startEventsLoginPage": function () {
             let reference = this;
             jQuery.migrateMute = true;
+            console.log("Start Login Page");
             if (!localStorage.getItem("user")) {
+                console.log("User not found in Cache");
                 $("#loginButton").click(function () {
                     let username = $("#username").val();
                     let password = $("#userpassword").val();
