@@ -66,7 +66,7 @@ module.exports = {
         let promiseUpdateCloud = new Promise(function(resolve,reject){
 
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/reportsImg/?token='+ localStorage.getItem(token),
+                url: 'https://smart-docs.herokuapp.com/reportsImg/?token='+ localStorage.getItem("token"),
                 type: 'POST',
                 dataType: 'json',
                 data: dataToUpdate,
@@ -93,7 +93,7 @@ module.exports = {
     uploadReportUpdate: function (dataToUpdate) {
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/reportsImg/update/?token='+ localStorage.getItem(token),
+                url: 'https://smart-docs.herokuapp.com/reportsImg/update/?token='+ localStorage.getItem("token"),
                 type: 'PATCH',
                 data: { reportImgId: dataToUpdate.reportImgId, reportId: dataToUpdate.reportId, image_1: JSON.stringify(dataToUpdate.image_1) },
                 dataType: 'json',
@@ -129,7 +129,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: 'https://smart-docs.herokuapp.com/reportsImg/?token='+ localStorage.getItem(token),
+                url: 'https://smart-docs.herokuapp.com/reportsImg/?token='+ localStorage.getItem("token"),
                 statusCode: {
                     401: function () {
                         message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
