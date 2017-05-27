@@ -100,7 +100,7 @@ let login = require("./login");
         loadEventButtonCloseApp: function () {
             $("#btnLogout").click(function () {
                 localStorage.clear();
-                window.location.replace("https://smart-docs.herokuapp.com");
+                window.location.replace("https://smart-docs.herokuapp.com/?#no-back-button");
             });
         },
         initApplication: function () {
