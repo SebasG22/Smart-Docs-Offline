@@ -12,6 +12,7 @@ module.exports = {
                 statusCode: {
                     500: function (msgRes) {
                         message.launchErrorModal(msgRes.responseJSON.title,msgRes.responseJSON.error.message, " Revisa tus credenciales");
+                        $("#userpassword").val("");
                     }
                 },
                 error: function () {
