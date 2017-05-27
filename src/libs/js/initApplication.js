@@ -91,7 +91,6 @@ let login = require("./login");
                         $("#userRole").text(reference.userInformation.role);
                         $("#userCompany").text(reference.userInformation.company);
                         $("#userEmail").text(reference.userInformation.email);
-                        reference.loadEventButtonCloseApp();
                         resolve();
                     }
                 })
@@ -111,6 +110,7 @@ let login = require("./login");
             message.changeMessageLoader("loaderMessage", "Cargando Aplicacion");
             reference.loadIndex().then(function () {
                 message.removeMessageLoader(".container");
+                reference.loadEventButtonCloseApp();
                 $.get("/views/dashboard.html", function (page) {
                     $("#mainContent2").html(page);
                     //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
