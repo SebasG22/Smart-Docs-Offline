@@ -424,7 +424,7 @@ let login = require("./login");
                         reference.fillAnswer();
                     }
                     else{
-                        smartEngine.fillDefaultValues(reference.userInformation,{});
+                        smartEngine.fillDefaultValues(reference.userInformation,visits.visitSelected);
                     }
                     message.removeMessageLoader("#mainContent2");
                     break;

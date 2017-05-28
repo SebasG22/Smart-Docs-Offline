@@ -6,7 +6,7 @@ let schema = new Schema({
     siteId: { type: String, required: true, unique: true },
     name: { type: String, required: true },
     project: { type: String, required: true },
-    porfatolio: { type: String, required: true },
+    portafolio: { type: String, required: true },
     anchorTenant: { type: String, required: true },
     region: { type: String, required: true },
     fmOffice: { type: String, required: true },

@@ -29,7 +29,7 @@ router.post('/', function (req, res, next) {
         project: req.body.project,
         creationDate: new Date(),
         lastModification: new Date(),
-        porfatolio: req.body.porfatolio,
+        portafolio: req.body.portafolio,
         anchorTenant: req.body.anchorTenant,
         region: req.body.region,
         fmOffice: req.body.fmOffice,
