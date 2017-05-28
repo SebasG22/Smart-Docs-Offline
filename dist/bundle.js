@@ -10406,7 +10406,6 @@ module.exports = {
                 name: name,
                 project: project,
                 porfatolio: portafolio,
-                assetTower:assetTower,
                 anchorTenant: anchorTenant,
                 region: region,
                 fmOffice: department,
