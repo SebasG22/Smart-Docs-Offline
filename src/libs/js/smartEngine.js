@@ -382,7 +382,7 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, selector: valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     if (valueSubPanelEle.defaultValue) {
-                                        reference.allDefaultValueInputs.push({ sel: valueSubPanelEle.id, val: valueSubPanelEle.defaultValue});
+                                        reference.allDefaultValueInputs.push({ sel: valueSubPanelEle.id, val: valueSubPanelEle.defaultValue });
                                     }
 
                                     let textSelector;
@@ -988,7 +988,7 @@ module.exports = {
                                         "<div id='" + valueSubPanelEle.idDiv + "' class='thumbnail' align='center'>" +
                                         "<img width='450' height='450' style='width: 450px;height: 450px' src='" + defaultImg + "' class='" + valueSubPanelEle.class + "' id='" + valueSubPanelEle.id + "'>" +
                                         "<div class='caption'> <h3>" + valueSubPanelEle.labels.firstLabel + "<a class='anchorjs-link' href='#thumbnail-label'><span class='anchorjs-icon'></span></a></h3> " +
-                                        "<div>  <label for='"+ valueSubPanelEle.id + "Event' class='btn btn-primary'> Seleccionar Imagen </label>  <input type='file' id='" + valueSubPanelEle.id + "Event' accept='image/*' capture='camera' style='visibility:hidden;'></div> </div>" +
+                                        "<div>  <label for='" + valueSubPanelEle.id + "Event' class='btn btn-primary'> Seleccionar Imagen </label>  <input type='file' id='" + valueSubPanelEle.id + "Event' accept='image/*' capture='camera' style='visibility:hidden;'></div> </div>" +
                                         "</div>");
 
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
@@ -1155,14 +1155,35 @@ module.exports = {
                     $("#" + input.sel).val(userInformation.fullname);
                     break;
                 case "userMobile":
-                    $("#" + input.sel).val(userInformation.cellphone);  
+                    $("#" + input.sel).val(userInformation.cellphone);
                     break;
                 case "userCompany":
-                   $("#" + input.sel).val(userInformation.company);
-                   break;
+                    $("#" + input.sel).val(userInformation.company);
+                    break;
                 case "userEmail":
-                   $("#" + input.sel).val(userInformation.company);
-                   break;              
+                    $("#" + input.sel).val(userInformation.company);
+                    break;
+                case "siteId":
+                    $("#" + input.sel).val(visitInformation.siteId);
+                    break;
+                case "siteName":
+                    $("#" + input.sel).val(visitInformation.name);
+                    break;    
+                case "portafolio":
+                    $("#" + input.sel).val(visitInformation.portafolio);
+                    break;
+                case "anchorTenant":
+                    $("#" + input.sel).val(visitInformation.anchorTenant);
+                    break;
+                case "fmOffice":
+                    $("#" + input.sel).val(visitInformation.fmOffice);
+                    break;
+                case "city":
+                    $("#" + input.sel).val(visitInformation.city);
+                    break;
+                case "region":
+                    $("#" + input.sel).val(visitInformation.region);
+                    break;
             }
         }
 
@@ -1248,7 +1269,7 @@ module.exports = {
                     break;
 
                 case "radio":
-                    $("input:radio[name='"+value.sel+"'][value='"+value.val+"']").prop("checked",true);
+                    $("input:radio[name='" + value.sel + "'][value='" + value.val + "']").prop("checked", true);
                     break;
                 default:
                     $("#" + value.sel).val("" + value.val);

@@ -115,7 +115,7 @@ module.exports = {
             data.oncomplete = function (e) {
                 console.log("elements", elements);
                 siteConnection.sites = elements;
-                resolve();
+                resolve(elements);
             }
         });
     },

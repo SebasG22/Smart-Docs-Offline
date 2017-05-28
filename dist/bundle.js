@@ -10447,7 +10447,7 @@ module.exports = {
             data.oncomplete = function (e) {
                 console.log("elements", elements);
                 siteConnection.sites = elements;
-                resolve();
+                resolve(elements);
             }
         });
     },
@@ -12717,7 +12717,7 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, selector: valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     if (valueSubPanelEle.defaultValue) {
-                                        reference.allDefaultValueInputs.push({ sel: valueSubPanelEle.id, val: valueSubPanelEle.defaultValue});
+                                        reference.allDefaultValueInputs.push({ sel: valueSubPanelEle.id, val: valueSubPanelEle.defaultValue });
                                     }
 
                                     let textSelector;
@@ -13323,7 +13323,7 @@ module.exports = {
                                         "<div id='" + valueSubPanelEle.idDiv + "' class='thumbnail' align='center'>" +
                                         "<img width='450' height='450' style='width: 450px;height: 450px' src='" + defaultImg + "' class='" + valueSubPanelEle.class + "' id='" + valueSubPanelEle.id + "'>" +
                                         "<div class='caption'> <h3>" + valueSubPanelEle.labels.firstLabel + "<a class='anchorjs-link' href='#thumbnail-label'><span class='anchorjs-icon'></span></a></h3> " +
-                                        "<div>  <label for='"+ valueSubPanelEle.id + "Event' class='btn btn-primary'> Seleccionar Imagen </label>  <input type='file' id='" + valueSubPanelEle.id + "Event' accept='image/*' capture='camera' style='visibility:hidden;'></div> </div>" +
+                                        "<div>  <label for='" + valueSubPanelEle.id + "Event' class='btn btn-primary'> Seleccionar Imagen </label>  <input type='file' id='" + valueSubPanelEle.id + "Event' accept='image/*' capture='camera' style='visibility:hidden;'></div> </div>" +
                                         "</div>");
 
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
@@ -13490,14 +13490,35 @@ module.exports = {
                     $("#" + input.sel).val(userInformation.fullname);
                     break;
                 case "userMobile":
-                    $("#" + input.sel).val(userInformation.cellphone);  
+                    $("#" + input.sel).val(userInformation.cellphone);
                     break;
                 case "userCompany":
-                   $("#" + input.sel).val(userInformation.company);
-                   break;
+                    $("#" + input.sel).val(userInformation.company);
+                    break;
                 case "userEmail":
-                   $("#" + input.sel).val(userInformation.company);
-                   break;              
+                    $("#" + input.sel).val(userInformation.company);
+                    break;
+                case "siteId":
+                    $("#" + input.sel).val(visitInformation.siteId);
+                    break;
+                case "siteName":
+                    $("#" + input.sel).val(visitInformation.name);
+                    break;    
+                case "portafolio":
+                    $("#" + input.sel).val(visitInformation.portafolio);
+                    break;
+                case "anchorTenant":
+                    $("#" + input.sel).val(visitInformation.anchorTenant);
+                    break;
+                case "fmOffice":
+                    $("#" + input.sel).val(visitInformation.fmOffice);
+                    break;
+                case "city":
+                    $("#" + input.sel).val(visitInformation.city);
+                    break;
+                case "region":
+                    $("#" + input.sel).val(visitInformation.region);
+                    break;
             }
         }
 
@@ -13583,7 +13604,7 @@ module.exports = {
                     break;
 
                 case "radio":
-                    $("input:radio[name='"+value.sel+"'][value='"+value.val+"']").prop("checked",true);
+                    $("input:radio[name='" + value.sel + "'][value='" + value.val + "']").prop("checked", true);
                     break;
                 default:
                     $("#" + value.sel).val("" + value.val);
@@ -16733,6 +16754,7 @@ let login = __webpack_require__(11);
                         message.changeMessageLoader("Consultando Visitas Almacenadas");
                         return visits.getVisits();
                     }).then(function () {
+                    
                         reference.fillVisitsPage();
                         reference.loadEventNewVisit();
                         message.removeMessageLoader("#mainContent2");
@@ -16769,11 +16791,21 @@ let login = __webpack_require__(11);
                     if (Object.keys(reports.reportSelected).length != 0) {
                         message.changeMessageLoader("Cargando Reporte Almacenado");
                         reference.fillAnswer();
+                        message.removeMessageLoader("#mainContent2");
                     }
                     else{
-                        smartEngine.fillDefaultValues(reference.userInformation,{});
+                        indexDb.getSites().then(function(sitesResponse){
+                            let siteSearched = sitesResponse.filter(function(site){
+                                return site == visits.visitSelected.visitId
+                            });
+                            smartEngine.fillDefaultValues(reference.userInformation,sites[0]);
+                            message.removeMessageLoader("#mainContent2");
+                        }).catch(function(err){
+                            console.log(err);
+                        });
+                        
                     }
-                    message.removeMessageLoader("#mainContent2");
+                    
                     break;
                 case "myReports":
                     message.addMessageLoder("loaderMessage", "#mainContent2");

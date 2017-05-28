@@ -386,6 +386,7 @@ let login = require("./login");
                         message.changeMessageLoader("Consultando Visitas Almacenadas");
                         return visits.getVisits();
                     }).then(function () {
+                    
                         reference.fillVisitsPage();
                         reference.loadEventNewVisit();
                         message.removeMessageLoader("#mainContent2");
@@ -422,11 +423,21 @@ let login = require("./login");
                     if (Object.keys(reports.reportSelected).length != 0) {
                         message.changeMessageLoader("Cargando Reporte Almacenado");
                         reference.fillAnswer();
+                        message.removeMessageLoader("#mainContent2");
                     }
                     else{
-                        smartEngine.fillDefaultValues(reference.userInformation,visits.visitSelected);
+                        indexDb.getSites().then(function(sitesResponse){
+                            let siteSearched = sitesResponse.filter(function(site){
+                                return site == visits.visitSelected.visitId
+                            });
+                            smartEngine.fillDefaultValues(reference.userInformation,sites[0]);
+                            message.removeMessageLoader("#mainContent2");
+                        }).catch(function(err){
+                            console.log(err);
+                        });
+                        
                     }
-                    message.removeMessageLoader("#mainContent2");
+                    
                     break;
                 case "myReports":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
