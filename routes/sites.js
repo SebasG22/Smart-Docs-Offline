@@ -32,7 +32,7 @@ router.post('/', function (req, res, next) {
         porfatolio: req.body.porfatolio,
         anchorTenant: req.body.anchorTenant,
         region: req.body.region,
-        fmOffice: req.body.department,
+        fmOffice: req.body.fmOffice,
         city: req.body.city,
     });
 
