@@ -380,7 +380,7 @@ module.exports = {
             }
         });
     },
-    "addReport": function (reportId, templateId, visitId, status, author, cloud = false) {
+    "addReport": function (reportId, templateId, visitId, status, author, creationDate = "" + new Date(), cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -394,7 +394,7 @@ module.exports = {
                 status: status,
                 author: author,
                 completedDate: status == 'SM-Status002' ? "" + new Date() : "",
-                creationDate: "" + new Date(),
+                creationDate: creationDate,
                 lastModification: "" + new Date(),
                 checkbox_answer: [],
                 date_answer: [],

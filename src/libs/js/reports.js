@@ -206,6 +206,11 @@ module.exports = {
             if (reportFiltered.length == 0) {
                 reportsToDelete.push(reference.getReportOnCloudToSaveLocally(reportCloud.reportId));
             }
+            else{
+                 if(reportFiltered.lastModification != reportCloud.lastModification){
+                        reportsToDelete.push(reference.getReportOnCloudToSaveLocally(reportCloud.reportId));
+                 } 
+            }
         }
 
         return new Promise(function (resolve, reject) {
@@ -319,7 +324,7 @@ module.exports = {
             let updateReports = [];
             for (let reportRes of reportsSaveOnCloud) {
                 this["updateReport" + cont] = indexDb.addReport(reportRes.reportId, reportRes.templateId,
-                    reportRes.visitId, reportRes.status, reportRes.author, true);
+                    reportRes.visitId, reportRes.status, reportRes.author, reportRes.creationDate, true);
                 updateReports.push(this["updateReport" + cont]);
                 cont++;
             }
