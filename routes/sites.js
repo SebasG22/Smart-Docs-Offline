@@ -4,8 +4,8 @@ const Site = require("./../models/Sites");
 const jwt = require("jsonwebtoken");
 
 
-router.use('/', function(req, res, next) {
-    jwt.verify(req.query.token, 'SDLHW', function(err, decoded) {
+router.use('/', function (req, res, next) {
+    jwt.verify(req.query.token, 'SDLHW', function (err, decoded) {
         if (err) {
             return res.status('401').json({
                 message: 'Not Authenticated',
@@ -26,10 +26,15 @@ router.post('/', function (req, res, next) {
     var site = new Site({
         siteId: req.body.siteId,
         name: req.body.name,
-        fmOffice: req.body.fmOffice,
         project: req.body.project,
         creationDate: new Date(),
-        lastModification: new Date()
+        lastModification: new Date(),
+        porfatolio: req.body.porfatolio,
+        assetTower: req.body.assetTower,
+        anchorTenant: req.body.anchorTenant,
+        region: req.body.region,
+        fmOffice: req.body.department,
+        city: req.body.city,
     });
 
     site.save(function (err, result) {

@@ -8,7 +8,7 @@ module.exports = {
     "startIndexedDB": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
-            reference.dataBase = indexedDB.open("SmartDocsOffline", 5);
+            reference.dataBase = indexedDB.open("SmartDocsOffline", 6);
             reference.dataBase.onupgradeneeded = function (e) {
                 let active = reference.dataBase.result;
                 let sites = active.createObjectStore("sites", { keyPath: 'siteId' });
@@ -62,7 +62,7 @@ module.exports = {
             }
         });
     },
-    "addSite": function (siteId, name, fmOffice, project) {
+    "addSite": function (siteId, name, fmOffice, project, portafolio,assetTower,region,city) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -72,8 +72,13 @@ module.exports = {
             var request = object.put({
                 siteId: siteId,
                 name: name,
-                fmOffice: fmOffice,
                 project: project,
+                porfatolio: portafolio,
+                assetTower:assetTower,
+                anchorTenant: anchorTenant,
+                region: region,
+                fmOffice: department,
+                city: city,
                 creationDate: "" + new Date(),
                 lastModification: "" + new Date()
             });

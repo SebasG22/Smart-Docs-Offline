@@ -5,13 +5,13 @@ const mongooseUniqueValidator = require("mongoose-unique-validator");
 let schema = new Schema({
     siteId: { type: String, required: true, unique: true },
     name: { type: String, required: true },
-    department: { type: String, required: false },
-    fmOffice: { type: String, required: true },
     project: { type: String, required: true },
-    portafolio: { type: String, required: false },
-    assetTorre: { type: String, required: false },
-    anchorTenant: { type: String, required: false },
-    regional: { type: String, required: false },
+    porfatolio: { type: String, required: true },
+    assetTower: { type: String, required: true },
+    anchorTenant: { type: String, required: true },
+    region: { type: String, required: true },
+    fmOffice: { type: String, required: true },
+    city: { type: String, required: true }  ,
     creationDate: { type: String, required: true },
     lastModification: { type: String, required: true }
 });
