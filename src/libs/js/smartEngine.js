@@ -1163,25 +1163,25 @@ module.exports = {
                 case "userEmail":
                     $("#" + input.sel).val(userInformation.company);
                     break;
-                case "siteId":
+                case "siteAssetTower":
                     $("#" + input.sel).val(siteInformation.siteId);
                     break;
                 case "siteName":
                     $("#" + input.sel).val(siteInformation.name);
                     break;    
-                case "portafolio":
+                case "sitePortafolio":
                     $("#" + input.sel).val(siteInformation.portafolio);
                     break;
-                case "anchorTenant":
+                case "siteAnchorTenant":
                     $("#" + input.sel).val(siteInformation.anchorTenant);
                     break;
-                case "fmOffice":
+                case "siteFmOffice":
                     $("#" + input.sel).val(siteInformation.fmOffice);
                     break;
-                case "city":
+                case "siteCity":
                     $("#" + input.sel).val(siteInformation.city);
                     break;
-                case "region":
+                case "siteRegion":
                     $("#" + input.sel).val(siteInformation.region);
                     break;
             }
