@@ -1130,7 +1130,7 @@ module.exports = {
 
                 break;
             case "radio":
-                if ($("input[name='" + selector + "']:checked") != null) {
+                if ($("input[name='" + selector + "']:checked").val() != undefined) {
                     reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': $("input[name='" + selector + "']:checked").val() });
                     return true;
                 }
