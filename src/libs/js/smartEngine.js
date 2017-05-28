@@ -1145,7 +1145,7 @@ module.exports = {
         let reference = this;
         console.log("Fill Default Value Inputs");
         for (let input of reference.allDefaultValueInputs) {
-            switch (input.value) {
+            switch (input.val) {
                 case "currentDate":
                     var now = new Date();
                     var currentDateFormmated = new Date(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()));
