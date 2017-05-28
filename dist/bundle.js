@@ -13474,7 +13474,7 @@ module.exports = {
     },
     "fillDefaultValues": function (userInformation, visitInformation) {
         let reference = this;
-
+        console.log("Fill Default Value Inputs");
         for (let input of reference.allDefaultValueInputs) {
             switch (input.value) {
                 case "currentDate":
