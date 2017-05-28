@@ -16796,7 +16796,7 @@ let login = __webpack_require__(11);
                     else{
                         indexDb.getSites().then(function(sitesResponse){
                             let siteSearched = sitesResponse.filter(function(site){
-                                return site.siteId == visits.visitSelected.visitId
+                                return site.siteId == visits.visitSelected.siteId
                             });
                             smartEngine.fillDefaultValues(reference.userInformation,siteSearched[0]);
                             message.removeMessageLoader("#mainContent2");
