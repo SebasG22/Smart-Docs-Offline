@@ -13433,11 +13433,11 @@ module.exports = {
             case "image1Label": case "image2Labels":
                 if ($("#" + selector).attr('src') == defaultImg) {
                     reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': defaultImg });
-                    return true;
+                    return false;
                 }
                 else {
                     reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': $("#" + selector).attr('src') });
-                    return false;
+                    return true;
                 }
                 
                 break;
