@@ -423,6 +423,9 @@ let login = require("./login");
                         message.changeMessageLoader("Cargando Reporte Almacenado");
                         reference.fillAnswer();
                     }
+                    else{
+                        smartEngine.fillDefaultValues(reference.userInformation,{});
+                    }
                     message.removeMessageLoader("#mainContent2");
                     break;
                 case "myReports":
