@@ -428,9 +428,9 @@ let login = require("./login");
                     else{
                         indexDb.getSites().then(function(sitesResponse){
                             let siteSearched = sitesResponse.filter(function(site){
-                                return site == visits.visitSelected.visitId
+                                return site.siteId == visits.visitSelected.visitId
                             });
-                            smartEngine.fillDefaultValues(reference.userInformation,sites[0]);
+                            smartEngine.fillDefaultValues(reference.userInformation,siteSearched[0]);
                             message.removeMessageLoader("#mainContent2");
                         }).catch(function(err){
                             console.log(err);

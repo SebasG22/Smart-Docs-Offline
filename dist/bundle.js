@@ -13476,7 +13476,7 @@ module.exports = {
 
         }
     },
-    "fillDefaultValues": function (userInformation, visitInformation) {
+    "fillDefaultValues": function (userInformation, siteInformation) {
         let reference = this;
         console.log("Fill Default Value Inputs");
         for (let input of reference.allDefaultValueInputs) {
@@ -13499,25 +13499,25 @@ module.exports = {
                     $("#" + input.sel).val(userInformation.company);
                     break;
                 case "siteId":
-                    $("#" + input.sel).val(visitInformation.siteId);
+                    $("#" + input.sel).val(siteInformation.siteId);
                     break;
                 case "siteName":
-                    $("#" + input.sel).val(visitInformation.name);
+                    $("#" + input.sel).val(siteInformation.name);
                     break;    
                 case "portafolio":
-                    $("#" + input.sel).val(visitInformation.portafolio);
+                    $("#" + input.sel).val(siteInformation.portafolio);
                     break;
                 case "anchorTenant":
-                    $("#" + input.sel).val(visitInformation.anchorTenant);
+                    $("#" + input.sel).val(siteInformation.anchorTenant);
                     break;
                 case "fmOffice":
-                    $("#" + input.sel).val(visitInformation.fmOffice);
+                    $("#" + input.sel).val(siteInformation.fmOffice);
                     break;
                 case "city":
-                    $("#" + input.sel).val(visitInformation.city);
+                    $("#" + input.sel).val(siteInformation.city);
                     break;
                 case "region":
-                    $("#" + input.sel).val(visitInformation.region);
+                    $("#" + input.sel).val(siteInformation.region);
                     break;
             }
         }
@@ -16796,9 +16796,9 @@ let login = __webpack_require__(11);
                     else{
                         indexDb.getSites().then(function(sitesResponse){
                             let siteSearched = sitesResponse.filter(function(site){
-                                return site == visits.visitSelected.visitId
+                                return site.siteId == visits.visitSelected.visitId
                             });
-                            smartEngine.fillDefaultValues(reference.userInformation,sites[0]);
+                            smartEngine.fillDefaultValues(reference.userInformation,siteSearched[0]);
                             message.removeMessageLoader("#mainContent2");
                         }).catch(function(err){
                             console.log(err);
