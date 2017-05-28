@@ -10394,7 +10394,7 @@ module.exports = {
             }
         });
     },
-    "addSite": function (siteId, name, fmOffice, project, portafolio,region,city) {
+    "addSite": function (siteId, name, fmOffice, project, portafolio, anchorTenant, region,city) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -10408,7 +10408,7 @@ module.exports = {
                 porfatolio: portafolio,
                 anchorTenant: anchorTenant,
                 region: region,
-                fmOffice: department,
+                fmOffice: fmOffice,
                 city: city,
                 creationDate: "" + new Date(),
                 lastModification: "" + new Date()
@@ -16679,7 +16679,7 @@ let login = __webpack_require__(11);
         updateSiteExternal: function (sitesOnCloud) {
             return new Promise(function (resolve, reject) {
                 for (let site of sitesOnCloud) {
-                    indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project, site.portafolio,site.region,site.city);
+                    indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project, site.portafolio, site.anchorTenant, site.region,site.city);
                 }
                 indexDb.getSites().then(function () {
                     resolve();
