@@ -332,7 +332,7 @@ let login = require("./login");
         updateSiteExternal: function (sitesOnCloud) {
             return new Promise(function (resolve, reject) {
                 for (let site of sitesOnCloud) {
-                    indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project);
+                    indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project, site.portafolio,site.region,site.city);
                 }
                 indexDb.getSites().then(function () {
                     resolve();

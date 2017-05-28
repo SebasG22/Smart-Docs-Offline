@@ -62,7 +62,7 @@ module.exports = {
             }
         });
     },
-    "addSite": function (siteId, name, fmOffice, project, portafolio,assetTower,region,city) {
+    "addSite": function (siteId, name, fmOffice, project, portafolio,region,city) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;

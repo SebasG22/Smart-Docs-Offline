@@ -30,7 +30,6 @@ router.post('/', function (req, res, next) {
         creationDate: new Date(),
         lastModification: new Date(),
         porfatolio: req.body.porfatolio,
-        assetTower: req.body.assetTower,
         anchorTenant: req.body.anchorTenant,
         region: req.body.region,
         fmOffice: req.body.department,
