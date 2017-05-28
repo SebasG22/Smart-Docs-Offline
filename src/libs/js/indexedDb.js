@@ -73,7 +73,7 @@ module.exports = {
                 siteId: siteId,
                 name: name,
                 project: project,
-                porfatolio: portafolio,
+                portafolio: portafolio,
                 anchorTenant: anchorTenant,
                 region: region,
                 fmOffice: fmOffice,
