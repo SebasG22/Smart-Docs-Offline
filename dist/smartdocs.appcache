@@ -35,9 +35,9 @@ https://fonts.googleapis.com/css?family=Lato:300,400,700,900
 
 
 NETWORK:
-https://smart-docs.herokuapp.com/templates/
-https://smart-docs.herokuapp.com/sites/
-https://smart-docs.herokuapp.com/visits/
-https://smart-docs.herokuapp.com/reports/
-https://smart-docs.herokuapp.com/reportsImg/
+http://localhost:3000/templates/
+http://localhost:3000/sites/
+http://localhost:3000/visits/
+http://localhost:3000/reports/
+http://localhost:3000/reportsImg/
 FALLBACK:

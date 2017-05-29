@@ -9,7 +9,7 @@ module.exports = {
     "getSitesOnCloud": function () {
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/sites/?token=' + localStorage.getItem('token'),
+                url: 'http://localhost:3000/sites/?token=' + localStorage.getItem('token'),
                 type: 'GET',
                 dataType: 'json',
                 statusCode: {

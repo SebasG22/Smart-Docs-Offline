@@ -85,7 +85,7 @@ module.exports = {
 
 
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/reports/?token=' + localStorage.getItem('token'),
+                url: 'http://localhost:3000/reports/?token=' + localStorage.getItem('token'),
                 type: 'POST',
                 dataType: 'json',
                 data: {
@@ -151,7 +151,7 @@ module.exports = {
         let reference = this;
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/reports/update/' + prop + "?token="+ localStorage.getItem('token'),
+                url: 'http://localhost:3000/reports/update/' + prop + "?token="+ localStorage.getItem('token'),
                 type: 'PATCH',
                 data: { reportId: reportId, content: JSON.stringify(valuePro) },
                 dataType: 'json',
@@ -229,7 +229,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reports/getAllFieldsReport/" + reportId+ "?token="+ localStorage.getItem("token"),
+                url: "http://localhost:3000/reports/getAllFieldsReport/" + reportId+ "?token="+ localStorage.getItem("token"),
                 statusCode: {
                     401: function () {
                         message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
@@ -302,7 +302,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 method: "GET",
-                url: "https://smart-docs.herokuapp.com/reports/?token="+ localStorage.getItem("token"),
+                url: "http://localhost:3000/reports/?token="+ localStorage.getItem("token"),
                 statusCode: {
                     401: function () {
                         message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");

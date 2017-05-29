@@ -5,7 +5,7 @@ module.exports = {
         console.log("Sign in Start");
         return new Promise(function (resolve, reject) {
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/user/signin',
+                url: 'http://localhost:3000/user/signin',
                 type: 'POST',
                 dataType: 'json',
                 data: { username: username, password: password },

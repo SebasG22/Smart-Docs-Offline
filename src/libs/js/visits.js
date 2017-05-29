@@ -55,7 +55,7 @@ module.exports = {
         let updateVisitCloud = new Promise(function (resolve, reject) {
 
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/visits/?token=' + localStorage.getItem('token'),
+                url: 'http://localhost:3000/visits/?token=' + localStorage.getItem('token'),
                 type: 'POST',
                 dataType: 'json',
                 data: dataToUpdate,
@@ -87,7 +87,7 @@ module.exports = {
         return new Promise(function (resolve, reject) {
 
             $.ajax({
-                url: 'https://smart-docs.herokuapp.com/visits/?token=' + localStorage.getItem('token'),
+                url: 'http://localhost:3000/visits/?token=' + localStorage.getItem('token'),
                 type: 'GET',
                 dataType: 'json',
                 statusCode: {

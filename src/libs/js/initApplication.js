@@ -99,7 +99,7 @@ let login = require("./login");
         loadEventButtonCloseApp: function () {
             $("#btnLogout").click(function () {
                 localStorage.clear();
-                window.location.replace("https://smart-docs.herokuapp.com/?#no-back-button");
+                window.location.replace("http://localhost:3000/?#no-back-button");
             });
         },
         initApplication: function () {
@@ -526,7 +526,7 @@ let login = require("./login");
         getAllTemplates: function () {
             let reference = this;
             /*if (navigator.onLine) {
-                $.get("https://smart-docs.herokuapp.com/templates/", function (templatesResponse) {
+                $.get("http://localhost:3000/templates/", function (templatesResponse) {
                     templates.templates = templatesResponse;
                     for (let template of templates.templates) {
                         indexDb.addTemplate(template.templateId, template.name, template.project, template.taskType, template.icon, template.content);
