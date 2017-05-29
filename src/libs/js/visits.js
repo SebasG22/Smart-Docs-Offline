@@ -1,4 +1,5 @@
 let indexDb = require("./indexedDb");
+let message = require("./messages");
 
 module.exports = {
     "visits": [],

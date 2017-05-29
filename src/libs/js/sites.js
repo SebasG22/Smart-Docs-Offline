@@ -1,3 +1,5 @@
+let message = require("./messages");
+
 module.exports = {
     "sites": [],
     "getAllSites": function () {
