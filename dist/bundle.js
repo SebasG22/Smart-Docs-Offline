@@ -12161,7 +12161,7 @@ module.exports = {
                 reportsToDelete.push(reference.getReportOnCloudToSaveLocally(reportCloud.reportId));
             }
             else{
-                 if(reportFiltered.lastModification != reportCloud.lastModification){
+                 if(reportFiltered[0].lastModification != reportCloud.lastModification){
                         reportsToDelete.push(reference.getReportOnCloudToSaveLocally(reportCloud.reportId));
                  } 
             }
