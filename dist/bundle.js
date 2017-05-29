@@ -16748,7 +16748,7 @@ let login = __webpack_require__(11);
         updateSiteExternal: function (sitesOnCloud) {
             return new Promise(function (resolve, reject) {
                 for (let site of sitesOnCloud) {
-                    indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project, site.portafolio, site.anchorTenant, site.region,site.city);
+                    indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project, site.portafolio, site.anchorTenant, site.region, site.city);
                 }
                 indexDb.getSites().then(function () {
                     resolve();
@@ -16802,7 +16802,7 @@ let login = __webpack_require__(11);
                         message.changeMessageLoader("Consultando Visitas Almacenadas");
                         return visits.getVisits();
                     }).then(function () {
-                    
+
                         reference.fillVisitsPage();
                         reference.loadEventNewVisit();
                         message.removeMessageLoader("#mainContent2");
@@ -16841,19 +16841,19 @@ let login = __webpack_require__(11);
                         reference.fillAnswer();
                         message.removeMessageLoader("#mainContent2");
                     }
-                    else{
-                        indexDb.getSites().then(function(sitesResponse){
-                            let siteSearched = sitesResponse.filter(function(site){
+                    else {
+                        indexDb.getSites().then(function (sitesResponse) {
+                            let siteSearched = sitesResponse.filter(function (site) {
                                 return site.siteId == visits.visitSelected.siteId
                             });
-                            smartEngine.fillDefaultValues(reference.userInformation,siteSearched[0]);
+                            smartEngine.fillDefaultValues(reference.userInformation, siteSearched[0]);
                             message.removeMessageLoader("#mainContent2");
-                        }).catch(function(err){
+                        }).catch(function (err) {
                             console.log(err);
                         });
-                        
+
                     }
-                    
+
                     break;
                 case "myReports":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
@@ -16867,8 +16867,8 @@ let login = __webpack_require__(11);
                 case "myReportsLog":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Logger");
-                    indexDb.getReportsLog().then(function () {
-                        reference.fillReportsLogPage();
+                    indexDb.getReportsLog().then(function (reportsLog) {
+                        reference.fillReportsLogPage(reportsLog);
                         message.removeMessageLoader("#mainContent2");
                     });
                     break;
@@ -17313,24 +17313,22 @@ let login = __webpack_require__(11);
                 cont += 1;
             }
         },
-        fillReportsLogPage: function () {
+        fillReportsLogPage: function (reportsLogResponse) {
             let reference = this;
             //let templatesResponse = templates.getTemplates();
-            let reportsLogResponse = reports.getReportsLog();
-            console.log("Reports Log Response", reportsLogResponse);
-            let cont = 0;
-            for (let reportLog of reportsLogResponse) {
-                let background_status;
-                switch (reportLog.status) {
-                    case "SM-Status001":
-                        background_status = "warning";
-                        break;
-                    case "SM-Status002":
-                        background_status = "info";
-                        break;
+                let cont = 0;
+                for (let reportLog of reportsLogResponse) {
+                    let background_status;
+                    switch (reportLog.status) {
+                        case "SM-Status001":
+                            background_status = "warning";
+                            break;
+                        case "SM-Status002":
+                            background_status = "info";
+                            break;
+                    }
+                    $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
                 }
-                $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
-            }
         }
     }
 
