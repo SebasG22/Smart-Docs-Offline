@@ -16551,9 +16551,8 @@ let login = __webpack_require__(11);
             let reportsLocal = [];
             let reportsCloud = [];
             message.launchSyncModal();
-            message.changeMessageLoader("loaderMessage", "Sincronizacion en curso");
             message.changeSyncModalText("Obteniendo Visitas Almacenados");
-
+            message.changeMessageLoader("loaderMessage", "Sincronizacion en curso");
             visits.getVisits().then(function (visitsLocalResponse) {
                 visitsLocal = visitsLocalResponse;
                 message.changeSyncModalText("loaderMessage", "Obteniendo Visitas Almacenadas");
