@@ -10774,7 +10774,7 @@ module.exports = {
             }
 
             request.onsuccess = function (e) {
-                reference.addReportLog(e.target.result, "Creacion", status);
+                reference.addReportLog(e.target.result, "Modificacion", status);
             }
 
             data.oncomplete = function (e) {
@@ -17319,15 +17319,19 @@ let login = __webpack_require__(11);
                 let cont = 0;
                 for (let reportLog of reportsLogResponse) {
                     let background_status;
+                    let status;
                     switch (reportLog.status) {
                         case "SM-Status001":
                             background_status = "warning";
+                            status = "DRAFT";
+
                             break;
                         case "SM-Status002":
                             background_status = "info";
+                            status = "COMPLETED";
                             break;
                     }
-                    $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + reportLog.status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
+                    $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
                 }
         }
     }

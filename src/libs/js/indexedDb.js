@@ -371,7 +371,7 @@ module.exports = {
             }
 
             request.onsuccess = function (e) {
-                reference.addReportLog(e.target.result, "Creacion", status);
+                reference.addReportLog(e.target.result, "Modificacion", status);
             }
 
             data.oncomplete = function (e) {
