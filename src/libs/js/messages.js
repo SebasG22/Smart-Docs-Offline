@@ -49,5 +49,17 @@ module.exports = {
                 $("#connection_modal").modal('hide');
             });
         });
-    }
+    },
+    launchSyncModal: function () {
+        let reference = this;
+        $("#sync_information_modal").remove();
+        $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=sync_information_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>Sincronizacion en Curso </h4></div><br><div style='float:none;margin: 0 auto;text-align:center'><i style='color:black' class='fa fa-spinner fa-pulse fa-3x text-center'></i></div><h4 style='text-align:center'>Por favor no cierres la aplicacion, estamos sincronizando tu progreso . </h4><br><h5 style='text-align:center'><b> Estado : </b><div id='sync_information_status'></div></h5></div></div></div></div>");
+        $("#sync_information_modal").modal({ backdrop: 'static', keyboard: false });
+    },
+    changeSyncModalText: function (msg) {
+        $("#sync_information_status").html(msg);
+    },
+    removeSyncModal: function () {
+        $("#sync_information_modal").modal('hide');
+    },
 }

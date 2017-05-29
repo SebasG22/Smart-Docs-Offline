@@ -10381,7 +10381,19 @@ return jQuery;
                 $("#connection_modal").modal('hide');
             });
         });
-    }
+    },
+    launchSyncModal: function () {
+        let reference = this;
+        $("#sync_information_modal").remove();
+        $("body").append("<div class='fade modal modal-warning'aria-hidden=true aria-labelledby=myModalLabel1 id=sync_information_modal role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>Sincronizacion en Curso </h4></div><br><div style='float:none;margin: 0 auto;text-align:center'><i style='color:black' class='fa fa-spinner fa-pulse fa-3x text-center'></i></div><h4 style='text-align:center'>Por favor no cierres la aplicacion, estamos sincronizando tu progreso . </h4><br><h5 style='text-align:center'><b> Estado : </b><div id='sync_information_status'></div></h5></div></div></div></div>");
+        $("#sync_information_modal").modal({ backdrop: 'static', keyboard: false });
+    },
+    changeSyncModalText: function (msg) {
+        $("#sync_information_status").html(msg);
+    },
+    removeSyncModal: function () {
+        $("#sync_information_modal").modal('hide');
+    },
 }
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
@@ -16538,45 +16550,52 @@ let login = __webpack_require__(11);
             let visitsCloud = [];
             let reportsLocal = [];
             let reportsCloud = [];
-            message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Almacenadas");
+            message.launchSyncModal();
+            message.changeMessageLoader("loaderMessage", "Sincronizacion en curso");
+            message.changeSyncModalText("Obteniendo Visitas Almacenados");
 
             visits.getVisits().then(function (visitsLocalResponse) {
                 visitsLocal = visitsLocalResponse;
-                message.changeMessageLoader("loaderMessage", "Subiendo Visitas Almacenadas");
+                message.changeSyncModalText("loaderMessage", "Obteniendo Visitas Almacenadas");
                 return visits.uploadVisitsToCloud();
             }).then(function () {
-                message.changeMessageLoader("loaderMessage", "Obteniendo Visitas Cloud");
+                message.changeSyncModalText("loaderMessage", "Obteniendo Visitas Cloud");
                 return visits.getVisitsSaveonCloud();
             }).then(function (visitsCloudResponse) {
                 visitsCloud = visitsCloudResponse;
-                message.changeMessageLoader("loaderMessage", "Validando Visitas Almacenadas");
+                message.changeSyncModalText("loaderMessage", "Sincronizando Visitas Almacenadas");
                 return visits.validateVisitLocally(visitsCloud, visitsLocal);
             })
                 .then(function () {
-                    message.changeMessageLoader("loaderMessage", "Obteniendo Reportes Almacenadas");
+                    message.changeSyncModalText("loaderMessage", "Obteniendo Reportes Almacenados");
                     return reports.getReports();
                 })
                 .then(function (reportsResponse) {
                     reportsLocal = reportsResponse;
-                    message.changeMessageLoader("loaderMessage", "Subiendo Reportes Almacenadas");
+                    message.changeSyncModalText("loaderMessage", "Subiendo Reportes Almacenados");
                     return reports.uploadReportToCloud(reportsResponse);
                 })
                 .then(function () {
+                    message.changeSyncModalText("loaderMessage", "Obteniendo Reportes Cloud");
                     return reports.getReportsSaveonCloud();
                 })
                 .then(function (reportsOnCloud) {
+                    message.changeSyncModalText("loaderMessage", "Sincronizando Reportes");
                     return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
                 })
                 .then(function () {
                     return reports.changeStatistic();
                 })
                 .then(function () {
+                    message.changeSyncModalText("loaderMessage", "Obteniendo Imagenes Localmente");
                     return reportsImg.getReportsImages();
                 })
                 .then(function (reportImagesResponse) {
                     return reportsImg.uploadReportsImages(reportImagesResponse);
+                    message.changeSyncModalText("loaderMessage", "Subiendo Imagenes 1 / 2");
                 })
                 .then(function () {
+                    message.changeSyncModalText("loaderMessage", "Subiendo Imagenes 2 / 2");
                     return reportsImg.uploadReportsImages1();
                 })
                 /*
@@ -16588,32 +16607,37 @@ let login = __webpack_require__(11);
                 })
                 */
                 .then(function () {
+                    message.changeSyncModalText("loaderMessage", "Obteniendo Sitios Cloud");
                     return sites.getSitesOnCloud();
                 })
                 .then(function (visitsOnCloud) {
                     console.log("Visits Saved ", visits.getVisits())
+                    message.changeSyncModalText("loaderMessage", "Sincronizando Sitios");
                     return reference.updateSiteExternal(visitsOnCloud);
                 }).then(function () {
-                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Cloud");
+                    message.changeSyncModalText("loaderMessage", "Obteniendo Plantillas Cloud");
                     return templates.getTemplatesOnCloud();
                 })
                 .then(function (templatesOnCloud) {
-                    message.changeMessageLoader("loaderMessage", "Actualizando Plantillas Almacenadas");
+                    message.changeSyncModalText("loaderMessage", "Actualizando Plantillas Almacenadas");
                     return reference.updateTemplatesLocally(templatesOnCloud);
                 })
                 .then(function () {
-                    message.changeMessageLoader("loaderMessage", "Obteniendo Plantillas Almacenadas");
+                    message.changeSyncModalText("loaderMessage", "Obteniendo Plantillas Almacenadas");
                     return indexDb.getTemplates();
                 })
                 .then(function () {
+                    message.removeSyncModal();
                     message.removeMessageLoader("#mainContent2");
                 });
         },
         "noUpdateInformation": function () {
             let reference = this;
-            message.changeMessageLoader("Obteniendo Sitios Almacenados");
+            message.changeMessageLoader("Obteniendo Informacion Almacenada");
+            //message.launchSyncModal();
+            //message.changeSyncModalText("Obteniendo Sitios Almacenados");
             indexDb.getSites().then(function (resolve, reject) {
-                message.changeMessageLoader("Obteniendo Plantillas Almacenadas");
+                message.changeSyncModalText("Obteniendo Plantillas Almacenadas");
                 return indexDb.getTemplates();
             })
                 .then(function () {
