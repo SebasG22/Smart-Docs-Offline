@@ -16594,8 +16594,8 @@ let login = __webpack_require__(11);
                     return reportsImg.getReportsImages();
                 })
                 .then(function (reportImagesResponse) {
-                    return reportsImg.uploadReportsImages(reportImagesResponse);
                     message.changeSyncModalText("Subiendo Imagenes 1 / 2");
+                    return reportsImg.uploadReportsImages(reportImagesResponse);
                 })
                 .then(function () {
                     message.changeSyncModalText("Subiendo Imagenes 2 / 2");
