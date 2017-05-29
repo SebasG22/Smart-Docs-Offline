@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var compression = require('compression');
+
 
 const mongoose = require("mongoose");
 
@@ -30,10 +32,13 @@ app.set('view engine', 'hbs');
 app.use(logger('dev'));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ extended: true, limit: '50mb' }));
-app.use(cookieParser());
+//app.use(cookieParser());
 app.use('/dist', express.static(path.join(__dirname, 'dist')));
 
 app.disable('etag');
+
+// GZIP all assets
+app.use(compression());
 
 app.use(express.static(path.join(__dirname, 'dist')));
 
