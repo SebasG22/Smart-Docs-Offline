@@ -29,6 +29,7 @@ module.exports = {
                     lastModification: reportImgToCreate.lastModification
                 });
                 reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+                cont ++;
             }
         }
         return new Promise(function (resolve, reject) {
@@ -44,12 +45,15 @@ module.exports = {
         let reportsToImgCreate = [];
         let cont = 0;
         for (let reportImgToCreate of reference.reportsImages) {
+            if (!reportImgToCreate.cloud) {
             this["reportImgToCreateUpd" + cont] = reference.uploadReportUpdate({
                 reportImgId: reportImgToCreate.reportImgId,
                 reportId: reportImgToCreate.reportId,
                 image_1: reportImgToCreate.image_1,
             });
             reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+            cont ++;
+            }
         }
         return new Promise(function (resolve, reject) {
             Promise.all(reportsToImgCreate).then(function () {

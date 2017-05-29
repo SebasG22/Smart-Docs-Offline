@@ -11807,6 +11807,7 @@ module.exports = {
                     lastModification: reportImgToCreate.lastModification
                 });
                 reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+                cont ++;
             }
         }
         return new Promise(function (resolve, reject) {
@@ -11822,12 +11823,15 @@ module.exports = {
         let reportsToImgCreate = [];
         let cont = 0;
         for (let reportImgToCreate of reference.reportsImages) {
+            if (!reportImgToCreate.cloud) {
             this["reportImgToCreateUpd" + cont] = reference.uploadReportUpdate({
                 reportImgId: reportImgToCreate.reportImgId,
                 reportId: reportImgToCreate.reportId,
                 image_1: reportImgToCreate.image_1,
             });
             reportsToImgCreate.push(this["reportImgToCreateUpd" + cont]);
+            cont ++;
+            }
         }
         return new Promise(function (resolve, reject) {
             Promise.all(reportsToImgCreate).then(function () {
@@ -16555,46 +16559,46 @@ let login = __webpack_require__(11);
             message.changeMessageLoader("loaderMessage", "Sincronizacion en curso");
             visits.getVisits().then(function (visitsLocalResponse) {
                 visitsLocal = visitsLocalResponse;
-                message.changeSyncModalText("loaderMessage", "Obteniendo Visitas Almacenadas");
+                message.changeSyncModalText("Obteniendo Visitas Almacenadas");
                 return visits.uploadVisitsToCloud();
             }).then(function () {
-                message.changeSyncModalText("loaderMessage", "Obteniendo Visitas Cloud");
+                message.changeSyncModalText("Obteniendo Visitas Cloud");
                 return visits.getVisitsSaveonCloud();
             }).then(function (visitsCloudResponse) {
                 visitsCloud = visitsCloudResponse;
-                message.changeSyncModalText("loaderMessage", "Sincronizando Visitas Almacenadas");
+                message.changeSyncModalText("Sincronizando Visitas Almacenadas");
                 return visits.validateVisitLocally(visitsCloud, visitsLocal);
             })
                 .then(function () {
-                    message.changeSyncModalText("loaderMessage", "Obteniendo Reportes Almacenados");
+                    message.changeSyncModalText("Obteniendo Reportes Almacenados");
                     return reports.getReports();
                 })
                 .then(function (reportsResponse) {
                     reportsLocal = reportsResponse;
-                    message.changeSyncModalText("loaderMessage", "Subiendo Reportes Almacenados");
+                    message.changeSyncModalText("Subiendo Reportes Almacenados");
                     return reports.uploadReportToCloud(reportsResponse);
                 })
                 .then(function () {
-                    message.changeSyncModalText("loaderMessage", "Obteniendo Reportes Cloud");
+                    message.changeSyncModalText("Obteniendo Reportes Cloud");
                     return reports.getReportsSaveonCloud();
                 })
                 .then(function (reportsOnCloud) {
-                    message.changeSyncModalText("loaderMessage", "Sincronizando Reportes");
+                    message.changeSyncModalText("Sincronizando Reportes");
                     return reports.validateReportsLocally(reportsOnCloud, reportsLocal);
                 })
                 .then(function () {
                     return reports.changeStatistic();
                 })
                 .then(function () {
-                    message.changeSyncModalText("loaderMessage", "Obteniendo Imagenes Localmente");
+                    message.changeSyncModalText("Obteniendo Imagenes Localmente");
                     return reportsImg.getReportsImages();
                 })
                 .then(function (reportImagesResponse) {
                     return reportsImg.uploadReportsImages(reportImagesResponse);
-                    message.changeSyncModalText("loaderMessage", "Subiendo Imagenes 1 / 2");
+                    message.changeSyncModalText("Subiendo Imagenes 1 / 2");
                 })
                 .then(function () {
-                    message.changeSyncModalText("loaderMessage", "Subiendo Imagenes 2 / 2");
+                    message.changeSyncModalText("Subiendo Imagenes 2 / 2");
                     return reportsImg.uploadReportsImages1();
                 })
                 /*
@@ -16606,23 +16610,23 @@ let login = __webpack_require__(11);
                 })
                 */
                 .then(function () {
-                    message.changeSyncModalText("loaderMessage", "Obteniendo Sitios Cloud");
+                    message.changeSyncModalText("Obteniendo Sitios Cloud");
                     return sites.getSitesOnCloud();
                 })
                 .then(function (visitsOnCloud) {
                     console.log("Visits Saved ", visits.getVisits())
-                    message.changeSyncModalText("loaderMessage", "Sincronizando Sitios");
+                    message.changeSyncModalText("Sincronizando Sitios");
                     return reference.updateSiteExternal(visitsOnCloud);
                 }).then(function () {
-                    message.changeSyncModalText("loaderMessage", "Obteniendo Plantillas Cloud");
+                    message.changeSyncModalText("Obteniendo Plantillas Cloud");
                     return templates.getTemplatesOnCloud();
                 })
                 .then(function (templatesOnCloud) {
-                    message.changeSyncModalText("loaderMessage", "Actualizando Plantillas Almacenadas");
+                    message.changeSyncModalText("Actualizando Plantillas Almacenadas");
                     return reference.updateTemplatesLocally(templatesOnCloud);
                 })
                 .then(function () {
-                    message.changeSyncModalText("loaderMessage", "Obteniendo Plantillas Almacenadas");
+                    message.changeSyncModalText("Obteniendo Plantillas Almacenadas");
                     return indexDb.getTemplates();
                 })
                 .then(function () {
