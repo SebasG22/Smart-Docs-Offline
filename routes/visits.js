@@ -20,7 +20,7 @@ router.use('/', function (req, res, next) {
 
 router.get('/', function (req, res, next) {
     var decoded = jwt.decode(req.query.token);
-    Visit.find({author: decoded.user._id}).then(function(visits){
+    Visit.find({author: decoded.user}).then(function(visits){
         if(!visits) {
             res.send([]);
         }
