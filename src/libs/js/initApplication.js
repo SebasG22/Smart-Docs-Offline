@@ -79,7 +79,7 @@ let login = require("./login");
                     console.log("The visits remove process was finish");
                     return indexDb.deleteAllReportsByAuthor(reference.userInformation.userId);
                 }).then(function(){
-                    return indexDb.deleteAllReportsImageByAuthor();
+                    return indexDb.deleteAllReportsImageByAuthor(reference.userInformation.userId);
                 })
                 .then(function(){
                     resolve();

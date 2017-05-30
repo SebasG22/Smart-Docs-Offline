@@ -16686,7 +16686,7 @@ let login = __webpack_require__(11);
                     console.log("The visits remove process was finish");
                     return indexDb.deleteAllReportsByAuthor(reference.userInformation.userId);
                 }).then(function(){
-                    return indexDb.deleteAllReportsImageByAuthor();
+                    return indexDb.deleteAllReportsImageByAuthor(reference.userInformation.userId);
                 })
                 .then(function(){
                     resolve();
