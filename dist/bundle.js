@@ -10424,7 +10424,7 @@ module.exports = {
                 let visits = active.createObjectStore("visits", { keyPath: 'visitId' });
                 visits.createIndex("by_visitId", "visitId", { unique: true });
                 visits.createIndex("by_site", "site", { unique: false });
-                visits.createIndex("by_user", "user", { unique: false });
+                visits.createIndex("by_author", "author", { unique: false });
                 visits.createIndex("by_creationDate", "creationDate", { unique: false });
 
                 let templates = active.createObjectStore("templates", { keyPath: 'templateId' });
