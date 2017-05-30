@@ -73,7 +73,7 @@ let login = require("./login");
         },
         "userInformation": "",
         "verifyUser": function () {
-            let reference;
+            let reference = this;
             indexDb.deleteAllVisitsByAuthor(reference.userInformation.userId).then(function () {
                 console.log("The visits remove process was finish");
             });
