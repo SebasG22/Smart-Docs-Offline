@@ -16603,9 +16603,15 @@ let login = __webpack_require__(11);
         "userInformation": "",
         "verifyUser": function () {
             let reference = this;
-            indexDb.deleteAllVisitsByAuthor(reference.userInformation.userId).then(function () {
-                console.log("The visits remove process was finish");
+            return new Promise(function (resolve, reject) {
+                indexDb.deleteAllVisitsByAuthor(reference.userInformation.userId).then(function () {
+                    console.log("The visits remove process was finish");
+                    resolve();
+                }).catch(function(err){
+                    reject(err);
+                });
             });
+
         },
         "loadIndex": function () {
             let reference = this;
