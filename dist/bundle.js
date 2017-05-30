@@ -10670,21 +10670,30 @@ module.exports = {
             let active = reference.dataBase.result;
             let data = active.transaction(["visits"], "readwrite");
             let object = data.objectStore("visits");
-            let index = object.index("by_author");
-            var objectStoreRequest = index.openCursor(IDBKeyRange.only(author.toString()));
 
-            objectStoreRequest.onsuccess = function (e) {
-                console.log("Delete all Visit by Author");
-                let cursor = objectStoreRequest.result;
+            object.openCursor().onsuccess = function (e) {
+                var cursor = event.target.result;
                 if (cursor) {
-                    cursor.delete();
+                    if (cursor.value.author !== author.toString()) {
+                        var request = cursor.delete();
+                        request.onsuccess = function () {
+                            console.log('One Visit Founded and was deleted');
+                        };
+                    } 
                     cursor.continue();
                 }
+            }
+            data.oncomplete = function (e) {
+                console.log("The visits by author was deleted");
                 resolve();
             }
-            objectStoreRequest.onerror = function (e) {
-                reject(e.error.name);
-            }
+
+            data.onerror = function (e) {
+                console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
+                reject(data.error.name);
+            } 
+
+
         });
     },
     "addTemplate": function (templateId, name, project, taskType, icon, content) {
