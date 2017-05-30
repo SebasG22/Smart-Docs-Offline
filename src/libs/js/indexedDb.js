@@ -118,7 +118,7 @@ module.exports = {
                 resolve(elements);
             }
         });
-    },
+    }, 
     "addVisit": function (visitId, siteId, name, author, cloud, creationDate = "" + new Date()) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -255,6 +255,24 @@ module.exports = {
             objectStoreRequest.onsuccess = function (e) {
                 resolve();
                 console.log("Reports DB was cleared");
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+        });
+    },
+    "deleteAllVisitsByAuthor": function(author){
+         let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["visits"], "readwrite");
+            let object = data.objectStore("visits");
+            let index = object.index("by_author");
+            var objectStoreRequest = index.openCursor(IDBKeyRange.only(author.toString()));
+
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
+                console.log("Delete all Visit by Author");
             }
             objectStoreRequest.onerror = function (e) {
                 reject(e.error.name);
@@ -704,7 +722,7 @@ module.exports = {
             }
         });
     },
-    getReportsLog: function () {
+    "getReportsLog": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -726,6 +744,23 @@ module.exports = {
             data.oncomplete = function (e) {
                 console.log("elements", elements);
                 resolve(elements);
+            }
+        });
+    },
+    "deleteAllReportsLog": function(){
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsLog"], "readwrite");
+            let object = data.objectStore("reportsLog");
+            var objectStoreRequest = object.clear();
+
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
+                console.log("Reports Log was cleared");
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
             }
         });
     }

@@ -10521,7 +10521,7 @@ module.exports = {
                 resolve(elements);
             }
         });
-    },
+    }, 
     "addVisit": function (visitId, siteId, name, author, cloud, creationDate = "" + new Date()) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -10658,6 +10658,24 @@ module.exports = {
             objectStoreRequest.onsuccess = function (e) {
                 resolve();
                 console.log("Reports DB was cleared");
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
+            }
+        });
+    },
+    "deleteAllVisitsByAuthor": function(author){
+         let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["visits"], "readwrite");
+            let object = data.objectStore("visits");
+            let index = object.index("by_author");
+            var objectStoreRequest = index.openCursor(IDBKeyRange.only(author.toString()));
+
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
+                console.log("Delete all Visit by Author");
             }
             objectStoreRequest.onerror = function (e) {
                 reject(e.error.name);
@@ -11107,7 +11125,7 @@ module.exports = {
             }
         });
     },
-    getReportsLog: function () {
+    "getReportsLog": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -11129,6 +11147,23 @@ module.exports = {
             data.oncomplete = function (e) {
                 console.log("elements", elements);
                 resolve(elements);
+            }
+        });
+    },
+    "deleteAllReportsLog": function(){
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsLog"], "readwrite");
+            let object = data.objectStore("reportsLog");
+            var objectStoreRequest = object.clear();
+
+            objectStoreRequest.onsuccess = function (e) {
+                resolve();
+                console.log("Reports Log was cleared");
+            }
+            objectStoreRequest.onerror = function (e) {
+                reject(e.error.name);
             }
         });
     }
@@ -13307,7 +13342,7 @@ module.exports = {
                                             ctx.fillStyle = "white";
                                             ctx.shadowBlur = 7;
 
-                                            ctx.fillText('SDM Ticket : Offline Version ', 10, (myCanvas.height - 150));
+                                            //ctx.fillText('SDM Ticket : Offline Version ', 10, (myCanvas.height - 150));
                                             ctx.fillText('Sitio: Offline Version ', 10, (myCanvas.height - 130));
                                             ctx.fillText('Hora Actual: ' + new Date().toString().split("GMT")[0], 10, (myCanvas.height - 110));
                                             ctx.font = "bold 8pt sans-serif";
@@ -13320,7 +13355,7 @@ module.exports = {
                                                 ctx.fillText('Longitud : ' + position.coords.longitude, 10, (myCanvas.height - 70));
                                                 ctx.fillText('Precision : Aprox. ' + position.coords.accuracy + ' Metros', 10, (myCanvas.height - 50));
 
-                                                ctx.fillText('Direccion: ' + 'Offline Version', (myCanvas.width / 2) - 80, (myCanvas.height - 10));
+                                                //ctx.fillText('Direccion: ' + 'Offline Version', (myCanvas.width / 2) - 80, (myCanvas.height - 10));
                                                 ctx.font = "italic 8pt sans-serif";
                                                 ctx.shadowColor = 'black';
                                                 ctx.fillStyle = "white";
@@ -13417,7 +13452,7 @@ module.exports = {
                                             ctx.fillStyle = "white";
                                             ctx.shadowBlur = 7;
 
-                                            ctx.fillText('SDM Ticket : ' + 'Offline Version', 10, (myCanvas.height - 150));
+                                            //ctx.fillText('SDM Ticket : ' + 'Offline Version', 10, (myCanvas.height - 150));
                                             ctx.fillText('Sitio: ' + 'Offline Version', 10, (myCanvas.height - 130));
                                             ctx.fillText('Hora Actual: ' + new Date().toString().split("GMT")[0], 10, (myCanvas.height - 110));
                                             ctx.font = "bold 8pt sans-serif";
@@ -13429,7 +13464,7 @@ module.exports = {
                                                 ctx.fillText('Latitud : ' + position.coords.latitude, 10, (myCanvas.height - 90));
                                                 ctx.fillText('Longitud : ' + position.coords.longitude, 10, (myCanvas.height - 70));
                                                 ctx.fillText('Precision : Aprox. ' + position.coords.accuracy + ' Metros', 10, (myCanvas.height - 50));
-                                                ctx.fillText('Direccion: ' + 'Offline Version', (myCanvas.width / 2) - 80, (myCanvas.height - 10));
+                                                //ctx.fillText('Direccion: ' + 'Offline Version', (myCanvas.width / 2) - 80, (myCanvas.height - 10));
                                                 ctx.font = "italic 8pt sans-serif";
                                                 ctx.shadowColor = 'black';
                                                 ctx.fillStyle = "white";
@@ -16566,6 +16601,12 @@ let login = __webpack_require__(11);
             }
         },
         "userInformation": "",
+        "verifyUser": function () {
+            let reference;
+            indexDb.deleteAllVisitsByAuthor(reference.userInformation.userId).then(function () {
+                console.log("The visits remove process was finish");
+            });
+        },
         "loadIndex": function () {
             let reference = this;
             return new Promise(function (resolve, reject) {
@@ -16609,50 +16650,51 @@ let login = __webpack_require__(11);
             reference.promptRefreshMessage();
             message.addMessageLoder("loaderMessage", ".container");
             message.changeMessageLoader("loaderMessage", "Cargando Aplicacion");
-            reference.loadIndex().then(function () {
-                message.removeMessageLoader(".container");
-                $.get("/views/dashboard.html", function (page) {
-                    $("#mainContent2").html(page);
-                    //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-                    message.addMessageLoder("loaderMessage", "#mainContent2");
-                    message.changeMessageLoader("Solicitando Acceso a Red")
-                    reference.addEventsToMenu();
-                    reference.loadNavBar();
-                    reference.grantPermissionPosition();
+            reference.verifyUser().then(function () {
+                reference.loadIndex().then(function () {
+                    message.removeMessageLoader(".container");
+                    $.get("/views/dashboard.html", function (page) {
+                        $("#mainContent2").html(page);
+                        //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
+                        message.addMessageLoder("loaderMessage", "#mainContent2");
+                        message.changeMessageLoader("Solicitando Acceso a Red")
+                        reference.addEventsToMenu();
+                        reference.loadNavBar();
+                        reference.grantPermissionPosition();
 
-                    notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
+                        notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
 
-                    if (navigator.onLine == true) {
-                        message.launchChooseConnection().then(function (userChoiceConnection) {
-                            switch (userChoiceConnection) {
-                                case true:
-                                    let userLogged = localStorage.getItem("userLogged");
-                                    let diff = Math.abs(new Date(userLogged) - new Date()) / 3600000;
-                                    if (diff > 1) {
-                                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
-                                        localStorage.clear();
-                                    }
-                                    else {
-                                        $("#userStatus").html(" Estado: Online ");
-                                        $("#userStatus").css("color", "green");
-                                        reference.updateInformation();
-                                    }
-                                    break;
-                                case false:
-                                    $("#userStatus").html(" Estado: Offline ");
-                                    $("#userStatus").css("color", "red");
-                                    reference.noUpdateInformation();
-                                    break;
-                            }
+                        if (navigator.onLine == true) {
+                            message.launchChooseConnection().then(function (userChoiceConnection) {
+                                switch (userChoiceConnection) {
+                                    case true:
+                                        let userLogged = localStorage.getItem("userLogged");
+                                        let diff = Math.abs(new Date(userLogged) - new Date()) / 3600000;
+                                        if (diff > 1) {
+                                            message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                                            localStorage.clear();
+                                        }
+                                        else {
+                                            $("#userStatus").html(" Estado: Online ");
+                                            $("#userStatus").css("color", "green");
+                                            reference.updateInformation();
+                                        }
+                                        break;
+                                    case false:
+                                        $("#userStatus").html(" Estado: Offline ");
+                                        $("#userStatus").css("color", "red");
+                                        reference.noUpdateInformation();
+                                        break;
+                                }
 
-                        });
-                    }
-                    else {
-                        reference.noUpdateInformation();
-                    }
+                            });
+                        }
+                        else {
+                            reference.noUpdateInformation();
+                        }
+                    });
                 });
             });
-
         },
         "updateInformation": function () {
             let reference = this;

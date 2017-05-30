@@ -72,6 +72,12 @@ let login = require("./login");
             }
         },
         "userInformation": "",
+        "verifyUser": function () {
+            let reference;
+            indexDb.deleteAllVisitsByAuthor(reference.userInformation.userId).then(function () {
+                console.log("The visits remove process was finish");
+            });
+        },
         "loadIndex": function () {
             let reference = this;
             return new Promise(function (resolve, reject) {
@@ -115,50 +121,51 @@ let login = require("./login");
             reference.promptRefreshMessage();
             message.addMessageLoder("loaderMessage", ".container");
             message.changeMessageLoader("loaderMessage", "Cargando Aplicacion");
-            reference.loadIndex().then(function () {
-                message.removeMessageLoader(".container");
-                $.get("/views/dashboard.html", function (page) {
-                    $("#mainContent2").html(page);
-                    //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
-                    message.addMessageLoder("loaderMessage", "#mainContent2");
-                    message.changeMessageLoader("Solicitando Acceso a Red")
-                    reference.addEventsToMenu();
-                    reference.loadNavBar();
-                    reference.grantPermissionPosition();
+            reference.verifyUser().then(function () {
+                reference.loadIndex().then(function () {
+                    message.removeMessageLoader(".container");
+                    $.get("/views/dashboard.html", function (page) {
+                        $("#mainContent2").html(page);
+                        //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
+                        message.addMessageLoder("loaderMessage", "#mainContent2");
+                        message.changeMessageLoader("Solicitando Acceso a Red")
+                        reference.addEventsToMenu();
+                        reference.loadNavBar();
+                        reference.grantPermissionPosition();
 
-                    notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
+                        notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
 
-                    if (navigator.onLine == true) {
-                        message.launchChooseConnection().then(function (userChoiceConnection) {
-                            switch (userChoiceConnection) {
-                                case true:
-                                    let userLogged = localStorage.getItem("userLogged");
-                                    let diff = Math.abs(new Date(userLogged) - new Date()) / 3600000;
-                                    if (diff > 1) {
-                                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
-                                        localStorage.clear();
-                                    }
-                                    else {
-                                        $("#userStatus").html(" Estado: Online ");
-                                        $("#userStatus").css("color", "green");
-                                        reference.updateInformation();
-                                    }
-                                    break;
-                                case false:
-                                    $("#userStatus").html(" Estado: Offline ");
-                                    $("#userStatus").css("color", "red");
-                                    reference.noUpdateInformation();
-                                    break;
-                            }
+                        if (navigator.onLine == true) {
+                            message.launchChooseConnection().then(function (userChoiceConnection) {
+                                switch (userChoiceConnection) {
+                                    case true:
+                                        let userLogged = localStorage.getItem("userLogged");
+                                        let diff = Math.abs(new Date(userLogged) - new Date()) / 3600000;
+                                        if (diff > 1) {
+                                            message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                                            localStorage.clear();
+                                        }
+                                        else {
+                                            $("#userStatus").html(" Estado: Online ");
+                                            $("#userStatus").css("color", "green");
+                                            reference.updateInformation();
+                                        }
+                                        break;
+                                    case false:
+                                        $("#userStatus").html(" Estado: Offline ");
+                                        $("#userStatus").css("color", "red");
+                                        reference.noUpdateInformation();
+                                        break;
+                                }
 
-                        });
-                    }
-                    else {
-                        reference.noUpdateInformation();
-                    }
+                            });
+                        }
+                        else {
+                            reference.noUpdateInformation();
+                        }
+                    });
                 });
             });
-
         },
         "updateInformation": function () {
             let reference = this;
