@@ -16500,6 +16500,7 @@ let login = __webpack_require__(11);
                         $("#userRole").text(reference.userInformation.role);
                         $("#userCompany").text(reference.userInformation.company);
                         $("#userEmail").text(reference.userInformation.email);
+                        reference.loadEventButtonCloseApp();
                         resolve();
                     }
                 })
@@ -16507,6 +16508,7 @@ let login = __webpack_require__(11);
         },
         loadEventButtonCloseApp: function () {
             $("#btnLogout").click(function () {
+                console.log("Click Logout");
                 localStorage.clear();
                 window.location.replace("https://smart-docs.herokuapp.com/?#no-back-button");
             });
@@ -16519,7 +16521,6 @@ let login = __webpack_require__(11);
             message.changeMessageLoader("loaderMessage", "Cargando Aplicacion");
             reference.loadIndex().then(function () {
                 message.removeMessageLoader(".container");
-                reference.loadEventButtonCloseApp();
                 $.get("/views/dashboard.html", function (page) {
                     $("#mainContent2").html(page);
                     //notification.sendNotification("Bievenido a Smart Docs", "Registra visitas para poder agregar reportes");
