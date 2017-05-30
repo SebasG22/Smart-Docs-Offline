@@ -1001,13 +1001,13 @@ module.exports = {
 
                                 case "graphic":
 
-                                    $("#" + valueSubPanel.id + " > .panel-body >").append("<div  id='" + valueEle.idDiv + "' class='" + valueEle.divClass + "'><canvas id='" + valueEle.id + "' width='" + valueEle.width + "' height='" + valueEle.height + "'> </canvas></div>");
+                                    $("#" + valueSubPanel.id + " > .panel-body >").append("<div  id='" + valueSubPanelEle.idDiv + "' class='" + valueSubPanelEle.divClass + "'><canvas id='" + valueSubPanelEle.id + "' width='" + valueSubPanelEle.width + "' height='" + valueSubPanelEle.height + "'> </canvas></div>");
 
-                                    for (inputEle of valueEle.inputsData){
+                                    for (inputEle of valueSubPanelEle.inputsData){
                                         $("#"+inputsEle).on("input",function(){
-                                                reference.removeChart(valueSubPanel.id, valueEle.idDiv, valueEle.divClass, valueEle.id, valueEle.width , valueEle.height);
+                                                reference.removeChart(valueSubPanelEle.id, valueSubPanelEle.idDiv, valueSubPanelEle.divClass, valueSubPanelEle.id, valueSubPanelEle.width , valueSubPanelEle.height);
 
-                                                reference.generateChart(valueEle.id, valueEle.width, valueEle.height, valueEle.type, valueEle.labels, valueEle.labelDataSet, valueEle.inputsData, valueEle.backgroundColor, valueEle.borderColor, valueEle.xlabel, valueEle.ylabel );
+                                                reference.generateChart(valueSubPanelEle.id, valueSubPanelEle.width, valueSubPanelEle.height, valueSubPanelEle.type, valueSubPanelEle.labels, valueSubPanelEle.labelDataSet, valueSubPanelEle.inputsData, valueSubPanelEle.backgroundColor, valueSubPanelEle.borderColor, valueSubPanelEle.xlabel, valueSubPanelEle.ylabel );
                                         });
                                     } 
 
@@ -1122,8 +1122,10 @@ module.exports = {
         $("#" + subpanelId + " > .panel-body >").append("<div  id='" + elementIdDiv + "' class='" + elementDivClass + "'><canvas id='" + elementId + "' width='" + elementWidth + "' height='" + elementHeight + "'> </canvas></div>");  
     },
     generateChart: function (canvasId, chartWidth, chartHeight, chartType, chartLabels, chartslabelDataSet, inputsData, chartBackgroundColor, chartBorderColor, chartXlabel, chartYlabel ){
-        let chartData = [];
+        console.log("Generating Chart");
 
+        let chartData = [];
+        
         for (let inputData of inputsData){
             chartData.push($("#"+inputData));
         }
