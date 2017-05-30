@@ -21,6 +21,7 @@ module.exports = {
                 complete: function (msgRes) {
                     localStorage.setItem("user",JSON.stringify(msgRes.responseJSON.user));
                     localStorage.setItem("token",msgRes.responseJSON.token);
+                    localStorage.setItem("userLogged",new Date());
                     resolve(msgRes.responseJSON.user);
                 }
             })

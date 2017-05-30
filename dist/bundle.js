@@ -11741,6 +11741,7 @@ module.exports = {
                 complete: function (msgRes) {
                     localStorage.setItem("user",JSON.stringify(msgRes.responseJSON.user));
                     localStorage.setItem("token",msgRes.responseJSON.token);
+                    localStorage.setItem("userLogged",new Date());
                     resolve(msgRes.responseJSON.user);
                 }
             })
@@ -16528,9 +16529,17 @@ let login = __webpack_require__(11);
                         message.launchChooseConnection().then(function (userChoiceConnection) {
                             switch (userChoiceConnection) {
                                 case true:
-                                    $("#userStatus").html(" Estado: Online ");
-                                    $("#userStatus").css("color", "green");
-                                    reference.updateInformation();
+                                    let userLogged = localStorage.getItem("userLogged");
+                                    let diff = Math.abs(userLogged - new Date()) / 3600000;
+                                    if (diff > 1) {
+                                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                                        localStorage.clear();
+                                    }
+                                    else {
+                                        $("#userStatus").html(" Estado: Online ");
+                                        $("#userStatus").css("color", "green");
+                                        reference.updateInformation();
+                                    }
                                     break;
                                 case false:
                                     $("#userStatus").html(" Estado: Offline ");
@@ -17316,23 +17325,23 @@ let login = __webpack_require__(11);
         fillReportsLogPage: function (reportsLogResponse) {
             let reference = this;
             //let templatesResponse = templates.getTemplates();
-                let cont = 0;
-                for (let reportLog of reportsLogResponse) {
-                    let background_status;
-                    let status;
-                    switch (reportLog.status) {
-                        case "SM-Status001":
-                            background_status = "warning";
-                            status = "DRAFT";
+            let cont = 0;
+            for (let reportLog of reportsLogResponse) {
+                let background_status;
+                let status;
+                switch (reportLog.status) {
+                    case "SM-Status001":
+                        background_status = "warning";
+                        status = "DRAFT";
 
-                            break;
-                        case "SM-Status002":
-                            background_status = "info";
-                            status = "COMPLETED";
-                            break;
-                    }
-                    $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
+                        break;
+                    case "SM-Status002":
+                        background_status = "info";
+                        status = "COMPLETED";
+                        break;
                 }
+                $("#dataTableAllReportLog > tbody").append("<tr class= '" + background_status + "' ><td>" + reportLog.reportId + "</td><td> " + reportLog.operation + "</td><td>" + status + "</td><td>" + reportLog.operationDate.split("GMT")[0] + "</td></tr>");
+            }
         }
     }
 

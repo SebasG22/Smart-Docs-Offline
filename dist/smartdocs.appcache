@@ -32,6 +32,7 @@ manifest.json
 service-worker.js
 https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400
 https://fonts.googleapis.com/css?family=Lato:300,400,700,900
+https://fonts.gstatic.com/s/robotocondensed/v14/Zd2E9abXLFGSr9G3YK2MsE1G989qbVg6RT5ly5jB8V8.woff2
 
 
 NETWORK:
