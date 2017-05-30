@@ -151,7 +151,6 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
 
-
                                     switch (valueSubPanelEle.type) {
                                         case "date": typeInside = "date"; break;
                                         case "datetime": typeInside = "datetime-local"; break;
@@ -191,6 +190,10 @@ module.exports = {
                                         $("#" + valueSubPanelEle.idDiv + " > input[type='" + typeInside + "']").prop('autofocus', function () {
                                             return true;
                                         });
+                                    }
+
+                                     if (valueSubPanelEle.defaultValue) {
+                                        reference.allDefaultValueInputs.push({ sel: valueSubPanelEle.id, val: valueSubPanelEle.defaultValue });
                                     }
 
                                     switch (typeInside) {
