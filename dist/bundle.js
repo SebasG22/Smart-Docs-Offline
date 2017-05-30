@@ -13366,7 +13366,9 @@ module.exports = {
 
                                     for (inputEle of valueSubPanelEle.inputsData){
                                         $("#"+inputEle).on("input",function(){
-                                                reference.removeChart(valueSubPanelEle.id, valueSubPanelEle.idDiv, valueSubPanelEle.divClass, valueSubPanelEle.id, valueSubPanelEle.width , valueSubPanelEle.height);
+                                            
+                                                /*reference.removeChart(valueSubPanelEle.id, valueSubPanelEle.idDiv, valueSubPanelEle.divClass, valueSubPanelEle.id, valueSubPanelEle.width , valueSubPanelEle.height);
+                                                */
 
                                                 reference.generateChart(valueSubPanelEle.id, valueSubPanelEle.width, valueSubPanelEle.height, valueSubPanelEle.graphicType, valueSubPanelEle.labels, valueSubPanelEle.labelDataSet, valueSubPanelEle.inputsData, valueSubPanelEle.backgroundColor, valueSubPanelEle.borderColor, valueSubPanelEle.xlabel, valueSubPanelEle.ylabel );
                                         });
