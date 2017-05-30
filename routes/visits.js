@@ -19,7 +19,8 @@ router.use('/', function (req, res, next) {
 });
 
 router.get('/', function (req, res, next) {
-    Visit.find().then(function(visits){
+    var decoded = jwt.decode(req.query.token);
+    Visit.find({author: decoded.user._id}).then(function(visits){
         if(!visits) {
             res.send([]);
         }
@@ -90,7 +91,7 @@ router.post('/', function (req, res, next) {
 });
 
 router.delete('/:visitId', function (req, res, next) {
-
+    
     Visit.findOneAndRemove({ visitId: req.params.visitId }, function (err) {
         if (err) {
             res.status(500).json({
