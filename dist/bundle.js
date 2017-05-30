@@ -16530,7 +16530,7 @@ let login = __webpack_require__(11);
                             switch (userChoiceConnection) {
                                 case true:
                                     let userLogged = localStorage.getItem("userLogged");
-                                    let diff = Math.abs(userLogged - new Date()) / 3600000;
+                                    let diff = Math.abs(new Date(userLogged) - new Date()) / 3600000;
                                     if (diff > 1) {
                                         message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
                                         localStorage.clear();
