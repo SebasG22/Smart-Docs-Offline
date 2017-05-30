@@ -1004,7 +1004,7 @@ module.exports = {
                                     $("#" + valueSubPanel.id + " > .panel-body >").append("<div  id='" + valueSubPanelEle.idDiv + "' class='" + valueSubPanelEle.divClass + "'><canvas id='" + valueSubPanelEle.id + "' width='" + valueSubPanelEle.width + "' height='" + valueSubPanelEle.height + "'> </canvas></div>");
 
                                     for (inputEle of valueSubPanelEle.inputsData){
-                                        $("#"+inputsEle).on("input",function(){
+                                        $("#"+inputEle).on("input",function(){
                                                 reference.removeChart(valueSubPanelEle.id, valueSubPanelEle.idDiv, valueSubPanelEle.divClass, valueSubPanelEle.id, valueSubPanelEle.width , valueSubPanelEle.height);
 
                                                 reference.generateChart(valueSubPanelEle.id, valueSubPanelEle.width, valueSubPanelEle.height, valueSubPanelEle.type, valueSubPanelEle.labels, valueSubPanelEle.labelDataSet, valueSubPanelEle.inputsData, valueSubPanelEle.backgroundColor, valueSubPanelEle.borderColor, valueSubPanelEle.xlabel, valueSubPanelEle.ylabel );
@@ -1125,7 +1125,7 @@ module.exports = {
         console.log("Generating Chart");
 
         let chartData = [];
-        
+
         for (let inputData of inputsData){
             chartData.push($("#"+inputData));
         }
