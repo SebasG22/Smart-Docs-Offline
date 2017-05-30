@@ -17,7 +17,7 @@ module.exports = {
                     'css-loader'
                     ]
             },
-            /*
+            
             {
                 test: /\.js$/,
                 use: {
@@ -26,17 +26,17 @@ module.exports = {
                         presets: ['es2015']
                     }
                 }
-            }*/
+            }
         ]
     }
     ,
     plugins: [
-        /*
+        
         new webpack.optimize.UglifyJsPlugin({
             sourceMap: false
         })
         ,
-        */
+        
         new webpack.ProvidePlugin({
             $: 'jquery',
             jQuery: 'jquery'
