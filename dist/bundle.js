@@ -10684,7 +10684,7 @@ module.exports = {
                 }
             }
             data.oncomplete = function (e) {
-                console.log("The visits by author was deleted");
+                console.log("The visits by author was completed");
                 resolve();
             }
 
@@ -10960,6 +10960,38 @@ module.exports = {
             }
         });
     },
+    "deleteAllReportsByAuthor": function (author) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reports"], "readwrite");
+            let object = data.objectStore("reports");
+
+            object.openCursor().onsuccess = function (e) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    if (cursor.value.author !== author.toString()) {
+                        var request = cursor.delete();
+                        request.onsuccess = function () {
+                            console.log('One Report Founded and was deleted');
+                        };
+                    } 
+                    cursor.continue();
+                }
+            }
+            data.oncomplete = function (e) {
+                console.log("The reports by author was completed");
+                resolve();
+            }
+
+            data.onerror = function (e) {
+                console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
+                reject(data.error.name);
+            } 
+
+
+        });
+    },
     "addReportImages": function (reportImgId, reportId, images, author, image_1 = [], cloud = false) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -11113,6 +11145,38 @@ module.exports = {
             objectStoreRequest.onerror = function (e) {
                 reject(e.error.name);
             }
+        });
+    },
+    "deleteAllReportsImageByAuthor": function (author) {
+        let reference = this;
+        return new Promise(function (resolve, reject) {
+            let active = reference.dataBase.result;
+            let data = active.transaction(["reportsImage"], "readwrite");
+            let object = data.objectStore("reportsImage");
+
+            object.openCursor().onsuccess = function (e) {
+                var cursor = event.target.result;
+                if (cursor) {
+                    if (cursor.value.author !== author.toString()) {
+                        var request = cursor.delete();
+                        request.onsuccess = function () {
+                            console.log('One ReportImg Founded and was deleted');
+                        };
+                    } 
+                    cursor.continue();
+                }
+            }
+            data.oncomplete = function (e) {
+                console.log("The reportsImg by author was completed");
+                resolve();
+            }
+
+            data.onerror = function (e) {
+                console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
+                reject(data.error.name);
+            } 
+
+
         });
     },
     "addReportLog": function (reportId, operation, status) {
@@ -16620,8 +16684,14 @@ let login = __webpack_require__(11);
             return new Promise(function (resolve, reject) {
                 indexDb.deleteAllVisitsByAuthor(reference.userInformation.userId).then(function () {
                     console.log("The visits remove process was finish");
+                    return indexDb.deleteAllReportsByAuthor(reference.userInformation.userId);
+                }).then(function(){
+                    return indexDb.deleteAllReportsImageByAuthor();
+                })
+                .then(function(){
                     resolve();
-                }).catch(function(err){
+                })
+                .catch(function(err){
                     reject(err);
                 });
             });

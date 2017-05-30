@@ -77,8 +77,14 @@ let login = require("./login");
             return new Promise(function (resolve, reject) {
                 indexDb.deleteAllVisitsByAuthor(reference.userInformation.userId).then(function () {
                     console.log("The visits remove process was finish");
+                    return indexDb.deleteAllReportsByAuthor(reference.userInformation.userId);
+                }).then(function(){
+                    return indexDb.deleteAllReportsImageByAuthor();
+                })
+                .then(function(){
                     resolve();
-                }).catch(function(err){
+                })
+                .catch(function(err){
                     reject(err);
                 });
             });
