@@ -192,7 +192,7 @@ module.exports = {
                                         });
                                     }
 
-                                     if (valueSubPanelEle.defaultValue) {
+                                    if (valueSubPanelEle.defaultValue) {
                                         reference.allDefaultValueInputs.push({ sel: valueSubPanelEle.id, val: valueSubPanelEle.defaultValue });
                                     }
 
@@ -496,8 +496,23 @@ module.exports = {
                                         });
                                     }
 
+                                    if (valueSubPanel.validation) {
+                                        $("#" + valueSubPanel.id).on("input", function () {
+                                            console.log("On Input Element");
+                                            let value = $("#" + valueSubPanel.id).val();
+                                            if (value.length > 0) {
+
+
+                                            }
+                                        });
+                                    }
                                     break;
 
+                                case "hidden":
+
+                                    reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.name, "type": valueSubPanelEle.type });
+
+                                    break;
 
                                 case "radio": case "checkbox":
 
@@ -984,16 +999,32 @@ module.exports = {
 
                                     break;
 
+                                case "graphic":
+
+                                    $("#" + valueSubPanel.id + " > .panel-body >").append("<div  id='" + valueEle.idDiv + "' class='" + valueEle.divClass + "'><canvas id='" + valueEle.id + "' width='" + valueEle.width + "' height='" + valueEle.height + "'> </canvas></div>");
+
+                                    for (inputEle of valueEle.inputsData){
+                                        $("#"+inputsEle).on("input",function(){
+                                                reference.removeChart(valueSubPanel.id, valueEle.idDiv, valueEle.divClass, valueEle.id, valueEle.width , valueEle.height);
+
+                                                reference.generateChart(valueEle.id, valueEle.width, valueEle.height, valueEle.type, valueEle.labels, valueEle.labelDataSet, valueEle.inputsData, valueEle.backgroundColor, valueEle.borderColor, valueEle.xlabel, valueEle.ylabel );
+                                        });
+                                    } 
+
+                                    
+
+                                break;
+
                                 case "image1Label":
                                     let labelRequired;
-                                    switch(valueSubPanelEle.required){
+                                    switch (valueSubPanelEle.required) {
                                         case true:
-                                        labelRequired = "* ";
-                                        break;
+                                            labelRequired = "* ";
+                                            break;
 
                                         case false:
-                                        labelRequired = "";
-                                        break;
+                                            labelRequired = "";
+                                            break;
                                     }
 
                                     $("#" + valueSubPanel.id + "> .panel-body").append("<div id='" + valueSubPanelEle.idDiv + "' class='" + valueSubPanelEle.divClass + "'>" +
@@ -1086,6 +1117,55 @@ module.exports = {
             });
         });
     },
+    removeChart: function(subpanelId, elementIdDiv, elementDivClass, elementId, elementWidth , elementHeight){
+        $("#"+elementId).remove();
+        $("#" + subpanelId + " > .panel-body >").append("<div  id='" + elementIdDiv + "' class='" + elementDivClass + "'><canvas id='" + elementId + "' width='" + elementWidth + "' height='" + elementHeight + "'> </canvas></div>");  
+    },
+    generateChart: function (canvasId, chartWidth, chartHeight, chartType, chartLabels, chartslabelDataSet, inputsData, chartBackgroundColor, chartBorderColor, chartXlabel, chartYlabel ){
+        let chartData = [];
+
+        for (let inputData of inputsData){
+            chartData.push($("#"+inputData));
+        }
+
+        let ctx = document.getElementById(canvasId);
+                                    ctx.width = chartWidth;
+                                    ctx.height = chartHeight;
+                                    var myChart = new Chart(ctx, {
+                                        type: chartType,
+                                        data: {
+                                            labels: chartLabels,
+                                            datasets: [{
+                                                label: chartslabelDataSet,
+                                                data: chartData,
+                                                backgroundColor: [
+                                                    chartBackgroundColor
+                                                ],
+                                                borderColor: [
+                                                    chartBorderColor
+                                                ],
+                                                borderWidth: 1
+                                            }]
+                                        },
+                                        options: {
+                                            maintainAspectRatio: false,
+                                            scales: {
+                                                yAxes: [{
+                                                    scaleLabel: {
+                                                        display: true,
+                                                        labelString: chartYlabel
+                                                    }
+                                                }],
+                                                xAxes: [{
+                                                    scaleLabel: {
+                                                        display: true,
+                                                        labelString: chartXlabel
+                                                    }
+                                                }]
+                                            }
+                                        }
+                                    });
+    },
     allInputsFilled: [],
     allDefaultValueInputs: [],
     "validateField": function (name, type, selector) {
@@ -1102,7 +1182,7 @@ module.exports = {
                     reference.allInputsFilled.push({ 'name': name, 'sel': selector, 'type': type, 'val': $("#" + selector).attr('src') });
                     return true;
                 }
-                
+
                 break;
 
 
@@ -1182,7 +1262,7 @@ module.exports = {
                     break;
                 case "siteName":
                     $("#" + input.sel).val(siteInformation.name);
-                    break;    
+                    break;
                 case "sitePortafolio":
                     $("#" + input.sel).val(siteInformation.portafolio);
                     break;

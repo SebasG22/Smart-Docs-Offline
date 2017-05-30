@@ -28,6 +28,7 @@ views/myReportsLog.html
 views/newReport.html
 views/newTemplate.html
 bundle.js
+js/Chart.min.js
 manifest.json
 service-worker.js
 https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400
