@@ -1133,7 +1133,7 @@ module.exports = {
         }
 
         let ctx = document.getElementById(canvasId);
-        ctx.destroy();
+        //ctx.destroy();
                                     ctx.width = chartWidth;
                                     ctx.height = chartHeight;
                                     var myChart = new Chart(ctx, {
