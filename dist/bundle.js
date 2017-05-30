@@ -16542,9 +16542,10 @@ let login = __webpack_require__(11);
             let reference = this;
             jQuery.migrateMute = true;
             console.log("Start Login Page");
-            if (navigator.onLine) {
+            /*if (navigator.onLine) {
                 reference.registerSW();
             }
+            */
 
             if (!localStorage.getItem("user")) {
                 console.log("User not found in Cache");
@@ -17441,23 +17442,25 @@ let login = __webpack_require__(11);
         }
     }
 
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-        for (let registration of registrations) {
-            registration.unregister()
+    /*navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    for (let registration of registrations) {
+                        registration.unregister()
+                    }
+                })
+                */
+
+    indexDb.startIndexedDB().then(function () {
+        message.removeMessageLoader("#mainContent2");
+        //smartDocsOffline.registerSW();
+        smartDocsOffline.startEventsLoginPage();
+        /*
+        if (JSON.parse(localStorage.getItem("user")).userId == null) {
+            smartDocsOffline.launchUserModal();
+        } else {
+            smartDocsOffline.initApplication();
         }
-        indexDb.startIndexedDB().then(function () {
-            message.removeMessageLoader("#mainContent2");
-            //smartDocsOffline.registerSW();
-            smartDocsOffline.startEventsLoginPage();
-            /*
-            if (JSON.parse(localStorage.getItem("user")).userId == null) {
-                smartDocsOffline.launchUserModal();
-            } else {
-                smartDocsOffline.initApplication();
-            }
-            */
-        });
-    })
+        */
+    });
 })();
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(0), __webpack_require__(0)))
 

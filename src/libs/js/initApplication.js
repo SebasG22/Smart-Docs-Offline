@@ -48,9 +48,10 @@ let login = require("./login");
             let reference = this;
             jQuery.migrateMute = true;
             console.log("Start Login Page");
-            if (navigator.onLine) {
+            /*if (navigator.onLine) {
                 reference.registerSW();
             }
+            */
 
             if (!localStorage.getItem("user")) {
                 console.log("User not found in Cache");
@@ -947,21 +948,23 @@ let login = require("./login");
         }
     }
 
-    navigator.serviceWorker.getRegistrations().then(function (registrations) {
-        for (let registration of registrations) {
-            registration.unregister()
+    /*navigator.serviceWorker.getRegistrations().then(function (registrations) {
+                    for (let registration of registrations) {
+                        registration.unregister()
+                    }
+                })
+                */
+
+    indexDb.startIndexedDB().then(function () {
+        message.removeMessageLoader("#mainContent2");
+        //smartDocsOffline.registerSW();
+        smartDocsOffline.startEventsLoginPage();
+        /*
+        if (JSON.parse(localStorage.getItem("user")).userId == null) {
+            smartDocsOffline.launchUserModal();
+        } else {
+            smartDocsOffline.initApplication();
         }
-        indexDb.startIndexedDB().then(function () {
-            message.removeMessageLoader("#mainContent2");
-            //smartDocsOffline.registerSW();
-            smartDocsOffline.startEventsLoginPage();
-            /*
-            if (JSON.parse(localStorage.getItem("user")).userId == null) {
-                smartDocsOffline.launchUserModal();
-            } else {
-                smartDocsOffline.initApplication();
-            }
-            */
-        });
-    })
+        */
+    });
 })();
