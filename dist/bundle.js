@@ -16437,7 +16437,7 @@ let login = __webpack_require__(11);
                 });
         },
         "showInstallationBanner": function () {
-            window.addEventListener('beforeinstallprompt', function (e) {
+            /*window.addEventListener('beforeinstallprompt', function (e) {
                 // beforeinstallprompt Event fired
                 e.userChoice.then(function (choiceResult) {
                     console.log(choiceResult.outcome);
@@ -16451,6 +16451,7 @@ let login = __webpack_require__(11);
                 e.preventDefault();
                 return false;
             });
+            */
         },
         "startEventsLoginPage": function () {
             let reference = this;

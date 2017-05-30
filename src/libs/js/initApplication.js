@@ -28,7 +28,7 @@ let login = require("./login");
                 });
         },
         "showInstallationBanner": function () {
-            window.addEventListener('beforeinstallprompt', function (e) {
+            /*window.addEventListener('beforeinstallprompt', function (e) {
                 // beforeinstallprompt Event fired
                 e.userChoice.then(function (choiceResult) {
                     console.log(choiceResult.outcome);
@@ -42,6 +42,7 @@ let login = require("./login");
                 e.preventDefault();
                 return false;
             });
+            */
         },
         "startEventsLoginPage": function () {
             let reference = this;
