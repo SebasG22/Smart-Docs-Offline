@@ -10465,7 +10465,7 @@ module.exports = {
             }
         });
     },
-    "addSite": function (siteId, name, fmOffice, project, portafolio, anchorTenant, region,city) {
+    "addSite": function (siteId, name, fmOffice, project, portafolio, anchorTenant, region, city) {
         let reference = this;
         return new Promise(function (resolve, reject) {
             var active = reference.dataBase.result;
@@ -10521,7 +10521,7 @@ module.exports = {
                 resolve(elements);
             }
         });
-    }, 
+    },
     "addVisit": function (visitId, siteId, name, author, cloud, creationDate = "" + new Date()) {
         let reference = this;
         return new Promise(function (resolve, reject) {
@@ -10664,8 +10664,8 @@ module.exports = {
             }
         });
     },
-    "deleteAllVisitsByAuthor": function(author){
-         let reference = this;
+    "deleteAllVisitsByAuthor": function (author) {
+        let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
             let data = active.transaction(["visits"], "readwrite");
@@ -10674,8 +10674,13 @@ module.exports = {
             var objectStoreRequest = index.openCursor(IDBKeyRange.only(author.toString()));
 
             objectStoreRequest.onsuccess = function (e) {
-                resolve();
                 console.log("Delete all Visit by Author");
+                let cursor = objectStoreRequest.result;
+                if (cursor) {
+                    cursor.delete();
+                    cursor.continue();
+                }
+                resolve();
             }
             objectStoreRequest.onerror = function (e) {
                 reject(e.error.name);
@@ -11150,7 +11155,7 @@ module.exports = {
             }
         });
     },
-    "deleteAllReportsLog": function(){
+    "deleteAllReportsLog": function () {
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
