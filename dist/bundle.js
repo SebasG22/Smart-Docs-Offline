@@ -16431,7 +16431,6 @@ let login = __webpack_require__(11);
             navigator.serviceWorker.register('/service-worker.js', { scope: '/' })
                 .then(function (reg) {
                     console.log("Yes, it did.", reg.scope);
-                    notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
                     reference.showInstallationBanner();
                 }).catch(function (err) {
                     console.log("No it didn't. This happened: ", err)
@@ -16457,6 +16456,9 @@ let login = __webpack_require__(11);
             let reference = this;
             jQuery.migrateMute = true;
             console.log("Start Login Page");
+            if(navigator.onLine){
+                reference.registerSW();
+            }
             if (!localStorage.getItem("user")) {
                 console.log("User not found in Cache");
                 $("#loginButton").click(function () {
@@ -16510,7 +16512,7 @@ let login = __webpack_require__(11);
             $("#btnLogout").click(function () {
                 console.log("Click Logout");
                 localStorage.clear();
-                window.location.replace("https://smart-docs.herokuapp.com/?#no-back-button");
+                window.location.replace("https://smart-docs.herokuapp.com");
             });
         },
         initApplication: function () {
@@ -16529,6 +16531,9 @@ let login = __webpack_require__(11);
                     reference.addEventsToMenu();
                     reference.loadNavBar();
                     reference.grantPermissionPosition();
+
+                    notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
+                    
                     if (navigator.onLine == true) {
                         message.launchChooseConnection().then(function (userChoiceConnection) {
                             switch (userChoiceConnection) {
