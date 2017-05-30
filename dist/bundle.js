@@ -13488,7 +13488,7 @@ module.exports = {
         let chartData = [];
 
         for (let inputData of inputsData){
-            chartData.push($("#"+inputData));
+            chartData.push($("#"+inputData).val());
         }
 
         let ctx = document.getElementById(canvasId);
