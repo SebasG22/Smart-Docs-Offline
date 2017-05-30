@@ -48,9 +48,10 @@ let login = require("./login");
             let reference = this;
             jQuery.migrateMute = true;
             console.log("Start Login Page");
-            if(navigator.onLine){
+            if (navigator.onLine) {
                 reference.registerSW();
             }
+
             if (!localStorage.getItem("user")) {
                 console.log("User not found in Cache");
                 $("#loginButton").click(function () {
@@ -125,7 +126,7 @@ let login = require("./login");
                     reference.grantPermissionPosition();
 
                     notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
-                    
+
                     if (navigator.onLine == true) {
                         message.launchChooseConnection().then(function (userChoiceConnection) {
                             switch (userChoiceConnection) {
@@ -946,18 +947,21 @@ let login = require("./login");
         }
     }
 
-
-
-    indexDb.startIndexedDB().then(function () {
-        message.removeMessageLoader("#mainContent2");
-        //smartDocsOffline.registerSW();
-        smartDocsOffline.startEventsLoginPage();
-        /*
-        if (JSON.parse(localStorage.getItem("user")).userId == null) {
-            smartDocsOffline.launchUserModal();
-        } else {
-            smartDocsOffline.initApplication();
+    navigator.serviceWorker.getRegistrations().then(function (registrations) {
+        for (let registration of registrations) {
+            registration.unregister()
         }
-        */
-    });
+        indexDb.startIndexedDB().then(function () {
+            message.removeMessageLoader("#mainContent2");
+            //smartDocsOffline.registerSW();
+            smartDocsOffline.startEventsLoginPage();
+            /*
+            if (JSON.parse(localStorage.getItem("user")).userId == null) {
+                smartDocsOffline.launchUserModal();
+            } else {
+                smartDocsOffline.initApplication();
+            }
+            */
+        });
+    })
 })();
