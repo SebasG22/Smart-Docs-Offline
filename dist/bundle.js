@@ -13403,7 +13403,7 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     $("#" + valueSubPanelEle.id + "Event").on('change', function (event) {
-
+                                        /*
                                         message.launchProcessImageModal();
                                         var myCanvas = $('#canvasRezise')[0];
                                         var ctx = myCanvas.getContext('2d');
@@ -13469,8 +13469,9 @@ module.exports = {
                                         };
 
                                         img.src = URL.createObjectURL(event.target.files[0]);
+                                        */
                                     });
-
+                                
                                     break;
 
                                 case "graphic":
@@ -13513,7 +13514,7 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     $("#" + valueSubPanelEle.id + "Event").on('change', function (event) {
-
+                                        /*
                                         message.launchProcessImageModal();
                                         var myCanvas = $('#canvasRezise')[0];
                                         var ctx = myCanvas.getContext('2d');
@@ -13578,6 +13579,7 @@ module.exports = {
                                         };
 
                                         img.src = URL.createObjectURL(event.target.files[0]);
+                                        */
                                     });
                                     //reference.imgTo64(this, '' + valueSubPanelEle.id)
                                     //reference.imgTo64(this);
@@ -13784,6 +13786,7 @@ module.exports = {
                 if (validate == false) {
                     allReqComplete = false;
                     arrayAllReqComplete.push({ "name": value.name, "sel": value.selector, "fill": false });
+                    
                 }
                 //If it's not empty
                 else {
@@ -13821,6 +13824,9 @@ module.exports = {
         }
 
         return response;
+    },
+    "changeInputColor": function(selector){
+        $("#")
     },
     "matchAnswers": function (allInputsAnswer) {
         let reference = this;
