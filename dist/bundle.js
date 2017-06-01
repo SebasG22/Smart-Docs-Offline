@@ -13523,9 +13523,9 @@ module.exports = {
                                         img.onload = function () {
 
                                             
-                                            myCanvas.width = 500;
-                                            myCanvas.height = 500;
-                                            ctx.drawImage(img, 0, 0, 800, 800);
+                                            //myCanvas.width = 500;
+                                            //myCanvas.height = 500;
+                                            ctx.drawImage(img, 0, 0);
                                             /*
                                             ctx.font = "bold 8pt sans-serif";
                                             ctx.shadowColor = 'black';
