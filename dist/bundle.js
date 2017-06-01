@@ -13514,7 +13514,7 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     $("#" + valueSubPanelEle.id + "Event").on('change', function (event) {
-                                        /*
+                                        
                                         message.launchProcessImageModal();
                                         
                                         var myCanvas = $('#canvasRezise')[0];
@@ -13555,8 +13555,8 @@ module.exports = {
                                                 ctx.fillText('Este Imagen fue cargada en Smart Docs', 10, (myCanvas.height - 30));
                                                 ctx.fillText('Huawei @OWS', 80, (myCanvas.height - 10));
                                                 
-                                                //$("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
-                                                $("#" + valueSubPanelEle.id).attr("src", img.src);
+                                                $("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
+                                                //$("#" + valueSubPanelEle.id).attr("src", img.src);
                                                 message.removeProcessImageModal();
                                             });
 
@@ -13583,9 +13583,9 @@ module.exports = {
                                         };
 
                                         img.src = URL.createObjectURL(event.target.files[0]);
-                                        */
+                                        
                                     });
-                                    reference.imgTo64(this, '' + valueSubPanelEle.id)
+                                    //reference.imgTo64(this, '' + valueSubPanelEle.id)
                                     //reference.imgTo64(this);
 
 
