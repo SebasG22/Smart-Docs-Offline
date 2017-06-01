@@ -13514,7 +13514,7 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     $("#" + valueSubPanelEle.id + "Event").on('change', function (event) {
-                                        /*
+                                        
                                         message.launchProcessImageModal();
                                         var myCanvas = $('#canvasRezise')[0];
                                         var ctx = myCanvas.getContext('2d');
@@ -13522,6 +13522,7 @@ module.exports = {
 
                                         img.onload = function () {
 
+                                            /*
                                             myCanvas.width = 500;
                                             myCanvas.height = 500;
                                             ctx.drawImage(img, 0, 0, 500, 600);
@@ -13574,12 +13575,12 @@ module.exports = {
                                             }
 
                                             console.log("The Image changes");
-
+                                            */
 
                                         };
 
                                         img.src = URL.createObjectURL(event.target.files[0]);
-                                        */
+                                        
                                     });
                                     //reference.imgTo64(this, '' + valueSubPanelEle.id)
                                     //reference.imgTo64(this);
