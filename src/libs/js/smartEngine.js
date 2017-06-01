@@ -1040,16 +1040,16 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     $("#" + valueSubPanelEle.id + "Event").on('change', function (event) {
-                                        
+                                        /*
                                         message.launchProcessImageModal();
+                                        
                                         var myCanvas = $('#canvasRezise')[0];
                                         var ctx = myCanvas.getContext('2d');
                                         var img = new Image();
 
-                                        
                                         img.onload = function () {
-
-                                            /*
+                                            
+                                            
                                             myCanvas.width = 500;
                                             myCanvas.height = 500;
                                             ctx.drawImage(img, 0, 0, 500, 600);
@@ -1066,10 +1066,10 @@ module.exports = {
                                             ctx.shadowColor = 'black';
                                             ctx.fillStyle = "white";
                                             ctx.shadowBlur = 7;
-                                            */
+                                            
 
                                             navigator.geolocation.getCurrentPosition(function (position) {
-                                                /*
+                                                
                                                 ctx.fillText('Latitud : ' + position.coords.latitude, 10, (myCanvas.height - 90));
                                                 ctx.fillText('Longitud : ' + position.coords.longitude, 10, (myCanvas.height - 70));
                                                 ctx.fillText('Precision : Aprox. ' + position.coords.accuracy + ' Metros', 10, (myCanvas.height - 50));
@@ -1080,7 +1080,7 @@ module.exports = {
                                                 ctx.shadowBlur = 7;
                                                 ctx.fillText('Este Imagen fue cargada en Smart Docs', 10, (myCanvas.height - 30));
                                                 ctx.fillText('Huawei @OWS', 80, (myCanvas.height - 10));
-                                                */
+                                                
                                                 //$("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
                                                 $("#" + valueSubPanelEle.id).attr("src", img.src);
                                                 message.removeProcessImageModal();
@@ -1104,16 +1104,14 @@ module.exports = {
                                                     xhttp.send();
                                                 })
                                             }
-
-                                            console.log("The Image changes");
                                             
-
+                                            console.log("The Image changes");
                                         };
 
                                         img.src = URL.createObjectURL(event.target.files[0]);
-                                        
+                                        */
                                     });
-                                    //reference.imgTo64(this, '' + valueSubPanelEle.id)
+                                    reference.imgTo64(this, '' + valueSubPanelEle.id)
                                     //reference.imgTo64(this);
 
 
