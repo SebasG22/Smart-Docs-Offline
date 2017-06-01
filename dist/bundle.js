@@ -13523,11 +13523,11 @@ module.exports = {
                                         
                                         img.onload = function () {
 
-                                            
+                                            /*
                                             myCanvas.width = 500;
                                             myCanvas.height = 500;
                                             ctx.drawImage(img, 0, 0, 500, 600);
-                                            /*
+                                            
                                             ctx.font = "bold 8pt sans-serif";
                                             ctx.shadowColor = 'black';
                                             ctx.fillStyle = "white";
@@ -13556,7 +13556,7 @@ module.exports = {
                                                 ctx.fillText('Huawei @OWS', 80, (myCanvas.height - 10));
                                                 */
                                                 //$("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
-                                                $("#" + valueSubPanelEle.id).attr("src", img);
+                                                $("#" + valueSubPanelEle.id).attr("src", img.src);
                                                 message.removeProcessImageModal();
                                             });
 
