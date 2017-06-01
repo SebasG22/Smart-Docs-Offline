@@ -13522,8 +13522,8 @@ module.exports = {
 
                                         img.onload = function () {
 
-                                            /*
-                                            myCanvas.width = 500;
+                                            
+                                            /*myCanvas.width = 500;
                                             myCanvas.height = 500;
                                             ctx.drawImage(img, 0, 0, 500, 600);
 
@@ -13539,8 +13539,10 @@ module.exports = {
                                             ctx.shadowColor = 'black';
                                             ctx.fillStyle = "white";
                                             ctx.shadowBlur = 7;
+                                            */
 
                                             navigator.geolocation.getCurrentPosition(function (position) {
+                                                /*
                                                 ctx.fillText('Latitud : ' + position.coords.latitude, 10, (myCanvas.height - 90));
                                                 ctx.fillText('Longitud : ' + position.coords.longitude, 10, (myCanvas.height - 70));
                                                 ctx.fillText('Precision : Aprox. ' + position.coords.accuracy + ' Metros', 10, (myCanvas.height - 50));
@@ -13551,6 +13553,7 @@ module.exports = {
                                                 ctx.shadowBlur = 7;
                                                 ctx.fillText('Este Imagen fue cargada en Smart Docs', 10, (myCanvas.height - 30));
                                                 ctx.fillText('Huawei @OWS', 80, (myCanvas.height - 10));
+                                                */
                                                 $("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
                                                 message.removeProcessImageModal();
                                             });
@@ -13575,7 +13578,7 @@ module.exports = {
                                             }
 
                                             console.log("The Image changes");
-                                            */
+                                            
 
                                         };
 
