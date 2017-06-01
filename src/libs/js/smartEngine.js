@@ -1060,8 +1060,8 @@ module.exports = {
                                             ctx.shadowBlur = 7;
 
                                             //ctx.fillText('SDM Ticket : ' + 'Offline Version', 10, (myCanvas.height - 150));
-                                            ctx.fillText('Sitio: ' + 'Offline Version', 10, (myCanvas.height - 130));
-                                            ctx.fillText('Hora Actual: ' + new Date().toString().split("GMT")[0], 10, (myCanvas.height - 110));
+                                            //ctx.fillText('Sitio: ' + 'Offline Version', 10, (myCanvas.height - 130));
+                                            //ctx.fillText('Hora Actual: ' + new Date().toString().split("GMT")[0], 10, (myCanvas.height - 110));
                                             ctx.font = "bold 8pt sans-serif";
                                             ctx.shadowColor = 'black';
                                             ctx.fillStyle = "white";
@@ -1070,16 +1070,16 @@ module.exports = {
 
                                             navigator.geolocation.getCurrentPosition(function (position) {
                                                 
-                                                ctx.fillText('Latitud : ' + position.coords.latitude, 10, (myCanvas.height - 90));
-                                                ctx.fillText('Longitud : ' + position.coords.longitude, 10, (myCanvas.height - 70));
-                                                ctx.fillText('Precision : Aprox. ' + position.coords.accuracy + ' Metros', 10, (myCanvas.height - 50));
+                                                //ctx.fillText('Latitud : ' + position.coords.latitude, 10, (myCanvas.height - 90));
+                                                //ctx.fillText('Longitud : ' + position.coords.longitude, 10, (myCanvas.height - 70));
+                                                //ctx.fillText('Precision : Aprox. ' + position.coords.accuracy + ' Metros', 10, (myCanvas.height - 50));
                                                 //ctx.fillText('Direccion: ' + 'Offline Version', (myCanvas.width / 2) - 80, (myCanvas.height - 10));
                                                 ctx.font = "italic 8pt sans-serif";
                                                 ctx.shadowColor = 'black';
                                                 ctx.fillStyle = "white";
                                                 ctx.shadowBlur = 7;
-                                                ctx.fillText('Este Imagen fue cargada en Smart Docs', 10, (myCanvas.height - 30));
-                                                ctx.fillText('Huawei @OWS', 80, (myCanvas.height - 10));
+                                                //ctx.fillText('Este Imagen fue cargada en Smart Docs', 10, (myCanvas.height - 30));
+                                                //ctx.fillText('Huawei @OWS', 80, (myCanvas.height - 10));
                                                 
                                                 $("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
                                                 //$("#" + valueSubPanelEle.id).attr("src", img.src);
