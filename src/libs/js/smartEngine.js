@@ -1046,12 +1046,13 @@ module.exports = {
                                         var ctx = myCanvas.getContext('2d');
                                         var img = new Image();
 
+                                        
                                         img.onload = function () {
 
                                             
-                                            //myCanvas.width = 500;
-                                            //myCanvas.height = 500;
-                                            ctx.drawImage(img, 0, 0);
+                                            myCanvas.width = 500;
+                                            myCanvas.height = 500;
+                                            ctx.drawImage(img, 0, 0, 500, 600);
                                             /*
                                             ctx.font = "bold 8pt sans-serif";
                                             ctx.shadowColor = 'black';
@@ -1080,7 +1081,8 @@ module.exports = {
                                                 ctx.fillText('Este Imagen fue cargada en Smart Docs', 10, (myCanvas.height - 30));
                                                 ctx.fillText('Huawei @OWS', 80, (myCanvas.height - 10));
                                                 */
-                                                $("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
+                                                //$("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
+                                                $("#" + valueSubPanelEle.id).attr("src", img);
                                                 message.removeProcessImageModal();
                                             });
 
