@@ -13556,7 +13556,7 @@ module.exports = {
                                                 ctx.fillText('Huawei @OWS', 80, (myCanvas.height - 10));
                                                 
                                                 $("#" + valueSubPanelEle.id).attr("src", myCanvas.toDataURL());
-                                                $("#" + valueSubPanelEle.id).attr("src", img.src);
+                                                //$("#" + valueSubPanelEle.id).attr("src", img.src);
                                                 message.removeProcessImageModal();
                                             });
 
