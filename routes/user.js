@@ -51,13 +51,13 @@ router.post('/signin', function (req, res, next) {
         if (!user) {
             return res.status(500).json({
                 title: 'Loging Failed',
-                error: { message: 'Invalid login credentials' }
+                error: { message: 'Invalid login credentials - U' }
             });
         }
         if (!bcrypt.compareSync(req.body.password, user.password)) {
             return res.status(500).json({
                 title: 'Loging Failed',
-                error: { message: 'Invalid login credentials' }
+                error: { message: 'Invalid login credentials - P' }
             });
         }
         var token = jwt.sign({ user: user._id }, 'SDLHW', { expiresIn: 7200 });
