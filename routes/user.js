@@ -38,6 +38,8 @@ router.post('/registerUser', function (req, res, next) {
 });
 
 router.post('/signin', function (req, res, next) {
+    console.log("Request",req);
+    console.log("username: " + req.body.username);
     User.findOne({ username: req.body.username }, function (err, user) {
         //res.setHeader('Content-Type', 'application/json');
 
