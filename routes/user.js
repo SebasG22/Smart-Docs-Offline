@@ -39,7 +39,7 @@ router.post('/registerUser', function (req, res, next) {
 
 router.post('/signin', function (req, res, next) {
     User.findOne({ username: req.body.username }, function (err, user) {
-        res.setHeader('Content-Type', 'application/json');
+        //res.setHeader('Content-Type', 'application/json');
 
         if (err) {
             return res.status(500).json({
