@@ -210,7 +210,7 @@ module.exports = {
             let active = reference.dataBase.result;
             let data = active.transaction(["visits"], "readonly");
             let object = data.objectStore("visits");
-            let request = object.get(visitId);
+            let request = object.get("Fri Jun 02 2017 22:14:53 GMT-0500 (SA Pacific Standard Time)");
             request.onsuccess = function () {
                 if (request.result !== undefined) {
                     resolve(request.result);
