@@ -1050,8 +1050,8 @@ module.exports = {
                                         img.onload = function () {
                                             
                                             
-                                            myCanvas.width = 500;
-                                            myCanvas.height = 500;
+                                            myCanvas.width = 600;
+                                            myCanvas.height = 600;
                                             ctx.drawImage(img, 0, 0, 500, 600);
                                             
                                             //ctx.font = "bold 8pt sans-serif";
