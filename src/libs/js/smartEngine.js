@@ -1050,7 +1050,7 @@ module.exports = {
                                         img.onload = function () {
                                             
                                             
-                                            myCanvas.width = 600;
+                                            myCanvas.width = 500;
                                             myCanvas.height = 600;
                                             ctx.drawImage(img, 0, 0, 500, 600);
                                             
