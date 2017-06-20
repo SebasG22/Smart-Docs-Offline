@@ -3,8 +3,9 @@ var router = express.Router();
 const Site = require("./../models/Sites");
 const jwt = require("jsonwebtoken");
 
-
+/*
 router.use('/', function (req, res, next) {
+    
     jwt.verify(req.query.token, 'SDLHW', function (err, decoded) {
         if (err) {
             return res.status('401').json({
@@ -14,7 +15,9 @@ router.use('/', function (req, res, next) {
         }
         next();
     })
+
 });
+*/
 
 router.get('/', function (req, res, next) {
     Site.find().then(function (sites) {
