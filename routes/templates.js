@@ -3,7 +3,7 @@ var router = express.Router();
 const Template = require("./../models/Template");
 var jwt = require("jsonwebtoken");
 
-
+/*
 router.use('/', function(req, res, next) {
     jwt.verify(req.query.token, 'SDLHW', function(err, decoded) {
         if (err) {
@@ -15,6 +15,7 @@ router.use('/', function(req, res, next) {
         next();
     })
 });
+*/
 
 router.get('/', function (req, res, next) {
     Template.find().then(function (templates) {
