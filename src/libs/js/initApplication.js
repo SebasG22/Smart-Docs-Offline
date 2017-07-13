@@ -346,7 +346,7 @@ let login = require("./login");
                 timeout: 50000,
                 maximumAge: 50000
             };
-            return new promise(function (resolve, reject) {
+            return new Promise(function (resolve, reject) {
                 navigator.geolocation.getCurrentPosition(function success(pos) {
                     let crd = pos.coords;
                     console.log('Your current position is:');
