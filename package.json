@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "NODE_ENV=production node ./bin/cluster",
+    "start": "NODE_ENV=production | node ./bin/cluster",
     "build": "webpack",
     "build:prod": "webpack -p"
   },

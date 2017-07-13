@@ -78,15 +78,15 @@ let login = require("./login");
                 indexDb.deleteAllVisitsByAuthor(reference.userInformation.userId).then(function () {
                     console.log("The visits remove process was finish");
                     return indexDb.deleteAllReportsByAuthor(reference.userInformation.userId);
-                }).then(function(){
+                }).then(function () {
                     return indexDb.deleteAllReportsImageByAuthor(reference.userInformation.userId);
                 })
-                .then(function(){
-                    resolve();
-                })
-                .catch(function(err){
-                    reject(err);
-                });
+                    .then(function () {
+                        resolve();
+                    })
+                    .catch(function (err) {
+                        reject(err);
+                    });
             });
 
         },
@@ -287,9 +287,14 @@ let login = require("./login");
             window.onhashchange = function () { window.location.hash = "no-back-button"; }
         },
         promptRefreshMessage: function () {
-            window.onbeforeunload = function () {
+            if (location.protocol != 'https:') {
+                location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+            }
+            else{
+                window.onbeforeunload = function () {
                 return "";
             };
+            }
         },
         loadNavBar: function () {
             $(function () {
@@ -336,32 +341,52 @@ let login = require("./login");
         },
         grantPermissionPosition: function () {
             let reference = this;
-            var options = {
-                enableHighAccuracy: true,
-                timeout: 5000,
-                maximumAge: 0
+            let options = {
+                enableHighAccuracy: false,
+                timeout: 50000,
+                maximumAge: 50000
             };
+            return new promise(function (resolve, reject) {
+                navigator.geolocation.getCurrentPosition(function success(pos) {
+                    let crd = pos.coords;
+                    console.log('Your current position is:');
+                    console.log('Latitude : ' + crd.latitude);
+                    console.log('Longitude: ' + crd.longitude);
+                    console.log('More or less ' + crd.accuracy + ' meters.');
+                    resolve();
+                },
+                    function error(err) {
 
-            function success(pos) {
-                var crd = pos.coords;
-                console.log('Your current position is:');
-                console.log('Latitude : ' + crd.latitude);
-                console.log('Longitude: ' + crd.longitude);
-                console.log('More or less ' + crd.accuracy + ' meters.');
-
-            };
-
-            function error(err) {
-                reference.launchErrorPosition();
-                console.warn('ERROR(' + err.code + '): ' + err.message);
-            };
-
-            navigator.geolocation.getCurrentPosition(success, error, options);
+                        switch (err.code) {
+                            case 0:
+                                reference.launchErrorPosition("There was an error while retrieving your location: " +
+                                    err.message);
+                                reject("There was an error while retrieving your location: " +
+                                    err.message);
+                                break;
+                            case 1:
+                                reference.launchErrorPosition("The user prevented the app from retrieving a location.");
+                                reject("The user prevented this page from retrieving a location.");
+                                break;
+                            case 2:
+                                reference.launchErrorPosition("The browser was unable to determine your location: " +
+                                    err.message);
+                                reject("The browser was unable to determine your location: " +
+                                    err.message);
+                                break;
+                            case 3:
+                                reference.launchErrorPosition("The browser timed out before retrieving the location.");
+                                reject("The browser timed out before retrieving the location.");
+                                break;
+                        }
+                        console.warn('ERROR(' + err.code + '): ' + err.message);
+                    }, options);
+            });
         },
-        launchErrorPosition: function () {
+        launchErrorPosition: function (message) {
             $("#errorPosition").remove();
-            $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel2 id=errorPosition role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>No has permitido el acceso a tu localizacion </h4></div><div class=modal-body><img src='https://cdn4.iconfinder.com/data/icons/flatified/128/map.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Por favor, configura tu dispositivo correctamente </h4><h5 style=text-align:center>El accesor a la localizacion ha sido bloqueado <br> <b> Solucion> </b> Ingresa a la configuracion del navegador y modifica los permisos de localizacion </h5><div class='text-center'></div></div></div></div></div>");
-            $("#errorPosition").modal({ backdrop: 'static', keyboard: false });
+            $("body").append("<div class='fade modal modal-danger'aria-hidden=true aria-labelledby=myModalLabel2 id=errorPosition role=dialog style=display:block tabindex=-1><div class=modal-dialog><div class=modal-content><div class=modal-header><h4 class=modal-title id=myModalLabel13>No has permitido el acceso a tu localizacion </h4></div><div class=modal-body><img src='https://cdn4.iconfinder.com/data/icons/flatified/128/map.png' style=margin-left:auto;margin-right:auto;display:block width=150px><h4 style=text-align:center> Por favor, configura tu dispositivo correctamente </h4><h5 style=text-align:center>Error : " + message + "<br> <b> Solucion> </b> Ingresa a la configuracion del navegador y modifica los permisos de localizacion </h5><div class='text-center'></div></div></div></div></div>");
+            $("#errorPosition").modal('show');
         },
         updateTemplatesLocally: function (templatesOnCloud) {
             let templatesToUpdate = [];
