@@ -143,38 +143,38 @@ let login = require("./login");
                         message.changeMessageLoader("Solicitando Acceso a Red")
                         reference.addEventsToMenu();
                         reference.loadNavBar();
-                        reference.grantPermissionPosition();
+                        reference.grantPermissionPosition().then(function () {
+                            notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
 
-                        notification.sendNotification("Bienvenido a Smart Docs ", "Registra una visita para agregar reportes");
+                            if (navigator.onLine == true) {
+                                message.launchChooseConnection().then(function (userChoiceConnection) {
+                                    switch (userChoiceConnection) {
+                                        case true:
+                                            let userLogged = localStorage.getItem("userLogged");
+                                            let diff = Math.abs(new Date(userLogged) - new Date()) / 3600000;
+                                            if (diff > 1) {
+                                                message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                                                localStorage.clear();
+                                            }
+                                            else {
+                                                $("#userStatus").html(" Estado: Online ");
+                                                $("#userStatus").css("color", "green");
+                                                reference.updateInformation();
+                                            }
+                                            break;
+                                        case false:
+                                            $("#userStatus").html(" Estado: Offline ");
+                                            $("#userStatus").css("color", "red");
+                                            reference.noUpdateInformation();
+                                            break;
+                                    }
 
-                        if (navigator.onLine == true) {
-                            message.launchChooseConnection().then(function (userChoiceConnection) {
-                                switch (userChoiceConnection) {
-                                    case true:
-                                        let userLogged = localStorage.getItem("userLogged");
-                                        let diff = Math.abs(new Date(userLogged) - new Date()) / 3600000;
-                                        if (diff > 1) {
-                                            message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
-                                            localStorage.clear();
-                                        }
-                                        else {
-                                            $("#userStatus").html(" Estado: Online ");
-                                            $("#userStatus").css("color", "green");
-                                            reference.updateInformation();
-                                        }
-                                        break;
-                                    case false:
-                                        $("#userStatus").html(" Estado: Offline ");
-                                        $("#userStatus").css("color", "red");
-                                        reference.noUpdateInformation();
-                                        break;
-                                }
-
-                            });
-                        }
-                        else {
-                            reference.noUpdateInformation();
-                        }
+                                });
+                            }
+                            else {
+                                reference.noUpdateInformation();
+                            }
+                        });
                     });
                 });
             });
@@ -290,10 +290,10 @@ let login = require("./login");
             if (location.protocol != 'https:') {
                 location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
             }
-            else{
+            else {
                 window.onbeforeunload = function () {
-                return "";
-            };
+                    return "";
+                };
             }
         },
         loadNavBar: function () {
