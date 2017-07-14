@@ -31,6 +31,7 @@ router.post('/', function (req, res, next) {
         taskType:req.body.taskType,
         icon: req.body.icon,
         content: req.body.content,
+        pdfContent: req.body.pdfContent,
         creationDate: new Date(),
         lastModification: new Date()
     });
