@@ -16889,8 +16889,10 @@ let login = __webpack_require__(11);
         "noUpdateInformation": function () {
             let reference = this;
             message.changeMessageLoader("Obteniendo Informacion Almacenada");
+
             //message.launchSyncModal();
             //message.changeSyncModalText("Obteniendo Sitios Almacenados");
+            /*
             indexDb.getSites().then(function (resolve, reject) {
                 message.changeSyncModalText("Obteniendo Plantillas Almacenadas");
                 return indexDb.getTemplates();
@@ -16899,8 +16901,10 @@ let login = __webpack_require__(11);
                     return reports.changeStatistic();
                 })
                 .then(function () {
-                    message.removeMessageLoader("#mainContent2");
+                    
                 });
+                */
+                message.removeMessageLoader("#mainContent2");
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
