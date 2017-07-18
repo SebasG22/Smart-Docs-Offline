@@ -90,8 +90,8 @@ router.post('/signin', function (req, res, next) {
                 cellphone: user.cellphone,
                 username: user.username,
                 email: user.email,
-                region: user.region,
-                project: user.project,
+                region: JSON.stringify(user.region),
+                project: JSON.stringify(user.project),
             }
         });
     });
