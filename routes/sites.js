@@ -3,7 +3,19 @@ var router = express.Router();
 const Site = require("./../models/Sites");
 const jwt = require("jsonwebtoken");
 
-/*
+/**
+ * Method: Apply Auth Middleware to the sites routes
+ * @param {Object} Request - Request Object contains data about the user request
+ * @param {Object} Response - Using the obejct you can send a response to the user
+ * @param {function} next - Callback to continue with the next line
+ * Validate the token with SDLHW security code
+ * If the Token is valid continue finding the route, if not
+ * send a 401 code error.
+ * @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
+ * @since Added for security reasons, when access to the API. 
+ * @version 1.0.0
+ * @date  07/17/2017 DD-MM-YYYY
+ */
 router.use('/', function (req, res, next) {
     
     jwt.verify(req.query.token, 'SDLHW', function (err, decoded) {
@@ -17,7 +29,14 @@ router.use('/', function (req, res, next) {
     })
 
 });
-*/
+
+
+router.get('/', function (req, res, next) {
+    Site.find().then(function (sites) {
+        res.send(sites);
+    });
+});
+
 
 router.get('/', function (req, res, next) {
     Site.find().then(function (sites) {
