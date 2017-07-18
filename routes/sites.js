@@ -48,11 +48,7 @@ router.get('/findMySites', function (req, res, next) {
         Site.find({ project: { $in: ['ATC FLM'] } , region: { $in: ['Costa'] }  }).then(function (sitesRetrieved) {
         let sitesToSend = [];
         console.log("Sites Retrieved", sitesRetrieved);
-        for (let sites of sitesRetrieved) {
-            sitesToSend.push({ 
-                reportId: report.reportId, lastModification: report.lastModification });
-        }
-        res.send(sitesToSend);
+        res.send(sitesRetrieved);
     });
 });
 
