@@ -10,6 +10,8 @@ let schema = new Schema({
     password: { type: String, required: true },
     username: { type: String, required: true, unique: true },
     email: { type: String, required: true },
+    region: {type: Array, required: true},
+    project: {type: Array, required: true}
 });
 
 schema.plugin(mongooseUniqueValidator);
