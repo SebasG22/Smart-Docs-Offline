@@ -90,7 +90,7 @@ router.post('/signin', function (req, res, next) {
                 username: user.username,
                 email: user.email,
                 region: user.region,
-                project: user.project
+                project: user.project,
             }
         });
     });
