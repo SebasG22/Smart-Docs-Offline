@@ -30,11 +30,28 @@ router.use('/', function (req, res, next) {
 
 });
 
-
+/**
+ * Method: Find Sites depeding on user properties like region and project
+ * @param {Object} Request - Request Object contains data about the user request
+ * @param {Object} Response - Using the obejct you can send a response to the user
+ * @param {function} next - Callback to continue with the next line
+ * Decode de token that the request contain
+ * Based on the user properties like project and region find on the sites database and retrieve the sites that mtach with the filters.
+ * If no one match return and empty Array
+ * @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
+ * @since Added for perfomance reasons, Doesn't download all the sites, only some of them based on the user preferences. 
+ * @version 1.0.0
+ * @date  07/17/2017 DD-MM-YYYY
+ */
 router.get('/findMySites', function (req, res, next) {
         var decoded = jwt.decode(req.query.token);
-    Site.find().then(function (sites) {
-        res.send(sites);
+        Site.find({ project: { $in: decoded.user.project } , region: {$in: decoded.user.region}  }).then(function (sitesRetrieved) {
+        let sitesToSend = [];
+        for (let sites of sitesRetrieved) {
+            sitesToSend.push({ 
+                reportId: report.reportId, lastModification: report.lastModification });
+        }
+        res.send(sitesToSend);
     });
 });
 
