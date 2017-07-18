@@ -77,9 +77,7 @@ router.post('/signin', function (req, res, next) {
                 error: { message: 'Invalid login credentials - P' }
             });
         }
-        var token = jwt.sign({ user: user._id }, 'SDLHW', { expiresIn: 7200 });
-        console.log("Completed User: ", user);
-        console.log("Region : ",JSON.stringify(user.region));
+        var token = jwt.sign({ user: user._id, region: user.region, project: user.project }, 'SDLHW', { expiresIn: 7200 });
         res.status(200).json({
             message: "Sucessfully signin",
             token: token,
@@ -91,8 +89,8 @@ router.post('/signin', function (req, res, next) {
                 cellphone: user.cellphone,
                 username: user.username,
                 email: user.email,
-                region: JSON.stringify(user.region),
-                project: JSON.stringify(user.project)
+                region: user.region,
+                project: user.project
             }
         });
     });
