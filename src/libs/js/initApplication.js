@@ -283,7 +283,7 @@ let login = require("./login");
                     
                 });
                 */
-                message.removeMessageLoader("#mainContent2");
+            message.removeMessageLoader("#mainContent2");
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
@@ -444,6 +444,10 @@ let login = require("./login");
                 $("#mainContent2").html(page);
                 reference.loadResources(page_route);
             });
+        },
+        getChromeVersion: function () {
+            var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+            return raw ? parseInt(raw[2], 10) : false;
         },
         loadResources: function (page_route) {
             let reference = this;
