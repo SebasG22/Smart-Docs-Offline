@@ -50,7 +50,7 @@ router.post('/registerUser', function (req, res, next) {
  * @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
  * @since Attach properties project and region to the user. 
  * @version 1.0.0
- * @date  07/17/2017 DD-MM-YYYY
+ * date 07/17/2017 DD-MM-YYYY
  */
 router.post('/signin', function (req, res, next) {
     console.log("Request",req);

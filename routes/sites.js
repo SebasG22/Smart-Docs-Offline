@@ -14,7 +14,7 @@ const jwt = require("jsonwebtoken");
  * @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
  * @since Added for security reasons, when access to the API. 
  * @version 1.0.0
- * @date  07/17/2017 DD-MM-YYYY
+ * date  07/17/2017 DD-MM-YYYY
  */
 router.use('/', function (req, res, next) {
     
@@ -41,7 +41,7 @@ router.use('/', function (req, res, next) {
  * @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
  * @since Added for perfomance reasons, Doesn't download all the sites, only some of them based on the user preferences. 
  * @version 1.0.0
- * @date  07/17/2017 DD-MM-YYYY
+ * date  07/17/2017 DD-MM-YYYY
  */
 router.get('/findMySites', function (req, res, next) {
         var decoded = jwt.decode(req.query.token);
