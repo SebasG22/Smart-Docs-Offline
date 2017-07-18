@@ -45,8 +45,9 @@ router.use('/', function (req, res, next) {
  */
 router.get('/findMySites', function (req, res, next) {
         var decoded = jwt.decode(req.query.token);
-        Site.find({ project: { $in: decoded.user.project } , region: { $in: decoded.user.region }  }).then(function (sitesRetrieved) {
+        Site.find({ project: { $in: ['ATC FLM'] } , region: { $in: ['Costa'] }  }).then(function (sitesRetrieved) {
         let sitesToSend = [];
+        console.log("Sites Retrieved", sitesRetrieved);
         for (let sites of sitesRetrieved) {
             sitesToSend.push({ 
                 reportId: report.reportId, lastModification: report.lastModification });
