@@ -1250,6 +1250,12 @@ module.exports = {
 
         }
     },
+    /**
+     * Property: allDefaultValueInputs
+     * This will be an array that contains all the default value inputs.
+     * The array must be filled by executeEngine Method
+     */
+    "allDefaultValueInputs":[],
     "fillDefaultValues": function (userInformation, siteInformation) {
         let reference = this;
         console.log("Fill Default Value Inputs");
