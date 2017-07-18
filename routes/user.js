@@ -82,6 +82,7 @@ router.post('/signin', function (req, res, next) {
             message: "Sucessfully signin",
             token: token,
             user: {
+                userComplete:user,
                 userId: user._id,
                 fullname: user.fullname,
                 role: user.role,
