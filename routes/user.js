@@ -78,11 +78,12 @@ router.post('/signin', function (req, res, next) {
             });
         }
         var token = jwt.sign({ user: user._id }, 'SDLHW', { expiresIn: 7200 });
+        console.log("Completed User: ", user);
+        console.log("Region : ",JSON.stringify(user.region));
         res.status(200).json({
             message: "Sucessfully signin",
             token: token,
             user: {
-                userComplete:user,
                 userId: user._id,
                 fullname: user.fullname,
                 role: user.role,
@@ -91,7 +92,7 @@ router.post('/signin', function (req, res, next) {
                 username: user.username,
                 email: user.email,
                 region: JSON.stringify(user.region),
-                project: JSON.stringify(user.project),
+                project: JSON.stringify(user.project)
             }
         });
     });
