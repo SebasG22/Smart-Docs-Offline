@@ -31,7 +31,8 @@ router.use('/', function (req, res, next) {
 });
 
 
-router.get('/', function (req, res, next) {
+router.get('/findMySites', function (req, res, next) {
+        var decoded = jwt.decode(req.query.token);
     Site.find().then(function (sites) {
         res.send(sites);
     });

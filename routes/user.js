@@ -37,6 +37,21 @@ router.post('/registerUser', function (req, res, next) {
     })
 });
 
+/**
+ * Method: Login Route to acces to the application
+ * @param {Object} Request - Request Object contains data about the user request like username and password
+ * @param {Object} Response - Using the obejct you can send a response to the user
+ * @param {function} next - Callback to continue with the next line
+ * First go to the user database and find the user, if the user doens't exist send a 500 error code.
+ * If the user exist, compare the password with the hash saved on the database. If the password doesnt match, send a 500 error code.
+ * If the password match, generate a token a send to the user using 200 success code.
+ * The user properties like region, project, username, email and more.
+ * This properties will be use on the front end side.
+ * @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
+ * @since Attach properties project and region to the user. 
+ * @version 1.0.0
+ * @date  07/17/2017 DD-MM-YYYY
+ */
 router.post('/signin', function (req, res, next) {
     console.log("Request",req);
     console.log("username: " + req.body.username);
@@ -73,7 +88,9 @@ router.post('/signin', function (req, res, next) {
                 company: user.company,
                 cellphone: user.cellphone,
                 username: user.username,
-                email: user.email
+                email: user.email,
+                region: user.region,
+                project: user.project
             }
         });
     });
