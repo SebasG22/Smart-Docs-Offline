@@ -40,16 +40,16 @@ router.use('/', function (req, res, next) {
  * If no one match return and empty Array
  * @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
  * @since Added for perfomance reasons, Doesn't download all the sites, only some of them based on the user preferences. 
- * @version 1.0.0
- * date  07/17/2017 DD-MM-YYYY
+ * @version 1.0.1
+ * date  07/18/2017 DD-MM-YYYY
  */
 router.get('/findMySites', function (req, res, next) {
         var decoded = jwt.decode(req.query.token);
         console.log("Decoded: ", decoded );
         Site.find({ project: { $in: decoded.project } , region: { $in: decoded.region }  }).then(function (sitesRetrieved) {
-        let sitesToSend = [];
+        let sitesToSend = { sites:sitesRetrieved, total:sitesRetrieved.length};
         console.log("Sites Retrieved", sitesRetrieved);
-        res.send(sitesRetrieved);
+        res.send(sitesToSend);
     });
 });
 
