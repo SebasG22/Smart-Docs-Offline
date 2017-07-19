@@ -241,12 +241,13 @@ let login = require("./login");
                 })
                 */
                 .then(function () {
-                    message.changeSyncModalText("Obteniendo Sitios Cloud");
+                    message.changeSyncModalText("Obteniendo Sitios Cloud Total: ");
                     return sites.getSitesOnCloudByUserPreferences();
                 })
                 .then(function (sitesOnCloud) {
                     console.log("SitesOnCloud", sitesOnCloud);
                     localStorage.setItem('totalSitesSM', sitesOnCloud.total);
+                    message.changeSyncModalText("Total Sitios Recibidos: "+ sitesOnCloud.total);
                     return reference.updateSiteExternal(sitesOnCloud.sites);
                 }).then(function () {
                     message.changeSyncModalText("Obteniendo Plantillas Cloud");
@@ -263,6 +264,7 @@ let login = require("./login");
                 .then(function () {
                     message.removeSyncModal();
                     message.removeMessageLoader("#mainContent2");
+                    reference.loadResources('dashboard');
                 });
         },
         "noUpdateInformation": function () {
