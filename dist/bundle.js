@@ -17235,7 +17235,7 @@ let login = __webpack_require__(11);
                 });
 
                 $("#new_visit_register_btn").click(function () {
-                    let siteFilter = sites.getAllSites().filter(function (siteEle) {
+                    let siteFilter = reference.sitesRetrieved.filter(function (siteEle) {
                         return siteEle.siteId == reference.siteOptSelected;
                     });
                     console.log("Site Filter ", siteFilter);
