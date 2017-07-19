@@ -93,7 +93,17 @@ module.exports = {
             }
         });
     },
+    /**
+* Method: Get Sites from indexed db - Database create on the user device
+*  Make a request to sites objectstore, and iterate between the sites.
+*  Get the total sites saved and change the modal text
+* @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
+* @since Added for perfomance reasons, Doesn't download all the sites, only some of them based on the user preferences. 
+* @version 1.0.0
+* date  07/18/2017 DD-MM-YYYY
+*/
     "getSites": function () {
+        let cont = 0;
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -106,6 +116,7 @@ module.exports = {
                 if (result === null) {
                     result;
                 } else {
+                    $("#sync_information_status").html('Se han cargado ' + cont + 'de ' + localStorage.getItem('totalSitesSM') + ' Sitios');
                     elements.push(result.value);
                     console.log(elements);
                     result.continue();
@@ -276,7 +287,7 @@ module.exports = {
                         request.onsuccess = function () {
                             console.log('One Visit Founded and was deleted');
                         };
-                    } 
+                    }
                     cursor.continue();
                 }
             }
@@ -288,7 +299,7 @@ module.exports = {
             data.onerror = function (e) {
                 console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
                 reject(data.error.name);
-            } 
+            }
 
 
         });
@@ -572,7 +583,7 @@ module.exports = {
                         request.onsuccess = function () {
                             console.log('One Report Founded and was deleted');
                         };
-                    } 
+                    }
                     cursor.continue();
                 }
             }
@@ -584,7 +595,7 @@ module.exports = {
             data.onerror = function (e) {
                 console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
                 reject(data.error.name);
-            } 
+            }
 
 
         });
@@ -759,7 +770,7 @@ module.exports = {
                         request.onsuccess = function () {
                             console.log('One ReportImg Founded and was deleted');
                         };
-                    } 
+                    }
                     cursor.continue();
                 }
             }
@@ -771,7 +782,7 @@ module.exports = {
             data.onerror = function (e) {
                 console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
                 reject(data.error.name);
-            } 
+            }
 
 
         });
