@@ -10401,7 +10401,7 @@ return jQuery;
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
-let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
+/* WEBPACK VAR INJECTION */(function($) {let indexedDB = window.indexedDB || window.mozIndexedDB || window.webkitIndexedDB || window.msIndexedDB;
 let dataBase;
 let templatesConnection = __webpack_require__(6);
 let siteConnection = __webpack_require__(5);
@@ -10496,7 +10496,17 @@ module.exports = {
             }
         });
     },
+    /**
+* Method: Get Sites from indexed db - Database create on the user device
+*  Make a request to sites objectstore, and iterate between the sites.
+*  Get the total sites saved and change the modal text
+* @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
+* @since Added for perfomance reasons, Doesn't download all the sites, only some of them based on the user preferences. 
+* @version 1.0.0
+* date  07/18/2017 DD-MM-YYYY
+*/
     "getSites": function () {
+        let cont = 0;
         let reference = this;
         return new Promise(function (resolve, reject) {
             let active = reference.dataBase.result;
@@ -10509,6 +10519,7 @@ module.exports = {
                 if (result === null) {
                     result;
                 } else {
+                    $("#sync_information_status").html('Se han cargado ' + cont + 'de ' + localStorage.getItem('totalSitesSM') + ' Sitios');
                     elements.push(result.value);
                     console.log(elements);
                     result.continue();
@@ -10679,7 +10690,7 @@ module.exports = {
                         request.onsuccess = function () {
                             console.log('One Visit Founded and was deleted');
                         };
-                    } 
+                    }
                     cursor.continue();
                 }
             }
@@ -10691,7 +10702,7 @@ module.exports = {
             data.onerror = function (e) {
                 console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
                 reject(data.error.name);
-            } 
+            }
 
 
         });
@@ -10975,7 +10986,7 @@ module.exports = {
                         request.onsuccess = function () {
                             console.log('One Report Founded and was deleted');
                         };
-                    } 
+                    }
                     cursor.continue();
                 }
             }
@@ -10987,7 +10998,7 @@ module.exports = {
             data.onerror = function (e) {
                 console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
                 reject(data.error.name);
-            } 
+            }
 
 
         });
@@ -11162,7 +11173,7 @@ module.exports = {
                         request.onsuccess = function () {
                             console.log('One ReportImg Founded and was deleted');
                         };
-                    } 
+                    }
                     cursor.continue();
                 }
             }
@@ -11174,7 +11185,7 @@ module.exports = {
             data.onerror = function (e) {
                 console.log("An error occurred " + data.error.name + " \n\n " + data.error.message);
                 reject(data.error.name);
-            } 
+            }
 
 
         });
@@ -11246,6 +11257,7 @@ module.exports = {
         });
     }
 }
+/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(0)))
 
 /***/ }),
 /* 3 */
@@ -11658,6 +11670,37 @@ module.exports = {
         return new Promise(function (resolve, reject) {
             $.ajax({
                 url: 'https://smart-docs.herokuapp.com/sites/?token=' + localStorage.getItem('token'),
+                type: 'GET',
+                dataType: 'json',
+                statusCode: {
+                    401: function () {
+                        message.launchErrorNotAuthenthicateModal("La sesion ha caducado", "El token de seguridad que se te ha asignado ya no es valido", "Solucion: Inicia de nuevo Sesion");
+                        localStorage.clear();
+                    }
+                },
+                error: function () {
+                    reject();
+                },
+                complete: function (msgRes) {
+                    resolve(msgRes.responseJSON);
+                }
+            });
+        });
+    },
+    /**
+ * Method: Find Sites depeding on user properties like region and project
+ *  Make a GET request to https://smart-docs.herokuapp.com/sites/findMySites with the token query parameter
+ *  Return an array of sites based on the user preferences 
+ *  If the token isn't valid rwill prompt a error. Solution: Get a new token, login again.
+ * @author Sebastian Guevara <outs.sebastian.velasquez@huawei.com>
+ * @since Added for perfomance reasons, Doesn't download all the sites, only some of them based on the user preferences. 
+ * @version 1.0.0
+ * date  07/18/2017 DD-MM-YYYY
+ */
+    "getSitesOnCloudByUserPreferences": function () {
+        return new Promise(function (resolve, reject) {
+            $.ajax({
+                url: 'https://smart-docs.herokuapp.com/sites/findMySites/?token=' + localStorage.getItem('token'),
                 type: 'GET',
                 dataType: 'json',
                 statusCode: {
@@ -16869,12 +16912,12 @@ let login = __webpack_require__(11);
                 */
                 .then(function () {
                     message.changeSyncModalText("Obteniendo Sitios Cloud");
-                    return sites.getSitesOnCloud();
+                    return sites.getSitesOnCloudByUserPreferences();
                 })
-                .then(function (visitsOnCloud) {
-                    console.log("Visits Saved ", visits.getVisits())
-                    message.changeSyncModalText("Sincronizando Sitios");
-                    return reference.updateSiteExternal(visitsOnCloud);
+                .then(function (sitesOnCloud) {
+                    console.log("SitesOnCloud", sitesOnCloud);
+                    localStorage.setItem('totalSitesSM', sitesOnCloud.total);
+                    return reference.updateSiteExternal(sitesOnCloud.sites);
                 }).then(function () {
                     message.changeSyncModalText("Obteniendo Plantillas Cloud");
                     return templates.getTemplatesOnCloud();
@@ -16910,7 +16953,10 @@ let login = __webpack_require__(11);
                     
                 });
                 */
+            indexDb.getSites().then(function () {
                 message.removeMessageLoader("#mainContent2");
+                reference.loadResources("dashboard");
+            });
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
@@ -17071,6 +17117,10 @@ let login = __webpack_require__(11);
                 $("#mainContent2").html(page);
                 reference.loadResources(page_route);
             });
+        },
+        getChromeVersion: function () {
+            var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
+            return raw ? parseInt(raw[2], 10) : false;
         },
         loadResources: function (page_route) {
             let reference = this;

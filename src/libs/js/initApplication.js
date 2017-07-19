@@ -242,12 +242,12 @@ let login = require("./login");
                 */
                 .then(function () {
                     message.changeSyncModalText("Obteniendo Sitios Cloud");
-                    return sites.getSitesOnCloud();
+                    return sites.getSitesOnCloudByUserPreferences();
                 })
-                .then(function (visitsOnCloud) {
-                    console.log("Visits Saved ", visits.getVisits())
-                    message.changeSyncModalText("Sincronizando Sitios");
-                    return reference.updateSiteExternal(visitsOnCloud);
+                .then(function (sitesOnCloud) {
+                    console.log("SitesOnCloud", sitesOnCloud);
+                    localStorage.setItem('totalSitesSM', sitesOnCloud.total);
+                    return reference.updateSiteExternal(sitesOnCloud.sites);
                 }).then(function () {
                     message.changeSyncModalText("Obteniendo Plantillas Cloud");
                     return templates.getTemplatesOnCloud();
@@ -283,7 +283,10 @@ let login = require("./login");
                     
                 });
                 */
-            message.removeMessageLoader("#mainContent2");
+            indexDb.getSites().then(function () {
+                message.removeMessageLoader("#mainContent2");
+                reference.loadResources("dashboard");
+            });
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
