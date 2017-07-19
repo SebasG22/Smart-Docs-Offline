@@ -17169,7 +17169,6 @@ let login = __webpack_require__(11);
                     message.changeMessageLoader("Consultando Plantillas Almacenadas");
                     reference.getAllTemplates();
                     message.removeMessageLoader("#mainContent2");
-
                     break;
                 case "newReport":
                     message.addMessageLoder("loaderMessage", "#mainContent2");

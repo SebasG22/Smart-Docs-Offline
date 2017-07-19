@@ -499,7 +499,6 @@ let login = require("./login");
                     message.changeMessageLoader("Consultando Plantillas Almacenadas");
                     reference.getAllTemplates();
                     message.removeMessageLoader("#mainContent2");
-
                     break;
                 case "newReport":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
