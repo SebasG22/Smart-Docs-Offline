@@ -283,10 +283,8 @@ let login = require("./login");
                     
                 });
                 */
-            indexDb.getSites().then(function () {
                 message.removeMessageLoader("#mainContent2");
                 reference.loadResources("dashboard");
-            });
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
@@ -413,9 +411,11 @@ let login = require("./login");
                 for (let site of sitesOnCloud) {
                     indexDb.addSite(site.siteId, site.name, site.fmOffice, site.project, site.portafolio, site.anchorTenant, site.region, site.city);
                 }
-                indexDb.getSites().then(function () {
+                resolve();
+                /* indexDb.getSites().then(function () {
                     resolve();
                 });
+                */
             });
         },
         addEventsToMenu: function () {
@@ -452,6 +452,7 @@ let login = require("./login");
             var raw = navigator.userAgent.match(/Chrom(e|ium)\/([0-9]+)\./);
             return raw ? parseInt(raw[2], 10) : false;
         },
+        sitesRetrieved: [],
         loadResources: function (page_route) {
             let reference = this;
             switch (page_route) {
@@ -459,7 +460,9 @@ let login = require("./login");
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Sitios Almacenados");
                     reports.changeStatistic().then(function () {
-                        message.removeMessageLoader("#mainContent2");
+                        reference.sitesRetrieved = indexDb.getSites().then(function () {
+                            message.removeMessageLoader("#mainContent2");
+                        });
                     });
                     break;
                 case "allVisits":
@@ -509,18 +512,12 @@ let login = require("./login");
                         message.removeMessageLoader("#mainContent2");
                     }
                     else {
-                        indexDb.getSites().then(function (sitesResponse) {
-                            let siteSearched = sitesResponse.filter(function (site) {
-                                return site.siteId == visits.visitSelected.siteId
-                            });
-                            smartEngine.fillDefaultValues(reference.userInformation, siteSearched[0]);
-                            message.removeMessageLoader("#mainContent2");
-                        }).catch(function (err) {
-                            console.log(err);
+                        let siteSearched = reference.sitesRetrieved.filter(function (site) {
+                            return site.siteId == visits.visitSelected.siteId
                         });
-
+                        smartEngine.fillDefaultValues(reference.userInformation, siteSearched[0]);
+                        message.removeMessageLoader("#mainContent2");
                     }
-
                     break;
                 case "myReports":
                     message.addMessageLoder("loaderMessage", "#mainContent2");
