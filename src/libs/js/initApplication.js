@@ -460,7 +460,8 @@ let login = require("./login");
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Sitios Almacenados");
                     reports.changeStatistic().then(function () {
-                        reference.sitesRetrieved = indexDb.getSites().then(function () {
+                         indexDb.getSites().then(function (sitesRetrieved) {
+                             reference.sitesRetrieved = sitesRetrieved;
                             message.removeMessageLoader("#mainContent2");
                         });
                     });
