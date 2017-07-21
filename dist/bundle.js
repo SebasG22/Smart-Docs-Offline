@@ -13599,7 +13599,7 @@ module.exports = {
                                     });
 
                                     $("#" + valueSubPanelEle.id + "Event").on('change', function (event) {
-                                        reference.grantPermissionPosition()
+                                        //reference.grantPermissionPosition()
                                         message.launchProcessImageModal();
 
                                         var myCanvas = $('#canvasRezise')[0];
@@ -13607,7 +13607,7 @@ module.exports = {
                                         var img = new Image();
 
                                         img.onload = function () {
-                                            
+
                                             myCanvas.width = 500;
                                             myCanvas.height = 600;
                                             ctx.drawImage(img, 0, 0, 500, 600);
@@ -16927,9 +16927,9 @@ let login = __webpack_require__(12);
                 message.changeSyncModalText("Sincronizando Visitas Almacenadas");
                 return visits.validateVisitLocally(visitsCloud, visitsLocal);
             }).then(function () {
-                    message.changeSyncModalText("Obteniendo Reportes Almacenados");
-                    return reports.getReports();
-                })
+                message.changeSyncModalText("Obteniendo Reportes Almacenados");
+                return reports.getReports();
+            })
                 .then(function (reportsResponse) {
                     reportsLocal = reportsResponse;
                     message.changeSyncModalText("Subiendo Reportes Almacenados");
@@ -16973,7 +16973,7 @@ let login = __webpack_require__(12);
                 .then(function (sitesOnCloud) {
                     console.log("SitesOnCloud", sitesOnCloud);
                     localStorage.setItem('totalSitesSM', sitesOnCloud.total);
-                    message.changeSyncModalText("Total Sitios Recibidos: "+ sitesOnCloud.total);
+                    message.changeSyncModalText("Total Sitios Recibidos: " + sitesOnCloud.total);
                     return reference.updateSiteExternal(sitesOnCloud.sites);
                 }).then(function () {
                     message.changeSyncModalText("Obteniendo Plantillas Cloud");
@@ -17011,8 +17011,8 @@ let login = __webpack_require__(12);
                     
                 });
                 */
-                message.removeMessageLoader("#mainContent2");
-                reference.loadResources("dashboard");
+            message.removeMessageLoader("#mainContent2");
+            reference.loadResources("dashboard");
         },
         disabledBackButton: function () {
             window.location.hash = "no-back-button";
@@ -17188,8 +17188,8 @@ let login = __webpack_require__(12);
                     message.addMessageLoder("loaderMessage", "#mainContent2");
                     message.changeMessageLoader("Consultando Sitios Almacenados");
                     reports.changeStatistic().then(function () {
-                         indexDb.getSites().then(function (sitesRetrieved) {
-                             reference.sitesRetrieved = sitesRetrieved;
+                        indexDb.getSites().then(function (sitesRetrieved) {
+                            reference.sitesRetrieved = sitesRetrieved;
                             message.removeMessageLoader("#mainContent2");
                         });
                     });
@@ -17404,8 +17404,9 @@ let login = __webpack_require__(12);
         },
         showTemplate: function () {
             let reference = this;
-            let totalTabs;
-            let indexTab = 0;
+            let ref = this;
+            let indexActiveTab = 0;
+            let totalTab;
             smartEngine.executeEngine(templates.templateSelected.content);
             totalTabs = parseInt($('.nav-tabs > li ').length) - 1;
             $('#templateNavTabs a:first').tab('show');
@@ -17416,6 +17417,7 @@ let login = __webpack_require__(12);
                     $("#menu-previous").css("display", "");
                 }
             });
+
             $("#menu-previous").css("display", "none");
             $("#menu-previous").click(function () {
                 $("#menu-next").css("display", "");
@@ -17428,7 +17430,7 @@ let login = __webpack_require__(12);
                     indexActiveTab -= 1;
                     $("#templateNavTabs li:eq(" + indexActiveTab + ") a").tab('show');
                 }
-            })
+            });
 
             $("#menu-next").click(function () {
                 $("#menu-previous").css("display", "");
@@ -17443,7 +17445,6 @@ let login = __webpack_require__(12);
                     $("#templateNavTabs li:eq(" + indexActiveTab + ") a").tab('show');
                 }
             });
-
             $('#templateNavTabs a:first').tab('show');
             totalTabs = $('#templateNavTabs li a').length;
             $("#btnBefore").prop("disabled", true);

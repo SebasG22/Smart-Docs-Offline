@@ -1051,7 +1051,7 @@ module.exports = {
                                     });
 
                                     $("#" + valueSubPanelEle.id + "Event").on('change', function (event) {
-                                        reference.grantPermissionPosition()
+                                        //reference.grantPermissionPosition()
                                         message.launchProcessImageModal();
 
                                         var myCanvas = $('#canvasRezise')[0];
@@ -1059,7 +1059,7 @@ module.exports = {
                                         var img = new Image();
 
                                         img.onload = function () {
-                                            
+
                                             myCanvas.width = 500;
                                             myCanvas.height = 600;
                                             ctx.drawImage(img, 0, 0, 500, 600);
