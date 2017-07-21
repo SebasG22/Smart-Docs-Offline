@@ -682,7 +682,7 @@ let login = require("./login");
             let indexActiveTab = 0;
             let totalTab;
             smartEngine.executeEngine(templates.templateSelected.content);
-            totalTabs = parseInt($('.nav-tabs > li ').length) - 1;
+            let totalTabs = parseInt($('.nav-tabs > li ').length) - 1;
             $('#templateNavTabs a:first').tab('show');
             $('.nav-tabs > li > a ').click(function (e) {
                 e.preventDefault();
