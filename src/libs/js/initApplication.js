@@ -2,6 +2,7 @@ import 'jquery';
 import 'bootstrap';
 import './../css/flat-blue.css';
 import './../css/style.css';
+import './../css/custom.css';
 import './../css/checkbox-radioStyles.css';
 let visits = require("./visits");
 let reports = require("./reports");
@@ -199,8 +200,7 @@ let login = require("./login");
                 visitsCloud = visitsCloudResponse;
                 message.changeSyncModalText("Sincronizando Visitas Almacenadas");
                 return visits.validateVisitLocally(visitsCloud, visitsLocal);
-            })
-                .then(function () {
+            }).then(function () {
                     message.changeSyncModalText("Obteniendo Reportes Almacenados");
                     return reports.getReports();
                 })
@@ -681,6 +681,43 @@ let login = require("./login");
             let totalTabs;
             let indexTab = 0;
             smartEngine.executeEngine(templates.templateSelected.content);
+            totalTabs = parseInt($('.nav-tabs > li ').length) - 1;
+            $('#templateNavTabs a:first').tab('show');
+            $('.nav-tabs > li > a ').click(function (e) {
+                e.preventDefault();
+                indexActiveTab = $($(this).attr('href')).index();
+                if (indexActiveTab > 0) {
+                    $("#menu-previous").css("display", "");
+                }
+            });
+            $("#menu-previous").css("display", "none");
+            $("#menu-previous").click(function () {
+                $("#menu-next").css("display", "");
+                if (indexActiveTab - 1 == 0) {
+                    indexActiveTab -= 1;
+                    $("#templateNavTabs li:eq(" + indexActiveTab + ") a").tab('show');
+                    $("#menu-previous").css("display", "none");
+                }
+                else {
+                    indexActiveTab -= 1;
+                    $("#templateNavTabs li:eq(" + indexActiveTab + ") a").tab('show');
+                }
+            })
+
+            $("#menu-next").click(function () {
+                $("#menu-previous").css("display", "");
+                console.log("Total Tabs", totalTabs);
+                if (indexActiveTab + 1 == totalTabs) {
+                    $("#menu-next").css("display", "none");
+                    indexActiveTab += 1;
+                    $("#templateNavTabs li:eq(" + indexActiveTab + ") a").tab('show');
+                }
+                else {
+                    indexActiveTab += 1;
+                    $("#templateNavTabs li:eq(" + indexActiveTab + ") a").tab('show');
+                }
+            });
+
             $('#templateNavTabs a:first').tab('show');
             totalTabs = $('#templateNavTabs li a').length;
             $("#btnBefore").prop("disabled", true);
