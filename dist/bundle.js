@@ -13594,7 +13594,7 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     $("#" + valueSubPanelEle.id).click(function(){
-                                        var elem = $("#"+valueSubPanelEle.id)
+                                        var elem =  document.getElementById(''+valueSubPanelEle.id); 
                                         //Validate if the element exits
                                         if (elem.requestFullscreen) {
                                             elem.requestFullscreen();
