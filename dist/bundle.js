@@ -13594,9 +13594,10 @@ module.exports = {
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
                                     $("#" + valueSubPanelEle.id).click(function(){
+                                        var elem = $("#"+valueSubPanelEle.id)
                                         //Validate if the element exits
-                                        if (valueSubPanelEle.id.requestFullscreen) {
-                                            valueSubPanelEle.id.requestFullscreen();
+                                        if (elem.requestFullscreen) {
+                                            elem.requestFullscreen();
                                         }
                                     });
 
