@@ -952,12 +952,40 @@ let login = require("./login");
             let answerImages;
             let contImages; let total_images_saved;
             answerImages = reference.filterByAnswerTypeImage();
+            
+            reference.generateBackupJSON(reference.userAnswer);
+            /*
+            var zip = new JSZip();
+            var img = zip.folder("imagenes");
+            for (let image of answerImages) {
+                if (Array.isArray(image.image_1)) {
+                    img.file("smile.png", image.image_1[0].val.replace("data:image/png;base64,", ""), { base64: true });
+                }
+                if (Array.isArray(image.images)) {
+                    img.file("smile.png", image.images[0].val.replace("data:image/png;base64,", ""), { base64: true });
+                }
+            }
+
+            zip.generateAsync({ type: "blob" })
+                .then(function (content) {
+                    // see FileSaver.js
+                    saveAs(content, visits.visitSelected.name + " - Imagenes.zip");
+                });
+
+                */
+            
             contImages = 0;
             do {
                 this["answerImages_" + contImages] = answerImages.splice(0, 1);
                 contImages++;
             }
             while (answerImages.length > 0);
+
+
+            /** Generate the zip File
+             * 
+             */
+
             let contProImg = 0; let subIdNumber = 0; let subId = "-SB";
             let promisesUpdateImg = [];
             do {
@@ -976,6 +1004,61 @@ let login = require("./login");
                 Promise.all(promisesUpdateImg).then(function () {
                     resolve();
                 });
+            });
+        },
+        previewPDF: function (template, template_name, watermark, answers) {
+            return new Promise(function (resolve, reject) {
+                var worker = new Worker(URL.createObjectURL(blob));
+
+                worker.addEventListener('message', function (e) {
+                    resolve(e.data);
+                }, false);
+
+                worker.addEventListener("error", function (error) {
+                    //console.log("Se ha producido un error : " + error);
+                }
+                    , false);
+
+                worker.postMessage({ "template": JSON.stringify(template), "template_name": template_name, "watermark": watermark, "answers": JSON.stringify(answers), "username": username }); // Send data to our worker.
+
+            });
+        },
+        generateBackupJSON: function (answers) {
+
+            var saveData = (function () {
+                var a = document.createElement("a");
+                document.body.appendChild(a);
+                a.style = "display: none";
+                return function (data, fileName) {
+                    var json = JSON.stringify(data),
+                        blob = new Blob([json], { type: "octet/stream" }),
+                        url = window.URL.createObjectURL(blob);
+                    a.href = url;
+                    a.download = fileName;
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+                };
+            }());
+
+            var fileName = "Answers BACKUP.json";
+            saveData(answers, fileName);
+        },
+        generatePDF: function (template) {
+            let ref = this;
+            ref.previewPDF().then(function (loadPdfResponse) {
+                let preview_pdf = JSON.parse(loadPdfResponse);
+                preview_pdf.footer = function (currentPage, pageCount) {
+                    var text = {};
+                    text["text"] = "Este reporte fue generado en Smart Docs Lite App - " + new Date().toString().split("GMT")[0] + " Pag " + currentPage + " de " + pageCount;
+                    text["alignment"] = "center";
+                    text["fontSize"] = 6;
+                    text["link"] = "https://www.smart-docs.co";
+                    return text;
+                };
+
+                let export_pdf_name = templateExportPDFName;
+
+                pdfMake.createPdf(preview_pdf).download(templateExportPDFName + ".pdf");
             });
         },
         filterByAnswerType: function (type) {

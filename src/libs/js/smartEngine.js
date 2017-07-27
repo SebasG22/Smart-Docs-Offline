@@ -1045,11 +1045,17 @@ module.exports = {
 
                                     reference.allInputs.push({ 'name': valueSubPanelEle.label.value, 'selector': valueSubPanelEle.id, "type": valueSubPanelEle.type, "required": valueSubPanelEle.required });
 
-                                    $("#" + valueSubPanelEle.id).click(function(){
-                                        var elem =  document.getElementById(''+valueSubPanelEle.id); 
-                                        //Validate if the element exits
+                                    $("#" + valueSubPanelEle.id).click(function () {
+                                        var elem = document.getElementById('' + valueSubPanelEle.id);
+                                        // Go full-screen based on broswer javascript runtime
                                         if (elem.requestFullscreen) {
-                                            elem.requestFullscreen();
+                                            i.requestFullscreen();
+                                        } else if (elem.webkitRequestFullscreen) {
+                                            i.webkitRequestFullscreen();
+                                        } else if (elem.mozRequestFullScreen) {
+                                            i.mozRequestFullScreen();
+                                        } else if (elem.msRequestFullscreen) {
+                                            i.msRequestFullscreen();
                                         }
                                     });
 
