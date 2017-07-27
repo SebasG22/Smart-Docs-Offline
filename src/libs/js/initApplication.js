@@ -954,7 +954,7 @@ let login = require("./login");
             answerImages = reference.filterByAnswerTypeImage();
             
             reference.generateBackupJSON(reference.userAnswer);
-            /*
+            
             var zip = new JSZip();
             var img = zip.folder("imagenes");
             for (let image of answerImages) {
@@ -972,8 +972,6 @@ let login = require("./login");
                     saveAs(content, visits.visitSelected.name + " - Imagenes.zip");
                 });
 
-                */
-            
             contImages = 0;
             do {
                 this["answerImages_" + contImages] = answerImages.splice(0, 1);
