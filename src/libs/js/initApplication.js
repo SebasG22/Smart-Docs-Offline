@@ -952,19 +952,13 @@ let login = require("./login");
             let answerImages;
             let contImages; let total_images_saved;
             answerImages = reference.filterByAnswerTypeImage();
-            
+
             reference.generateBackupJSON(reference.userAnswer);
-            
+
             var zip = new JSZip();
             var img = zip.folder("imagenes");
             for (let image of answerImages) {
-                console.log("Imagen Mostrada"+ image);
-                if (Array.isArray(image.image_1)) {
-                    img.file("smile.png", image.image_1[0].val.replace("data:image/png;base64,", ""), { base64: true });
-                }
-                if (Array.isArray(image.images)) {
-                    img.file("smile.png", image.images[0].val.replace("data:image/png;base64,", ""), { base64: true });
-                }
+                img.file(image.name+".png", image.val.replace("data:image/png;base64,", ""), { base64: true })
             }
 
             zip.generateAsync({ type: "blob" })
