@@ -17698,6 +17698,7 @@ let login = __webpack_require__(12);
             var zip = new JSZip();
             var img = zip.folder("imagenes");
             for (let image of answerImages) {
+                console.log("Imagen Mostrada"+ image);
                 if (Array.isArray(image.image_1)) {
                     img.file("smile.png", image.image_1[0].val.replace("data:image/png;base64,", ""), { base64: true });
                 }
