@@ -351,7 +351,7 @@ let login = require("./login");
             let options = {
                 enableHighAccuracy: false,
                 timeout: 50000,
-                maximumAge: 50000
+                maximumAge: 7200000
             };
             return new Promise(function (resolve, reject) {
                 navigator.geolocation.getCurrentPosition(function success(pos) {

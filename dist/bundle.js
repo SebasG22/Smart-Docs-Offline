@@ -17091,7 +17091,7 @@ let login = __webpack_require__(12);
             let options = {
                 enableHighAccuracy: false,
                 timeout: 50000,
-                maximumAge: 50000
+                maximumAge: 7200000
             };
             return new Promise(function (resolve, reject) {
                 navigator.geolocation.getCurrentPosition(function success(pos) {
